@@ -183,6 +183,7 @@ Public Class Pref_Gui
                 Next
             Next
             Btn_Apply.Enabled = False
+            SetLogControlsStatus()
             IsShowed = True
             LogFile.LogTracing("Pref Gui Opened.", LogLvl.LOG_DEBUG, Me)
         Catch Except As Exception

@@ -138,6 +138,14 @@ Public Class WinNUT
         StrLog.Insert(AppResxStr.STR_LOG_UPDATE, My.Resources.Log_Str_11)
         StrLog.Insert(AppResxStr.STR_LOG_NUT_FSD, My.Resources.Log_Str_12)
 
+        'Init Logger
+        If My.Settings.LG_LogToFile Then
+            LogFile.LogLevelValue = My.Settings.LG_LogLevel
+            LogFile.InitializeLogFile()
+        ElseIf LogFile.IsWritingToFile Then
+            LogFile.DeleteLogFile()
+        End If
+
         'Init Systray
         NotifyIcon.Text = ProgramName & " - " & ShortProgramVersion
         NotifyIcon.Visible = False

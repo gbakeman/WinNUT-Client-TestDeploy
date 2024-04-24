@@ -835,7 +835,7 @@ Please correct the error, or cancel the upgrade dialog to continue with the defa
 Please correct the error, or cancel the upgrade dialog to continue with the default settings.</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Alert the user that an error occurred during the upgrade procedure, attempt to give a brief summary of the error, and prompt them to take the next step.</note>
         </trans-unit>
-        <trans-unit id="regedit_exe_14_100_0" translate="yes" xml:space="preserve" extype="System.Resources.ResXFileRef, System.Windows.Forms">
+        <trans-unit id="regedit_exe_14_100_0" translate="yes" extype="System.Resources.ResXFileRef, System.Windows.Forms" xml:space="preserve">
           <source>..\Resources\regedit.exe_14_100-0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
           <target state="needs-review-translation">..\Resources\regedit.exe_14_100-0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
         </trans-unit>
@@ -1291,9 +1291,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
         <trans-unit id="Tb_Delay_Com.ToolTip" translate="yes" xml:space="preserve">
           <source>Milliseconds between data updates from NUT server.
 Min: 100, Max: 60 000.</source>
-          <target state="needs-review-translation">Время между обновлениями данных ИБП (по умолчанию = 5).
-Число от 1 до 60 секунд.</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <target state="new">Milliseconds between data updates from NUT server.
+Min: 100, Max: 60 000.</target>
         </trans-unit>
         <trans-unit id="Tb_UPS_Name.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>154, 71</source>
@@ -1918,8 +1917,8 @@ Accepted value: Numeric value from 0 to 999.</source>
           <target state="final">Создать файл лога</target>
         </trans-unit>
         <trans-unit id="CB_Use_Logfile.ToolTip" translate="yes" xml:space="preserve">
-          <source>Create a log file ("WinNUT-client.log" file in the WinNUT installation directory).</source>
-          <target state="final">Создать файл лога (файл WinNUT-client.log в папке установки WinNUT).</target>
+          <source>Write logging events to a file.</source>
+          <target state="new">Write logging events to a file.</target>
         </trans-unit>
         <trans-unit id="CB_Start_W_Win.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>
@@ -3682,68 +3681,67 @@ Accepted value: Numeric value from 0 to 100.</source>
           <source>720, 420</source>
           <target state="final">720, 420</target>
         </trans-unit>
-        <trans-unit id="$this.Text" translate="yes" xml:space="preserve">
+        <trans-unit id="$this.Text" translate="no" xml:space="preserve">
           <source>WinNUT Client</source>
-          <target state="needs-review-translation">Windows NUT CLient</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <target state="final">WinNUT Client</target>
         </trans-unit>
-        <trans-unit id="NotifyIcon.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" xml:space="preserve" extradata="metadata">
+        <trans-unit id="NotifyIcon.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" extradata="metadata" xml:space="preserve">
           <source>133, 17</source>
           <target state="final">133, 17</target>
         </trans-unit>
-        <trans-unit id="ContextMenu_Systray.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" xml:space="preserve" extradata="metadata">
+        <trans-unit id="ContextMenu_Systray.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" extradata="metadata" xml:space="preserve">
           <source>364, 17</source>
           <target state="final">364, 17</target>
         </trans-unit>
-        <trans-unit id="Main_Menu.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" xml:space="preserve" extradata="metadata">
+        <trans-unit id="Main_Menu.TrayLocation" translate="no" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" extradata="metadata" xml:space="preserve">
           <source>248, 17</source>
           <target state="final">248, 17</target>
         </trans-unit>
-        <trans-unit id="Main_Menu.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="Main_Menu.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_Status.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_Status.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_InV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_InV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_OutV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_OutV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_BattCh_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_BattCh_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_Load_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_Load_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_BattV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_BattV_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="GB_InF_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="GB_InF_Dial.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="CB_CurrentLog.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="CB_CurrentLog.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="$this.Localizable" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="$this.Localizable" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="$this.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="$this.Locked" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>True</source>
           <target state="final">True</target>
         </trans-unit>
-        <trans-unit id="$this.TrayHeight" translate="no" extype="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" xml:space="preserve" extradata="metadata">
+        <trans-unit id="$this.TrayHeight" translate="no" extype="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>58</source>
           <target state="final">58</target>
         </trans-unit>
@@ -3751,14 +3749,13 @@ Accepted value: Numeric value from 0 to 100.</source>
           <source>NoControl</source>
           <target state="final">NoControl</target>
         </trans-unit>
-        <trans-unit id="ManageOldPrefsToolStripMenuItem.Enabled" translate="yes" xml:space="preserve" extype="System.Boolean, mscorlib">
+        <trans-unit id="ManageOldPrefsToolStripMenuItem.Enabled" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>False</source>
           <target state="needs-review-translation">False</target>
         </trans-unit>
-        <trans-unit id="ManageOldPrefsToolStripMenuItem.Size" translate="yes" xml:space="preserve" extype="System.Drawing.Size, System.Drawing">
+        <trans-unit id="ManageOldPrefsToolStripMenuItem.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>180, 22</source>
-          <target state="needs-review-translation">180, 22</target>
-          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
+          <target state="new">180, 22</target>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.Text" translate="yes" xml:space="preserve">
           <source>Manage Old Prefs...</source>

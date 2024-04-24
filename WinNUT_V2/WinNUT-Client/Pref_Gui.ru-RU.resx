@@ -81,10 +81,6 @@
   <data name="Lbl_Login_Nut.Text" xml:space="preserve">
     <value>Логин</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>Время между обновлениями данных ИБП (по умолчанию = 5).
-Число от 1 до 60 секунд.</value>
-  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>Имя ИБП для мониторинга.
 Допустимые значения: Имя ИБП из конфиграции сервера NUT</value>
@@ -203,9 +199,6 @@ IPV4 / IPV6 / доменное имя.</value>
   </data>
   <data name="CB_Use_Logfile.Text" xml:space="preserve">
     <value>Создать файл лога</value>
-  </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>Создать файл лога (файл WinNUT-client.log в папке установки WinNUT).</value>
   </data>
   <data name="CB_Start_W_Win.Text" xml:space="preserve">
     <value>Запускать с Windows</value>

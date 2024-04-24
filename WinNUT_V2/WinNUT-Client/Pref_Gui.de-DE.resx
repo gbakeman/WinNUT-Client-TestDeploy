@@ -165,9 +165,6 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Optionen</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>Zeit zwischen jeder Aktualisierung der USV-Daten (Standard = 5).Wertebereich: Numerischer Wert von 1 bis 60 Sekunden.</value>
-  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>Name der zu überwachenden USV. Wertebereich: Name der auf dem NUT-Server konfigurierten USV.</value>
   </data>
@@ -219,9 +216,6 @@
   <data name="Lbl_LevelLog.ToolTip" xml:space="preserve">
     <value>Detailstufe für die Logdatei</value>
   </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>Eine Logdatei (Datei WinNUT-client.log im WinNUT-Installationsverzeichnis) erstellen.</value>
-  </data>
   <data name="CB_Start_W_Win.ToolTip" xml:space="preserve">
     <value>Startet WinNUT beim Start von Windows.</value>
   </data>
@@ -238,7 +232,7 @@
     <value>Limit für zusätzliche Verzögerung. Wertebereich: Numerischer Wert von 0 bis 3600.</value>
   </data>
   <data name="Cb_ExtendTime.ToolTip" xml:space="preserve">
-    <value>Zusätzliche Zeit zum Herunterfahrens erlauben. Hinweis: Diese zusätzliche Zeit kann über die Verfügbarkeit der USV hinausgehen - MIT VORSICHT VERWENDEN !!!</value>
+    <value>USV-Name</value>
   </data>
   <data name="Tb_Delay_Stop.ToolTip" xml:space="preserve">
     <value>Prozedurverzögerung bei Verzögerung stoppen. Wertebereich: Numerischer Wert von 0 bis 3600.</value>

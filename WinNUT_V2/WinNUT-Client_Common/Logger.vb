@@ -74,22 +74,35 @@ Public Class Logger
     End Property
 
     ''' <summary>
-    ''' Returns if data is being written to a file. Also allows for file logging to be setup or stopped.
+    ''' Check status of the log file writer, as well as start or stop logging to a file.
+    ''' Events continue to be recorded to memory regardless.
     ''' </summary>
     ''' <returns>True when the <see cref="LogFile"/> object is instantiated, false if not.</returns>
-    Public ReadOnly Property IsWritingToFile() As Boolean
+    Public Property IsWritingToFile As Boolean
         Get
             Return LogFile IsNot Nothing
         End Get
+        Set(value As Boolean)
+            If value <> (LogFile IsNot Nothing) Then
+                If value = True Then
+                    InitializeLogFile()
+                Else
+                    TerminateLogFile()
+                End If
+            End If
+        End Set
     End Property
 
     ''' <summary>
-    ''' Get the log file location from the <see cref="LogFile"/> object.
+    ''' Get the filesystem location of the <see cref="LogFile"/> object, or the folder where it would be stored.
     ''' </summary>
-    ''' <returns>The possible path to the log file. Note that this does not gaurantee it exists.</returns>
     Public ReadOnly Property LogFilePath() As String
         Get
-            Return LogFile.FullLogFileName
+            If IsWritingToFile Then
+                Return LogFile.FullLogFileName
+            Else
+                Return DEFAULT_LOCATION
+            End If
         End Get
     End Property
 
@@ -108,6 +121,8 @@ Public Class Logger
     Public Sub New(LogLevel As LogLvl)
         LogLevelValue = LogLevel
     End Sub
+
+#Region "Log file management"
 
     ''' <summary>
     ''' Instantiates a new <see cref="FileLogTraceListener"/> at a the desired location, and outputs the
@@ -145,30 +160,42 @@ Public Class Logger
     End Sub
 
     ''' <summary>
-    ''' Disable logging and delete the current file.
+    ''' End logging to the <see cref="LogFile"/> by writing a terminating line to it, then closing and dereferencing it.
     ''' </summary>
-    ''' <returns>True if file was successfully deleted. False if an exception was encountered.</returns>
-    Public Function DeleteLogFile() As Boolean
-        Dim fileLocation = LogFile.FullLogFileName
-
-        ' Disable logging first.
-        If LogFile IsNot Nothing Then
+    ''' <exception cref="InvalidOperationException">The LogFile object is already Nothing and file logging is disabled.</exception>
+    ''' 
+    Public Sub TerminateLogFile()
+        If IsWritingToFile Then
+            LogTracing("Terminating log file.", LogLvl.LOG_NOTICE, Me)
             LogFile.Close()
             LogFile.Dispose()
-            ' For some reason, the object needs to be dereferenced to actually get it to close the handle.
             LogFile = Nothing
-            LogTracing("Logging to file has been disabled.", LogLvl.LOG_NOTICE, Me)
+        Else
+            Dim invOpExcp As New InvalidOperationException("Unable to terminate log file - already disabled.")
+            LogException(invOpExcp, Me)
+            Throw invOpExcp
         End If
+    End Sub
 
-        Try
-            ' IsWritingToFile = False
+    ''' <summary>
+    ''' Disable logging and delete the current file. May throw an exception while deleting the file,
+    ''' even if file logging was enabled.
+    ''' </summary>
+    ''' <exception cref="InvalidOperationException">LogFile object is Nothing.</exception>
+    Public Sub DeleteLogFile()
+        If IsWritingToFile Then
+            Dim fileLocation = LogFile.FullLogFileName
+            TerminateLogFile()
             File.Delete(fileLocation)
-            Return True
-        Catch ex As Exception
-            LogTracing("Error when deleteing log file: " & ex.ToString(), LogLvl.LOG_ERROR, Me)
-            Return False
-        End Try
-    End Function
+            LogTracing("Log file has been deleted.", LogLvl.LOG_NOTICE, Me)
+        Else
+            Dim invOpExcp As New InvalidOperationException("File logging is disabled, unable to delete log file.")
+            LogException(invOpExcp, Me)
+            Throw invOpExcp
+        End If
+    End Sub
+
+#End Region
 
     ''' <summary>
     ''' Write the <paramref name="message"/> to the Debug tracer is debugging, into the <see cref="LastEventsList" />

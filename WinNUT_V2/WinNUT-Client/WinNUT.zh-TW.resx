@@ -102,7 +102,4 @@
   <data name="ManageOldPrefsToolStripMenuItem.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="ManageOldPrefsToolStripMenuItem.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
 </root>

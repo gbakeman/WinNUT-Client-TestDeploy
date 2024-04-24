@@ -174,9 +174,6 @@
   <data name="Cbx_LogLevel.Items3" xml:space="preserve">
     <value>除錯</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>UPS 資料更新頻率 (預設值 5 秒)。範圍：1-60 秒。</value>
-  </data>
   <data name="CB_Systray.Text" xml:space="preserve">
     <value>最小化至系統匣</value>
   </data>
@@ -260,9 +257,6 @@
   </data>
   <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
     <value>檢查應用程式更新。</value>
-  </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>建立日誌檔案 (WinNUT-client.log 檔案位於 WinNUT 的安裝目錄)。</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>選項</value>

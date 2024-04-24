@@ -138,14 +138,6 @@ Public Class WinNUT
         StrLog.Insert(AppResxStr.STR_LOG_UPDATE, My.Resources.Log_Str_11)
         StrLog.Insert(AppResxStr.STR_LOG_NUT_FSD, My.Resources.Log_Str_12)
 
-        'Init Logger
-        If My.Settings.LG_LogToFile Then
-            LogFile.LogLevelValue = My.Settings.LG_LogLevel
-            LogFile.InitializeLogFile()
-        ElseIf LogFile.IsWritingToFile Then
-            LogFile.DeleteLogFile()
-        End If
-
         'Init Systray
         NotifyIcon.Text = ProgramName & " - " & ShortProgramVersion
         NotifyIcon.Visible = False
@@ -170,43 +162,6 @@ Public Class WinNUT
         'UPS_Device.Battery_Limit = WinNUT_Params.Arr_Reg_Key.Item("ShutdownLimitBatteryCharge")
         'UPS_Device.Backup_Limit = WinNUT_Params.Arr_Reg_Key.Item("ShutdownLimitUPSRemainTime")
         'UPS_Device.UPS_Follow_FSD = WinNUT_Params.Arr_Reg_Key.Item("Follow_FSD")
-
-        'Add DialGraph
-        With AG_InV
-            .Location = New Point(6, 26)
-            .MaxValue = My.Settings.CAL_VoltInMax
-            .MinValue = My.Settings.CAL_VoltInMin
-            .Value1 = UPS_InputV
-            .ScaleLinesMajorStepValue = CInt((.MaxValue - .MinValue) / 5)
-        End With
-        With AG_InF
-            .Location = New Point(6, 26)
-            .MaxValue = My.Settings.CAL_FreqInMax
-            .MinValue = My.Settings.CAL_FreqInMin
-            .Value1 = UPS_InputF
-            .ScaleLinesMajorStepValue = CInt((.MaxValue - .MinValue) / 5)
-        End With
-        With AG_OutV
-            .Location = New Point(6, 26)
-            .MaxValue = My.Settings.CAL_VoltOutMax
-            .MinValue = My.Settings.CAL_VoltOutMin
-            .Value1 = UPS_OutputV
-            .ScaleLinesMajorStepValue = CInt((.MaxValue - .MinValue) / 5)
-        End With
-        With AG_BattCh
-            .Location = New Point(6, 26)
-            .MaxValue = 100
-            .MinValue = 0
-            .Value1 = UPS_BattCh
-            .ScaleLinesMajorStepValue = CInt((.MaxValue - .MinValue) / 5)
-        End With
-        With AG_BattV
-            .Location = New Point(6, 26)
-            .MaxValue = My.Settings.CAL_BattVMax
-            .MinValue = My.Settings.CAL_BattVMin
-            .Value1 = UPS_BattV
-            .ScaleLinesMajorStepValue = CInt((.MaxValue - .MinValue) / 5)
-        End With
 
         'Verify Is Windows is In Dark Mode
         If My.Computer.Registry.GetValue("HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 0) = 0 Then
@@ -247,6 +202,8 @@ Public Class WinNUT
         UpdateIcon_NotifyIcon()
         LogFile.LogTracing("Update Icon at Startup", LogLvl.LOG_DEBUG, Me)
         ' Start_Tray_Icon = Nothing
+
+        ApplyApplicationPreferences()
 
         ' If this is the first time WinNUT has been launched with the Settings system, check if old preferences exist
         ' and prompt the user to upgrade.
@@ -416,7 +373,7 @@ Public Class WinNUT
         upPrefsDg.ShowDialog()
 
         UpdateManageOldPrefsMenuItemStatus()
-        WinNUT_PrefsChanged(True)
+        ApplyApplicationPreferences()
     End Sub
 
     Private Sub UPS_Connect(Optional retryOnConnFailure = False)
@@ -518,7 +475,7 @@ Public Class WinNUT
 
     Private Sub Menu_Settings_Click(sender As Object, e As EventArgs) Handles Menu_Settings.Click
         LogFile.LogTracing("Open Pref Gui From Menu", LogLvl.LOG_DEBUG, Me)
-        AddHandler Pref_Gui.SavedPreferences, AddressOf WinNUT_PrefsChanged
+        AddHandler Pref_Gui.SavedPreferences, AddressOf ApplyApplicationPreferences
         Pref_Gui.Activate()
         Pref_Gui.Visible = True
         HasFocus = False
@@ -531,7 +488,7 @@ Public Class WinNUT
 
     Private Sub Menu_Sys_Settings_Click(sender As Object, e As EventArgs) Handles Menu_Sys_Settings.Click
         LogFile.LogTracing("Open Pref Gui From Systray", LogLvl.LOG_DEBUG, Me)
-        AddHandler Pref_Gui.SavedPreferences, AddressOf WinNUT_PrefsChanged
+        AddHandler Pref_Gui.SavedPreferences, AddressOf ApplyApplicationPreferences
         Pref_Gui.Activate()
         Pref_Gui.Visible = True
         HasFocus = False
@@ -718,20 +675,20 @@ Public Class WinNUT
                 If .Batt_Charge = -1 AndAlso .Batt_Runtime = -1 Then
                     LogFile.LogTracing("Battery properties unavailable, unable to validate shutdown conditions.", LogLvl.LOG_WARNING, Me)
                 ElseIf Not ShutdownStatus Then
-                If .Batt_Charge <= My.Settings.PW_BattChrgFloor Or
+                    If .Batt_Charge <= My.Settings.PW_BattChrgFloor Or
                         .Batt_Runtime <= My.Settings.PW_RuntimeFloor Then
-                            LogFile.LogTracing("UPS battery has dropped below stop condition limits.",
+                        LogFile.LogTracing("UPS battery has dropped below stop condition limits.",
                                                LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_LOG_SHUT_START))
-                            Shutdown_Event()
-                        Else
-                            LogFile.LogTracing(String.Format("UPS charge ({0}%) or Runtime ({1}) have not met shutdown conditions {2} or {3}.",
+                        Shutdown_Event()
+                    Else
+                        LogFile.LogTracing(String.Format("UPS charge ({0}%) or Runtime ({1}) have not met shutdown conditions {2} or {3}.",
                             .Batt_Charge, .Batt_Runtime, My.Settings.PW_BattChrgFloor, My.Settings.PW_RuntimeFloor),
                             LogLvl.LOG_DEBUG, Me)
-                        End If
                     End If
                 End If
+            End If
 
-                If .UPS_Status.HasFlag(UPS_States.OVER) Then
+            If .UPS_Status.HasFlag(UPS_States.OVER) Then
                 Lbl_VOLoad.BackColor = Color.Red
             Else
                 Lbl_VOLoad.BackColor = Color.White
@@ -805,7 +762,7 @@ Public Class WinNUT
     End Sub
 
     Private Sub ReInitDisplayValues()
-        LogFile.LogTracing("Update all informations displayed to empty values", LogLvl.LOG_DEBUG, Me)
+        LogFile.LogTracing("Initializing all display values and configurations.", LogLvl.LOG_DEBUG, Me)
         UPS_Mfr = ""
         UPS_Model = ""
         UPS_Serial = ""
@@ -819,54 +776,13 @@ Public Class WinNUT
         Lbl_VName.Text = UPS_Model
         Lbl_VSerial.Text = UPS_Serial
         Lbl_VFirmware.Text = UPS_Firmware
-        AG_InV.Value1 = My.Settings.CAL_VoltInMin
-        AG_InF.Value1 = My.Settings.CAL_FreqInMin
-        AG_OutV.Value1 = My.Settings.CAL_VoltOutMin
         AG_BattCh.Value1 = 0
         AG_Load.Value1 = 0
         AG_Load.Value2 = 0
-        AG_BattV.Value1 = My.Settings.CAL_BattVMin
-    End Sub
-
-    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Reconnect.Click
-        LogFile.LogTracing("Force Reconnect from menu", LogLvl.LOG_DEBUG, Me)
-        UPSDisconnect()
-
-        UPS_Connect()
-    End Sub
-
-    Public Sub WinNUT_PrefsChanged(isChanged As Boolean)
-        My.Settings.Save()
-        LogFile.LogTracing("Beginning WinNUT_PrefsChanged subroutine.", LogLvl.LOG_DEBUG, Me)
-
-        ' Setup logging preferences
-        If My.Settings.LG_LogToFile Then
-            LogFile.LogLevelValue = My.Settings.LG_LogLevel
-            LogFile.InitializeLogFile()
-        ElseIf LogFile.IsWritingToFile Then
-            LogFile.DeleteLogFile()
-        End If
-
-        ' Validate interval value because it's been incorrectly stored in older versions.
-        If My.Settings.NUT_PollIntervalMsec <= 0 Then
-            LogFile.LogTracing("Incorrect value of " & My.Settings.NUT_PollIntervalMsec &
-                               " for Delay/Interval, resetting to default.", LogLvl.LOG_ERROR, Me)
-            My.Settings.NUT_PollIntervalMsec = 1000
-        End If
-
-        ' Automatically reconnect if already connected and prefs are changed.
-        If (UPS_Device IsNot Nothing) AndAlso UPS_Device.IsConnected And isChanged Then
-            LogFile.LogTracing("Connection parameters Changed. Force Reconnect", LogLvl.LOG_NOTICE, Me)
-            UPSDisconnect()
-            'ReInitDisplayValues()
-            'ActualAppIconIdx = AppIconIdx.IDX_ICO_OFFLINE
-            'LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
-            'UpdateIcon_NotifyIcon()
-            'LogFile.LogTracing("New Parameter Applyed. Force Reconnect", LogLvl.LOG_DEBUG, Me)
-            UPS_Connect()
-        End If
 
         With AG_InV
+            AG_InV.Value1 = My.Settings.CAL_VoltInMin
+
             If (.MaxValue <> My.Settings.CAL_VoltInMax) Or (.MinValue <> My.Settings.CAL_VoltInMin) Then
                 LogFile.LogTracing("Parameter Dial Input Voltage Need to be Updated", LogLvl.LOG_DEBUG, Me)
                 .MaxValue = My.Settings.CAL_VoltInMax
@@ -876,6 +792,8 @@ Public Class WinNUT
             End If
         End With
         With AG_InF
+            AG_InF.Value1 = My.Settings.CAL_FreqInMin
+
             If (.MaxValue <> My.Settings.CAL_FreqInMax) Or (.MinValue <> My.Settings.CAL_FreqInMin) Then
                 LogFile.LogTracing("Parameter Dial Input Frequency Need to be Updated", LogLvl.LOG_DEBUG, Me)
                 .MaxValue = My.Settings.CAL_FreqInMax
@@ -885,6 +803,8 @@ Public Class WinNUT
             End If
         End With
         With AG_OutV
+            AG_OutV.Value1 = My.Settings.CAL_VoltOutMin
+
             If (.MaxValue <> My.Settings.CAL_VoltOutMax) Or (.MinValue <> My.Settings.CAL_VoltOutMin) Then
                 LogFile.LogTracing("Parameter Dial Output Voltage Need to be Updated", LogLvl.LOG_DEBUG, Me)
                 .MaxValue = My.Settings.CAL_VoltOutMax
@@ -894,6 +814,8 @@ Public Class WinNUT
             End If
         End With
         With AG_BattV
+            AG_BattV.Value1 = My.Settings.CAL_BattVMin
+
             If (.MaxValue <> My.Settings.CAL_BattVMax) Or (.MinValue <> My.Settings.CAL_BattVMin) Then
                 LogFile.LogTracing("Parameter Dial Voltage Battery Need to be Updated", LogLvl.LOG_DEBUG, Me)
                 .MaxValue = My.Settings.CAL_BattVMax
@@ -902,6 +824,43 @@ Public Class WinNUT
                 LogFile.LogTracing("Parameter Dial Voltage Battery Updated", LogLvl.LOG_DEBUG, Me)
             End If
         End With
+    End Sub
+
+    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Reconnect.Click
+        LogFile.LogTracing("Force Reconnect from menu", LogLvl.LOG_DEBUG, Me)
+        UPSDisconnect()
+
+        UPS_Connect()
+    End Sub
+
+    ''' <summary>
+    ''' Apply settings and preferences to WinNUT, whether or not they have changed.
+    ''' </summary>
+    Public Sub ApplyApplicationPreferences()
+        LogFile.LogTracing("Beginning ApplyApplicationPreferences subroutine.", LogLvl.LOG_DEBUG, Me)
+        Dim autoReconnect = False
+
+        If (UPS_Device IsNot Nothing) AndAlso UPS_Device.IsConnected Then
+            autoReconnect = True
+            UPSDisconnect()
+        Else
+            ReInitDisplayValues()
+        End If
+
+        ' Apply logging subsystem configuration
+        LogFile.IsWritingToFile = My.Settings.LG_LogToFile
+        LogFile.LogLevelValue = My.Settings.LG_LogLevel
+
+        ' Validate interval value because it's been incorrectly stored in older versions.
+        If My.Settings.NUT_PollIntervalMsec <= 0 Then
+            LogFile.LogTracing("Incorrect value of " & My.Settings.NUT_PollIntervalMsec &
+                               " for Poll Delay/Interval, resetting to default.", LogLvl.LOG_ERROR, Me)
+            My.Settings.NUT_PollIntervalMsec = My.MySettings.Default.NUT_PollIntervalMsec
+        End If
+
+        If autoReconnect Then
+            UPS_Connect()
+        End If
 
         LogFile.LogTracing("WinNut Preferences Applied.", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_LOG_PREFS))
     End Sub

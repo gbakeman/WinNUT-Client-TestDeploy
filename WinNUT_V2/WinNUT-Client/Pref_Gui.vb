@@ -75,14 +75,10 @@ Public Class Pref_Gui
                 End If
             End If
 
-            'LogFile.LogLevel = Cbx_LogLevel.SelectedIndex
-            'LogFile.IsWritingToFile = CB_Use_Logfile.Checked
-
-            LogFile.LogTracing("Pref_Gui Params Saved", 1, Me)
+            RaiseEvent SavedPreferences(PrefsModified)
 
             SetLogControlsStatus()
-            ' WinNUT.WinNUT_PrefsChanged()
-            RaiseEvent SavedPreferences(PrefsModified)
+            LogFile.LogTracing("Preferences Saved", LogLvl.LOG_NOTICE, Me)
 
             ' PrefsModified = True
         Catch e As Exception
@@ -324,30 +320,6 @@ Public Class Pref_Gui
         End If
     End Sub
 
-    Private Sub Btn_DeleteLog_Click(sender As Object, e As EventArgs) Handles Btn_DeleteLog.Click
-        LogFile.LogTracing("Delete LogFile", LogLvl.LOG_DEBUG, Me)
-
-        If LogFile.DeleteLogFile() Then
-            LogFile.LogTracing("LogFile Deleted", LogLvl.LOG_DEBUG, Me)
-        Else
-            LogFile.LogTracing("Error deleting log file.", LogLvl.LOG_WARNING, Me)
-        End If
-
-        ' LogFile.IsWritingToFile = Arr_Reg_Key.Item("UseLogFile")
-        SetLogControlsStatus()
-    End Sub
-
-    Private Sub Btn_ViewLog_Click(sender As Object, e As EventArgs) Handles Btn_ViewLog.Click
-        LogFile.LogTracing("Show LogFile", LogLvl.LOG_DEBUG, Me)
-        If LogFile IsNot Nothing AndAlso File.Exists(LogFile.LogFilePath) Then
-            Process.Start(LogFile.LogFilePath)
-        Else
-            LogFile.LogTracing("LogFile does not exists", LogLvl.LOG_ERROR, Me)
-            Btn_ViewLog.Enabled = False
-            Btn_DeleteLog.Enabled = False
-        End If
-    End Sub
-
     Private Sub Pref_Gui_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = WinNUT.Icon
         LogFile.LogTracing("Load Pref Gui", LogLvl.LOG_DEBUG, Me)
@@ -365,12 +337,36 @@ Public Class Pref_Gui
         End If
     End Sub
 
+#Region "Logging controls"
+
+    Private Sub Btn_ViewLog_Click(sender As Object, e As EventArgs) Handles Btn_ViewLog.Click
+        LogFile.LogTracing("User clicked ViewLog button.", LogLvl.LOG_DEBUG, Me)
+        Try
+            Process.Start(LogFile.LogFilePath)
+            LogFile.LogTracing("Opened UI window to log location.", LogLvl.LOG_NOTICE, Me)
+        Catch ex As Exception
+            LogFile.LogException(ex, Me)
+            SetLogControlsStatus()
+        End Try
+    End Sub
+
+    Private Sub Btn_DeleteLog_Click(sender As Object, e As EventArgs) Handles Btn_DeleteLog.Click
+        LogFile.LogTracing("User clicked DeleteLog button.", LogLvl.LOG_DEBUG, Me)
+
+        Try
+            LogFile.DeleteLogFile()
+            PrefsModified = True ' Will help reinitialize log file later is user still wants it.
+        Catch ex As Exception
+            LogFile.LogException(ex, Me)
+        End Try
+
+        SetLogControlsStatus()
+    End Sub
+
     ''' <summary>
     ''' Enable or disable controls to view and delete log data if it's available.
     ''' </summary>
     Private Sub SetLogControlsStatus()
-        LogFile.LogTracing("Setting LogControl statuses.", LogLvl.LOG_DEBUG, Me)
-
         If LogFile.IsWritingToFile Then
             Btn_ViewLog.Enabled = True
             Btn_DeleteLog.Enabled = True
@@ -379,4 +375,6 @@ Public Class Pref_Gui
             Btn_DeleteLog.Enabled = False
         End If
     End Sub
+
+#End Region
 End Class

@@ -118,9 +118,13 @@ Public Enum UPS_States
     ALARM = 1 << 13
 End Enum
 
+''' <summary>
+''' Ref. https://github.com/nutdotnet/WinNUT-Client/pull/112
+''' </summary>
 Public Enum PowerMethod
     Unavailable ' No methods are available to calculate power.
     RealPower ' The ups.realpower variable is available for direct reading.
-    NominalPowerCalc ' Power can be calculated by taking the load percentage of the nominal power variable.
-    VoltAmpCalc ' Power will have be calculated as a function of volts and amps.
+    RPNomLoadPct ' Power is calcualted as the load percentage of nominal realpower.
+    InputNomVALoadPct ' Power is given as the nominal power calculated from nominal input volts/amps (and PF), multiplied by the percent load.
+    OutputVACalc ' Power is calculated with output voltage and current (seen on Huawei, issue #150)
 End Enum

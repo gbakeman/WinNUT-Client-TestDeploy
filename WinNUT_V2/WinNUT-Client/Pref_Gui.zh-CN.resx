@@ -263,7 +263,7 @@
     <value>每月</value>
   </data>
   <data name="Cbx_Delay_Verif.ToolTip" xml:space="preserve">
-    <value>验证频率。</value>
+    <value>检查更新频率。</value>
   </data>
   <data name="Lbl_Branch_Update.Text" xml:space="preserve">
     <value>稳定或开发分支</value>
@@ -284,7 +284,7 @@
     <value>检查应用更新。</value>
   </data>
   <data name="Btn_Ok.Text" xml:space="preserve">
-    <value>好的</value>
+    <value>确认</value>
   </data>
   <data name="Btn_Apply.Text" xml:space="preserve">
     <value>应用</value>
@@ -315,5 +315,18 @@
   </data>
   <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
+  </data>
+  <data name="Cbx_Freq_Input.Items" xml:space="preserve">
+    <value>50</value>
+  </data>
+  <data name="Cbx_Freq_Input.Items1" xml:space="preserve">
+    <value>60</value>
+  </data>
+  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
+    <value>从NUT服务器更新数据时间间隔（单位：毫秒）。
+最小值: 100, 最大值: 60 000。</value>
+  </data>
+  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
+    <value>将日志事件写入文件。</value>
   </data>
 </root>

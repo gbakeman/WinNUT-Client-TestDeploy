@@ -156,7 +156,7 @@
         </trans-unit>
         <trans-unit id="GB1.Text" translate="yes" xml:space="preserve">
           <source>Item Properties</source>
-          <target state="final">属性</target>
+          <target state="final">项目属性</target>
         </trans-unit>
         <trans-unit id="Btn_Reload.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>9, 300</source>
@@ -717,7 +717,7 @@ Cancel to Save Msi and Install Later</source>
         </trans-unit>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
-          <target state="final">从 Nut 主机断开了连接。</target>
+          <target state="final">从 Nut 主机断开了连接</target>
         </trans-unit>
         <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
           <source>Try Reconnect {0} / {1}</source>
@@ -841,7 +841,7 @@ Please correct the error, or cancel the upgrade dialog to continue with the defa
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_NoPrefsExistCaption" translate="yes" xml:space="preserve">
           <source>No preferences detected</source>
-          <target state="final">没有检测到设置。</target>
+          <target state="needs-review-translation">没有检测到设置</target>
           <note from="MultilingualBuild" annotates="source" priority="2">A brief caption for the error message.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_NoPrefsExistError" translate="yes" xml:space="preserve">
@@ -1456,7 +1456,7 @@ Accepted value: Numeric value from 0 to 999.</source>
           <source>Milliseconds between data updates from NUT server.
 Min: 100, Max: 60 000.</source>
           <target state="final">从NUT服务器更新数据时间间隔（单位：毫秒）。
-最小值: 100, 最大值: 60 000</target>
+最小值: 100, 最大值: 60 000。</target>
         </trans-unit>
         <trans-unit id="Tb_UPS_Name.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>154, 71</source>
@@ -1495,7 +1495,7 @@ Accepted Value: Name of the UPS configured in the Nut server.</source>
         <trans-unit id="Tb_Port.ToolTip" translate="yes" xml:space="preserve">
           <source>Nut Server Port Number (default = 3493).
 Accepted value: Numeric value from 1 to 65535.</source>
-          <target state="final">Nut 服务Nut 服务器端口（默认为3493）。
+          <target state="needs-review-translation">Nut 服务Nut 服务器端口（默认为3493）。
 取值：1-65535 之间的数值</target>
         </trans-unit>
         <trans-unit id="Tb_Server_IP.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
@@ -2237,7 +2237,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="Cbx_Delay_Verif.ToolTip" translate="yes" xml:space="preserve">
           <source>Frequency of verification.</source>
-          <target state="final">验证频率。</target>
+          <target state="final">检查更新频率。</target>
         </trans-unit>
         <trans-unit id="Lbl_Branch_Update.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>

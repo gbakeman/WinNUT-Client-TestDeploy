@@ -257,6 +257,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Pref_Gui.resx">
       <DependentUpon>Pref_Gui.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Pref_Gui.ru-RU.resx">
       <DependentUpon>Pref_Gui.vb</DependentUpon>

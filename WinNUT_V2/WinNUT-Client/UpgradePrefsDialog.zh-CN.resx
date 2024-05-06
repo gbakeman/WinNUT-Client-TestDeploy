@@ -195,4 +195,39 @@
   <metadata name="$this.TrayHeight" xml:space="preserve" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>44</value>
   </metadata>
+  <data name="IntroMessage.Text" xml:space="preserve">
+    <value>WinNUT已经升级到一个新的设置和设置系统，并且必须继续使用它。在注册表中检测到了一些旧程序的设置。请从下面选择您希望对旧设置进行的操作。如果您不希望采取任何操作，请选择取消，将使用默认设置。只要新的程序数据保持完整，将不会再显示此消息。
+
+</value>
+  </data>
+  <data name="OK_Button.Text" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Cancel_Button.Text" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ImportSettingsCheckBox.Text" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="ImportSettingsCheckBox.ToolTip" xml:space="preserve">
+    <value>旧设置将从注册表导入到新的设置系统中。</value>
+  </data>
+  <data name="DeleteSettingsCheckBox.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DeleteSettingsCheckBox.ToolTip" xml:space="preserve">
+    <value>在注册表中检测到旧设置数据。</value>
+  </data>
+  <data name="BackupSettingsCheckbox.Text" xml:space="preserve">
+    <value>备份</value>
+  </data>
+  <data name="BackupSettingsCheckbox.ToolTip" xml:space="preserve">
+    <value>旧设置将被导出到文件中。</value>
+  </data>
+  <data name="PrevSettngsGroupBox.Text" xml:space="preserve">
+    <value>以前的设置</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>迁移到新设置格式</value>
+  </data>
 </root>

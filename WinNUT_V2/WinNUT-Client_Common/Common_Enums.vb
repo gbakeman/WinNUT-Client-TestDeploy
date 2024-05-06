@@ -116,6 +116,8 @@ Public Enum UPS_States
     TRIM = 1 << 11
     BOOST = 1 << 12
     ALARM = 1 << 13
+    ECO = 1 << 14 ' eConversion mode
+    RB = 1 << 15 ' Batteries need to be replaced 
 End Enum
 
 ''' <summary>

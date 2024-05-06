@@ -156,7 +156,7 @@
         </trans-unit>
         <trans-unit id="GB1.Text" translate="yes" xml:space="preserve">
           <source>Item Properties</source>
-          <target state="final">物产</target>
+          <target state="final">项目属性</target>
         </trans-unit>
         <trans-unit id="Btn_Reload.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>9, 300</source>
@@ -172,7 +172,7 @@
         </trans-unit>
         <trans-unit id="Btn_Reload.Text" translate="yes" xml:space="preserve">
           <source>Reload</source>
-          <target state="final">重装</target>
+          <target state="final">重载</target>
         </trans-unit>
         <trans-unit id="Btn_Clear.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>102, 300</source>
@@ -188,7 +188,7 @@
         </trans-unit>
         <trans-unit id="Btn_Clear.Text" translate="yes" xml:space="preserve">
           <source>Clear</source>
-          <target state="final">清洁</target>
+          <target state="final">清空</target>
         </trans-unit>
         <trans-unit id="Btn_Close.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>289, 300</source>
@@ -220,7 +220,7 @@
         </trans-unit>
         <trans-unit id="Btn_Clip.Text" translate="yes" xml:space="preserve">
           <source>Copy</source>
-          <target state="final">复印</target>
+          <target state="final">复制</target>
         </trans-unit>
         <trans-unit id="$this.AutoScaleDimensions" translate="no" extype="System.Drawing.SizeF, System.Drawing" xml:space="preserve">
           <source>6, 13</source>
@@ -717,7 +717,7 @@ Cancel to Save Msi and Install Later</source>
         </trans-unit>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
-          <target state="final">从 Nut 主机断开了连接。</target>
+          <target state="final">从 Nut 主机断开了连接</target>
         </trans-unit>
         <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
           <source>Try Reconnect {0} / {1}</source>
@@ -789,37 +789,37 @@ Cancel to Save Msi and Install Later</source>
         </trans-unit>
         <trans-unit id="DetectedPreviousPrefsData" translate="yes" xml:space="preserve">
           <source>Previous preferences data detected in the Registry.</source>
-          <target state="new">Previous preferences data detected in the Registry.</target>
+          <target state="final">在注册表中检测到以前的设置数据。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Notify the user that preferences data from the old system was detected in the Registry hive.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_ImportProcedureCompleted" translate="yes" xml:space="preserve">
           <source>The old preferences have been imported.</source>
-          <target state="new">The old preferences have been imported.</target>
+          <target state="final">旧设置已经被导入。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Notify the user that the import procedure has completed.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_UnmatchedPairs" translate="yes" xml:space="preserve">
           <source>There were {0} unknown preferences. See log for more details.</source>
-          <target state="new">There were {0} unknown preferences. See log for more details.</target>
+          <target state="final">有 {0} 个未知的设置。请查看日志获取更多详细信息。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Alert the user to how many unmatched preferences there were {0}.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_DeleteProcedureComplete" translate="yes" xml:space="preserve">
           <source>The old preferences have been removed from your Registry.</source>
-          <target state="new">The old preferences have been removed from your Registry.</target>
+          <target state="final">旧设置已经从您的注册表中删除。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Notify the user that the old preferences have been removed from their Registry.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_Cancelled" translate="yes" xml:space="preserve">
           <source>The upgrade process was cancelled: using default settings.</source>
-          <target state="new">The upgrade process was cancelled: using default settings.</target>
+          <target state="final">升级过程已取消：使用默认设置。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Notify the user that the upgrade dialog was cancelled, and that default settings will be used instead.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_BackupLocationTitle" translate="yes" xml:space="preserve">
           <source>Save WinNUT Registry Key</source>
-          <target state="new">Save WinNUT Registry Key</target>
+          <target state="final">保存 WinNUT 注册表</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Title of the SaveFileDialog that prompts the user to select the file and location they would like to save their WinNUT Registry preferences to.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_BackupProcedureCompleted" translate="yes" xml:space="preserve">
           <source>The old preferences have been backed up to {0}</source>
-          <target state="new">The old preferences have been backed up to {0}</target>
+          <target state="final">旧设置已备份到 {0}</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Notify the user that the old preferences have been exported to a file, and give the full path with {0}.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_ErrorEncountered" translate="yes" xml:space="preserve">
@@ -828,11 +828,11 @@ Cancel to Save Msi and Install Later</source>
 {0}
 
 Please correct the error, or cancel the upgrade dialog to continue with the default settings.</source>
-          <target state="new">An error occurred during the upgrade procedure:
+          <target state="final">升级过程中发生错误：
 
 {0}
 
-Please correct the error, or cancel the upgrade dialog to continue with the default settings.</target>
+请修复错误，或取消升级对话框以继续使用默认设置。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Alert the user that an error occurred during the upgrade procedure, attempt to give a brief summary of the error, and prompt them to take the next step.</note>
         </trans-unit>
         <trans-unit id="regedit_exe_14_100_0" translate="yes" extype="System.Resources.ResXFileRef, System.Windows.Forms" xml:space="preserve">
@@ -841,27 +841,27 @@ Please correct the error, or cancel the upgrade dialog to continue with the defa
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_NoPrefsExistCaption" translate="yes" xml:space="preserve">
           <source>No preferences detected</source>
-          <target state="new">No preferences detected</target>
+          <target state="needs-review-translation">没有检测到设置</target>
           <note from="MultilingualBuild" annotates="source" priority="2">A brief caption for the error message.</note>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialog_NoPrefsExistError" translate="yes" xml:space="preserve">
           <source>No preferences were detected in the Registry. Unable to continue.</source>
-          <target state="new">No preferences were detected in the Registry. Unable to continue.</target>
+          <target state="final">您的系统中未检测到设置。无法继续操作。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Alert the user that the dialog is unable to continue, since no preferences are detected in the Registry.</note>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolstripMenuItem_Disabled_TooltipText" translate="yes" xml:space="preserve">
           <source>Old preferences were not detected in your system.</source>
-          <target state="new">Old preferences were not detected in your system.</target>
+          <target state="final">您的系统中未检测到旧设置。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Similar to _Enabled tooltip, except that the preferences were not detected.</note>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolstripMenuItem_Enabled_TooltipText" translate="yes" xml:space="preserve">
           <source>Old preferences detected. Click to run the import wizard.</source>
-          <target state="new">Old preferences detected. Click to run the import wizard.</target>
+          <target state="final">检测到旧设置。点击运行导入向导。</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Tooltip of the "manage old prefs" menu item, explaining that the old preferences were detected and that clicking will open the wizard dialog.</note>
         </trans-unit>
         <trans-unit id="VariableUnavailable" translate="yes" xml:space="preserve">
           <source>Unavailable</source>
-          <target state="new">Unavailable</target>
+          <target state="final">参数无效</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Indicate that a variable is unavailable</note>
         </trans-unit>
       </group>
@@ -1455,8 +1455,8 @@ Accepted value: Numeric value from 0 to 999.</source>
         <trans-unit id="Tb_Delay_Com.ToolTip" translate="yes" xml:space="preserve">
           <source>Milliseconds between data updates from NUT server.
 Min: 100, Max: 60 000.</source>
-          <target state="new">Milliseconds between data updates from NUT server.
-Min: 100, Max: 60 000.</target>
+          <target state="final">从NUT服务器更新数据时间间隔（单位：毫秒）。
+最小值: 100, 最大值: 60 000。</target>
         </trans-unit>
         <trans-unit id="Tb_UPS_Name.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>154, 71</source>
@@ -1495,7 +1495,7 @@ Accepted Value: Name of the UPS configured in the Nut server.</source>
         <trans-unit id="Tb_Port.ToolTip" translate="yes" xml:space="preserve">
           <source>Nut Server Port Number (default = 3493).
 Accepted value: Numeric value from 1 to 65535.</source>
-          <target state="final">Nut 服务Nut 服务器端口（默认为3493）。
+          <target state="needs-review-translation">Nut 服务Nut 服务器端口（默认为3493）。
 取值：1-65535 之间的数值</target>
         </trans-unit>
         <trans-unit id="Tb_Server_IP.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
@@ -1754,7 +1754,7 @@ Accepted value: IPV4 / IPV6 / FQDN address.</source>
         </trans-unit>
         <trans-unit id="CB_Use_Logfile.ToolTip" translate="yes" xml:space="preserve">
           <source>Write logging events to a file.</source>
-          <target state="new">Write logging events to a file.</target>
+          <target state="final">将日志事件写入文件。</target>
         </trans-unit>
         <trans-unit id="CB_Start_W_Win.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>
@@ -2237,7 +2237,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="Cbx_Delay_Verif.ToolTip" translate="yes" xml:space="preserve">
           <source>Frequency of verification.</source>
-          <target state="final">验证频率。</target>
+          <target state="final">检查更新频率。</target>
         </trans-unit>
         <trans-unit id="Lbl_Branch_Update.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>
@@ -2357,7 +2357,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="Btn_Ok.Text" translate="yes" xml:space="preserve">
           <source>Ok</source>
-          <target state="final">好的</target>
+          <target state="final">确认</target>
         </trans-unit>
         <trans-unit id="Btn_Apply.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>186, 278</source>
@@ -3758,7 +3758,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.Text" translate="yes" xml:space="preserve">
           <source>Manage Old Prefs...</source>
-          <target state="new">Manage Old Prefs...</target>
+          <target state="final">管理旧设置...</target>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.ShortcutKeyDisplayString" translate="yes" xml:space="preserve">
           <source></source>
@@ -3817,9 +3817,7 @@ Accepted value: Numeric value from 0 to 100.</source>
           <source>WinNUT has been upgraded to a new Settings and Preferences system, and must use that going forward. Items leftover from the previous system have been deteceted in your user Registry hive. Select the actions below that you would like to have performed on the old preferences. If you wish to take no action, select Cancel and the default settings will be used. This message will not be displayed again as long as the new program data remains intact.
 
 </source>
-          <target state="new">WinNUT has been upgraded to a new Settings and Preferences system, and must use that going forward. Items leftover from the previous system have been deteceted in your user Registry hive. Select the actions below that you would like to have performed on the old preferences. If you wish to take no action, select Cancel and the default settings will be used. This message will not be displayed again as long as the new program data remains intact.
-
-</target>
+          <target state="final">WinNUT已经升级到一个新的设置和设置系统，并且必须继续使用它。在注册表中检测到了一些旧程序的设置。请从下面选择您希望对旧设置进行的操作。如果您不希望采取任何操作，请选择取消，将使用默认设置。只要新的程序数据保持完整，将不会再显示此消息。</target>
         </trans-unit>
         <trans-unit id="OK_Button.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
           <source>Right</source>
@@ -3843,7 +3841,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="OK_Button.Text" translate="yes" xml:space="preserve">
           <source>OK</source>
-          <target state="new">OK</target>
+          <target state="final">确认</target>
         </trans-unit>
         <trans-unit id="Cancel_Button.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
           <source>Right</source>
@@ -3867,7 +3865,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="Cancel_Button.Text" translate="yes" xml:space="preserve">
           <source>Cancel</source>
-          <target state="new">Cancel</target>
+          <target state="final">取消</target>
         </trans-unit>
         <trans-unit id="ImportSettingsCheckBox.AutoSize" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>
@@ -3891,11 +3889,11 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="ImportSettingsCheckBox.Text" translate="yes" xml:space="preserve">
           <source>Import</source>
-          <target state="new">Import</target>
+          <target state="final">导入</target>
         </trans-unit>
         <trans-unit id="ImportSettingsCheckBox.ToolTip" translate="yes" xml:space="preserve">
           <source>The previous preferences will be imported from the Registry and into the new Settings system.</source>
-          <target state="new">The previous preferences will be imported from the Registry and into the new Settings system.</target>
+          <target state="final">旧设置将从注册表导入到新的设置系统中。</target>
         </trans-unit>
         <trans-unit id="DeleteSettingsCheckBox.AutoSize" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
           <source>True</source>
@@ -3919,11 +3917,11 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="DeleteSettingsCheckBox.Text" translate="yes" xml:space="preserve">
           <source>Delete</source>
-          <target state="new">Delete</target>
+          <target state="final">删除</target>
         </trans-unit>
         <trans-unit id="DeleteSettingsCheckBox.ToolTip" translate="yes" xml:space="preserve">
           <source>The previous preferences will be deleted from the Registry.</source>
-          <target state="new">The previous preferences will be deleted from the Registry.</target>
+          <target state="final">在注册表中检测到旧设置数据。</target>
         </trans-unit>
         <trans-unit id="PrevSettngsGroupBox.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
           <source>Top, Left, Right</source>
@@ -3951,11 +3949,11 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="BackupSettingsCheckbox.Text" translate="yes" xml:space="preserve">
           <source>Backup</source>
-          <target state="new">Backup</target>
+          <target state="final">备份</target>
         </trans-unit>
         <trans-unit id="BackupSettingsCheckbox.ToolTip" translate="yes" xml:space="preserve">
           <source>The previous settings will be exported to a file.</source>
-          <target state="new">The previous settings will be exported to a file.</target>
+          <target state="final">旧设置将被导出到文件中。</target>
         </trans-unit>
         <trans-unit id="PrevSettngsGroupBox.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>6, 122</source>
@@ -3975,7 +3973,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="PrevSettngsGroupBox.Text" translate="yes" xml:space="preserve">
           <source>Previous Settings</source>
-          <target state="new">Previous Settings</target>
+          <target state="final">以前的设置</target>
         </trans-unit>
         <trans-unit id="buttonPanel.Dock" translate="yes" extype="System.Windows.Forms.DockStyle, System.Windows.Forms" xml:space="preserve">
           <source>Bottom</source>
@@ -4043,7 +4041,7 @@ Accepted value: Numeric value from 0 to 100.</source>
         </trans-unit>
         <trans-unit id="$this.Text" translate="yes" xml:space="preserve">
           <source>Migrate to New Settings Format</source>
-          <target state="new">Migrate to New Settings Format</target>
+          <target state="final">迁移到新设置格式</target>
         </trans-unit>
         <trans-unit id="UpgradePrefsDialogModelBindingSource.TrayLocation" translate="yes" extype="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" extradata="metadata" xml:space="preserve">
           <source>488, 17</source>

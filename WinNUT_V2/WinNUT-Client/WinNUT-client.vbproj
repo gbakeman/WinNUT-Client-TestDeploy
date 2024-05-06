@@ -29,7 +29,7 @@
     <ApplicationVersion>2.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperEnabled>false</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
     <TargetPlatformVersion>10.0.18362</TargetPlatformVersion>
@@ -96,10 +96,6 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AGauge, Version=2.1.8367.22654, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\AGauge.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -134,12 +130,6 @@
       <DependentUpon>About_Gui.vb</DependentUpon>
     </Compile>
     <Compile Include="About_Gui.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AGaugeTest.Designer.vb">
-      <DependentUpon>AGaugeTest.vb</DependentUpon>
-    </Compile>
-    <Compile Include="AGaugeTest.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
@@ -219,9 +209,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="About_Gui.zh-TW.resx">
       <DependentUpon>About_Gui.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AGaugeTest.resx">
-      <DependentUpon>AGaugeTest.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="List_Var_Gui.de-DE.resx">
       <DependentUpon>List_Var_Gui.vb</DependentUpon>
@@ -384,11 +371,6 @@
     <Content Include="WinNut.ico" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 et x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
@@ -409,6 +391,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AGauge.Classic">
+      <Version>2.1.0-prerelease.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.2</Version>
     </PackageReference>
@@ -416,7 +401,6 @@
       <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
   <Target Name="MATPrerequisite" BeforeTargets="PrepareForBuild" Condition="!Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets')" Label="MultilingualAppToolkit">

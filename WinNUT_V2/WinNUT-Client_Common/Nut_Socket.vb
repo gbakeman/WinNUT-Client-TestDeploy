@@ -10,13 +10,12 @@
 
 
 ' Class dealing only with the management of the communication socket with the Nut server
-Imports System.Net.Sockets
 Imports System.IO
+Imports System.Net.Sockets
 
 Public Class Nut_Socket
 
 #Region "Properties"
-
     Public ReadOnly Property ConnectionStatus As Boolean
         Get
             If NutSocket IsNot Nothing Then
@@ -33,6 +32,13 @@ Public Class Nut_Socket
         End Get
     End Property
 
+    Private _isLoggedIn As Boolean = False
+    Public ReadOnly Property IsLoggedIn() As Boolean
+        Get
+            Return _isLoggedIn
+        End Get
+    End Property
+
     Private Nut_Ver As String
     Public ReadOnly Property Nut_Version() As String
         Get
@@ -46,7 +52,6 @@ Public Class Nut_Socket
             Return Net_Ver
         End Get
     End Property
-
 #End Region
 
     Private LogFile As Logger
@@ -64,10 +69,6 @@ Public Class Nut_Socket
     ''' </summary>
     Private streamInUse As Boolean
 
-
-    Public Auth_Success As Boolean = False
-    ' Private ReadOnly WatchDog As New Timer
-
     Public Event Socket_Broken(ex As NutException)
 
     ''' <summary>
@@ -78,12 +79,6 @@ Public Class Nut_Socket
     Public Sub New(Nut_Config As Nut_Parameter, ByRef logger As Logger)
         LogFile = logger
         NutConfig = Nut_Config
-
-        'With Me.WatchDog
-        '    .Interval = 1000
-        '    .Enabled = False
-        '    AddHandler .Tick, AddressOf Event_WatchDog
-        'End With
     End Sub
 
     Public Sub Connect()
@@ -110,12 +105,17 @@ Public Class Nut_Socket
 
             ' Something went wrong - cleanup and pass along error.
         Catch Excep As Exception
-            Disconnect(True, True)
+            Disconnect(True)
             Throw ' Pass exception on up to UPS
         End Try
 
         If ConnectionStatus Then
-            AuthLogin(Login, Password)
+            Try
+                AuthLogin(Login, Password)
+            Catch ex As NutException
+                ' TODO: Make friendly message string for user.
+                LogFile.LogTracing("Error while attempting to log in: " & ex.Message, LogLvl.LOG_ERROR, Me)
+            End Try
 
             Dim Nut_Query = Query_Data("VER")
 
@@ -133,21 +133,43 @@ Public Class Nut_Socket
     End Sub
 
     ''' <summary>
-    ''' Perform various functions necessary to disconnect the socket from the NUT server.
+    ''' Register with the UPSd server as being dependant on it for power.
     ''' </summary>
-    ''' <param name="Silent">Skip raising the <see cref="SocketDisconnected"/> event if true.</param>
-    ''' <param name="Forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
-    Public Sub Disconnect(Optional silent = False, Optional forceful = False)
-        ' WatchDog.Stop()
-
-        If IsConnected AndAlso Not forceful Then
-            Query_Data("LOGOUT")
+    ''' <param name="Login"></param>
+    ''' <param name="Password"></param>
+    ''' <exception cref="NutException">A protocol error was encountered while trying to authenticate.</exception>
+    Private Sub AuthLogin(Login As String, Password As String)
+        If _isLoggedIn Then
+            Throw New InvalidOperationException("Attempted to login when already logged in.")
         End If
 
-        Close_Socket()
+        LogFile.LogTracing("Attempting authentication...", LogLvl.LOG_NOTICE, Me)
 
-        If Not silent Then
-            RaiseEvent SocketDisconnected()
+        If Not String.IsNullOrEmpty(Login) Then
+            Query_Data("USERNAME " & Login)
+
+            If Not String.IsNullOrEmpty(Password) Then
+                Query_Data("PASSWORD " & Password)
+            End If
+        End If
+
+        Query_Data("LOGIN")
+        _isLoggedIn = True
+        LogFile.LogTracing("Authenticated successfully.", LogLvl.LOG_NOTICE, Me)
+    End Sub
+
+    ''' <summary>
+    ''' Perform various functions necessary to disconnect the socket from the NUT server.
+    ''' </summary>
+    ''' <param name="Forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
+    Public Sub Disconnect(Optional forceful = False)
+        If Not forceful AndAlso IsConnected AndAlso IsLoggedIn Then
+            Try
+                Query_Data("LOGOUT")
+            Finally
+                Close_Socket()
+                RaiseEvent SocketDisconnected()
+            End Try
         End If
     End Sub
 
@@ -188,7 +210,8 @@ Public Class Nut_Socket
     ''' </summary>
     ''' <param name="Query_Msg">The query to be sent to the server, within specifications of the NUT protocol.</param>
     ''' <returns>The full <see cref="Transaction"/> of this function call.</returns>
-    ''' <exception cref="InvalidOperationException">Thrown when calling this function while disconnected.</exception>"
+    ''' <exception cref="InvalidOperationException">Thrown when calling this function while disconnected, or another
+    ''' call is in progress.</exception>
     ''' <exception cref="NutException">Thrown when the NUT server returns an error or unexpected response.</exception>
     Function Query_Data(Query_Msg As String) As Transaction
         Dim Response As NUTResponse
@@ -196,22 +219,22 @@ Public Class Nut_Socket
         Dim finalTransaction As Transaction
 
         If streamInUse Then
-            LogFile.LogTracing("Attempted to query " & Query_Msg & " while using the stream.", LogLvl.LOG_ERROR, Me)
-            Return Nothing
+            Throw New InvalidOperationException("Attempted to query " & Query_Msg & " while stream is in use.")
         End If
 
-        streamInUse = True
-
         If ConnectionStatus Then
-            ' LogFile.LogTracing("Query: " & Query_Msg, LogLvl.LOG_DEBUG, Me)
-            WriterStream.WriteLine(Query_Msg & vbCr)
-            WriterStream.Flush()
+            streamInUse = True
+
+            Try
+                WriterStream.WriteLine(Query_Msg & vbCr)
+                WriterStream.Flush()
+            Catch
+                Throw
+            Finally
+                streamInUse = False
+            End Try
 
             DataResult = Trim(ReaderStream.ReadLine())
-            ' LogFile.LogTracing(vbTab & "Response: " & DataResult, LogLvl.LOG_DEBUG, Me)
-            streamInUse = False
-            ' LogFile.LogTracing("Done processing response for query " & Query_Msg, LogLvl.LOG_DEBUG, Me)
-
             Response = EnumResponse(DataResult)
             finalTransaction = New Transaction(Query_Msg, DataResult, Response)
 
@@ -355,31 +378,10 @@ Public Class Nut_Socket
         End If
     End Function
 
-    Private Sub AuthLogin(Login As String, Password As String)
-        LogFile.LogTracing("Attempting authentication...", LogLvl.LOG_NOTICE, Me)
-        Auth_Success = False
-        If Not String.IsNullOrEmpty(Login) AndAlso String.IsNullOrEmpty(Password) Then
-            Dim Nut_Query = Query_Data("USERNAME " & Login)
-
-            If Nut_Query.ResponseType <> NUTResponse.OK Then
-                Throw New NutException(Nut_Query)
-            End If
-
-            Nut_Query = Query_Data("PASSWORD " & Password)
-
-            If Nut_Query.ResponseType <> NUTResponse.OK Then
-                Throw New NutException(Nut_Query)
-            End If
-        End If
-
-        LogFile.LogTracing("Authenticated successfully.", LogLvl.LOG_NOTICE, Me)
-        Auth_Success = True
-    End Sub
-
     Private Sub Event_WatchDog(sender As Object, e As EventArgs)
         Dim Nut_Query = Query_Data("")
         If Nut_Query.ResponseType = NUTResponse.NORESPONSE Then
-            Disconnect(True, True)
+            Disconnect(True)
             RaiseEvent Socket_Broken(New NutException(Nut_Query))
         End If
     End Sub

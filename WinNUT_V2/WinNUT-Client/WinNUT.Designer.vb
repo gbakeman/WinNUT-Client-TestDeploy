@@ -35,9 +35,9 @@ Partial Class WinNUT
         Me.Menu_Sys_Exit = New System.Windows.Forms.ToolStripMenuItem()
         Me.Main_Menu = New System.Windows.Forms.MenuStrip()
         Me.Menu_File = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Menu_Import_Ini = New System.Windows.Forms.ToolStripMenuItem()
         Me.Menu_UPS_Var = New System.Windows.Forms.ToolStripMenuItem()
         Me.Menu_Quit = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManageOldPrefsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Menu_Connection = New System.Windows.Forms.ToolStripMenuItem()
         Me.Menu_Reconnect = New System.Windows.Forms.ToolStripMenuItem()
         Me.Menu_Disconnect = New System.Windows.Forms.ToolStripMenuItem()
@@ -151,14 +151,9 @@ Partial Class WinNUT
         '
         'Menu_File
         '
-        Me.Menu_File.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Menu_Import_Ini, Me.Menu_UPS_Var, Me.Menu_Quit})
+        Me.Menu_File.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Menu_UPS_Var, Me.Menu_Quit, Me.ManageOldPrefsToolStripMenuItem})
         Me.Menu_File.Name = "Menu_File"
         resources.ApplyResources(Me.Menu_File, "Menu_File")
-        '
-        'Menu_Import_Ini
-        '
-        Me.Menu_Import_Ini.Name = "Menu_Import_Ini"
-        resources.ApplyResources(Me.Menu_Import_Ini, "Menu_Import_Ini")
         '
         'Menu_UPS_Var
         '
@@ -169,6 +164,12 @@ Partial Class WinNUT
         '
         Me.Menu_Quit.Name = "Menu_Quit"
         resources.ApplyResources(Me.Menu_Quit, "Menu_Quit")
+        '
+        'ManageOldPrefsToolStripMenuItem
+        '
+        resources.ApplyResources(Me.ManageOldPrefsToolStripMenuItem, "ManageOldPrefsToolStripMenuItem")
+        Me.ManageOldPrefsToolStripMenuItem.Image = Global.WinNUT_Client.My.Resources.Resources.regedit_exe_14_100_0
+        Me.ManageOldPrefsToolStripMenuItem.Name = "ManageOldPrefsToolStripMenuItem"
         '
         'Menu_Connection
         '
@@ -803,6 +804,6 @@ Partial Class WinNUT
     Friend WithEvents AG_InF As WinNUT_Client.Controls.UPSVarGauge
     Friend WithEvents Lbl_InF_Dial As Label
     Friend WithEvents CB_CurrentLog As ComboBox
-    Friend WithEvents Menu_Import_Ini As ToolStripMenuItem
     Friend WithEvents PBox_Battery_State As PictureBox
+    Friend WithEvents ManageOldPrefsToolStripMenuItem As ToolStripMenuItem
 End Class

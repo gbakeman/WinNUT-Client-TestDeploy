@@ -7,23 +7,39 @@
 '
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
+Imports System.Globalization
 Imports System.IO
+Imports System.Text
+Imports Microsoft.VisualBasic.Logging
 
 Public Class Logger
 #Region "Constants/Shared"
-    Private Shared ReadOnly BASE_FILE_NAME = ProgramName ' "WinNUT-CLient"
-    Private Const LOG_FILE_CREATION_SCHEDULE = Logging.LogFileCreationScheduleOption.Daily
-    ' The LogFileCreationScheduleOption doesn't present the string format of what it uses
-    Private Const LOG_FILE_DATESTRING = "yyyy-MM-dd"
-    ' The subfolder that will contain logs.
-    Public Const LOG_SUBFOLDER = "\Logs\"
+    Private Const LOG_FILE_CREATION_SCHEDULE = LogFileCreationScheduleOption.Daily
+
+    ' Set TEST_RELEASE_DIRS in the custom compiler constants dialog for file storage to behave like release.
+#If DEBUG And Not TEST_RELEASE_DIRS Then
+    Private Shared ReadOnly DEFAULT_DATETIMEFORMAT = DateTimeFormatInfo.InvariantInfo
+    Private Shared ReadOnly DEFAULT_LOCATION = LogFileLocation.ExecutableDirectory
+#Else
+    Private Shared ReadOnly DEFAULT_DATETIMEFORMAT = DateTimeFormatInfo.CurrentInfo
+    ' Actually goes to the Roaming folder.
+    Private Shared ReadOnly DEFAULT_LOCATION = LogFileLocation.LocalUserApplicationDirectory
+#End If
+
+    Private ReadOnly TEventCache As New TraceEventCache()
 #End Region
 
-    Private LogFile As Logging.FileLogTraceListener
-    Private ReadOnly TEventCache As New TraceEventCache()
-    Public LogLevelValue As LogLvl
+#Region "Private/backing values"
+
+    Private LogFile As FileLogTraceListener
     Private L_CurrentLogData As String
     Private LastEventsList As New List(Of Object)
+    Private _DateTimeFormatInfo As DateTimeFormatInfo = DEFAULT_DATETIMEFORMAT
+
+#End Region
+
+    Public LogLevelValue As LogLvl
+
     Public Event NewData(sender As Object)
 
 #Region "Properties"
@@ -58,24 +74,47 @@ Public Class Logger
     End Property
 
     ''' <summary>
-    ''' Returns if data is being written to a file. Also allows for file logging to be setup or stopped.
+    ''' Check status of the log file writer, as well as start or stop logging to a file.
+    ''' Events continue to be recorded to memory regardless.
     ''' </summary>
     ''' <returns>True when the <see cref="LogFile"/> object is instantiated, false if not.</returns>
-    Public ReadOnly Property IsWritingToFile() As Boolean
+    Public Property IsWritingToFile As Boolean
         Get
             Return LogFile IsNot Nothing
         End Get
+        Set(value As Boolean)
+            If value <> (LogFile IsNot Nothing) Then
+                If value = True Then
+                    InitializeLogFile()
+                Else
+                    TerminateLogFile()
+                End If
+            End If
+        End Set
     End Property
 
     ''' <summary>
-    ''' Get the log file location from the <see cref="LogFile"/> object.
+    ''' Get the filesystem location of the <see cref="LogFile"/> object, or the folder where it would be stored.
     ''' </summary>
-    ''' <returns>The possible path to the log file. Note that this does not gaurantee it exists.</returns>
-    Public ReadOnly Property LogFileLocation() As String
+    Public ReadOnly Property LogFilePath() As String
         Get
-            Return LogFile.FullLogFileName
+            If IsWritingToFile Then
+                Return LogFile.FullLogFileName
+            Else
+                Return DEFAULT_LOCATION
+            End If
         End Get
     End Property
+
+    Public Property DateTimeFormatInfo As DateTimeFormatInfo
+        Get
+            Return _DateTimeFormatInfo
+        End Get
+        Set(value As DateTimeFormatInfo)
+            _DateTimeFormatInfo = value
+        End Set
+    End Property
+
 
 #End Region
 
@@ -83,44 +122,80 @@ Public Class Logger
         LogLevelValue = LogLevel
     End Sub
 
-    Public Sub InitializeLogFile(baseDataFolder As String)
-        LogFile = New Logging.FileLogTraceListener(BASE_FILE_NAME) With {
+#Region "Log file management"
+
+    ''' <summary>
+    ''' Instantiates a new <see cref="FileLogTraceListener"/> at a the desired location, and outputs the
+    ''' <see cref="LastEvents"/> buffer into the file before synchronizing with write calls.
+    ''' </summary>
+    ''' <param name="baseDataFolder">Desired location to initiate the log file. If unspecified,
+    ''' then a default location is used.</param>
+    Public Sub InitializeLogFile(Optional baseDataFolder As String = Nothing)
+        LogFile = New FileLogTraceListener() With {
             .TraceOutputOptions = TraceOptions.DateTime Or TraceOptions.ProcessId,
             .Append = True,
             .AutoFlush = True,
-            .LogFileCreationSchedule = LOG_FILE_CREATION_SCHEDULE,
-            .CustomLocation = baseDataFolder & LOG_SUBFOLDER,
-            .Location = Logging.LogFileLocation.Custom
+            .LogFileCreationSchedule = LOG_FILE_CREATION_SCHEDULE
         }
 
-        LogTracing("Log file is initialized at " & LogFile.FullLogFileName, LogLvl.LOG_NOTICE, Me)
+        If baseDataFolder Is Nothing Then
+            LogFile.Location = DEFAULT_LOCATION
+        Else
+            LogFile.Location = LogFileLocation.Custom
+            LogFile.CustomLocation = baseDataFolder
+        End If
+
+        LogTracing(String.Format("{0} {1} Log file init", ProgramName, ProgramVersion), LogLvl.LOG_NOTICE, Me)
+
+        If LastEventsList.Count > 0 Then
+            ' Fill new file with the LastEventsList buffer
+            LogFile.WriteLine("==== History of " & LastEventsList.Count & " previous events ====")
+
+            For index As Integer = 0 To LastEventsList.Count - 1
+                LogFile.WriteLine(String.Format("[{0}] {1}", index + 1, LastEventsList(index)))
+            Next
+        End If
+
+        LogFile.WriteLine("==== Begin Live Log ====")
     End Sub
 
     ''' <summary>
-    ''' Disable logging and delete the current file.
+    ''' End logging to the <see cref="LogFile"/> by writing a terminating line to it, then closing and dereferencing it.
     ''' </summary>
-    ''' <returns>True if file was successfully deleted. False if an exception was encountered.</returns>
-    Public Function DeleteLogFile() As Boolean
-        Dim fileLocation = LogFile.FullLogFileName
-
-        ' Disable logging first.
-        If LogFile IsNot Nothing Then
+    ''' <exception cref="InvalidOperationException">The LogFile object is already Nothing and file logging is disabled.</exception>
+    ''' 
+    Public Sub TerminateLogFile()
+        If IsWritingToFile Then
+            LogTracing("Terminating log file.", LogLvl.LOG_NOTICE, Me)
             LogFile.Close()
             LogFile.Dispose()
-            ' For some reason, the object needs to be dereferenced to actually get it to close the handle.
             LogFile = Nothing
-            LogTracing("Logging to file has been disabled.", LogLvl.LOG_NOTICE, Me)
+        Else
+            Dim invOpExcp As New InvalidOperationException("Unable to terminate log file - already disabled.")
+            LogException(invOpExcp, Me)
+            Throw invOpExcp
         End If
+    End Sub
 
-        Try
-            ' IsWritingToFile = False
+    ''' <summary>
+    ''' Disable logging and delete the current file. May throw an exception while deleting the file,
+    ''' even if file logging was enabled.
+    ''' </summary>
+    ''' <exception cref="InvalidOperationException">LogFile object is Nothing.</exception>
+    Public Sub DeleteLogFile()
+        If IsWritingToFile Then
+            Dim fileLocation = LogFile.FullLogFileName
+            TerminateLogFile()
             File.Delete(fileLocation)
-            Return True
-        Catch ex As Exception
-            LogTracing("Error when deleteing log file: " & ex.ToString(), LogLvl.LOG_ERROR, Me)
-            Return False
-        End Try
-    End Function
+            LogTracing("Log file has been deleted.", LogLvl.LOG_NOTICE, Me)
+        Else
+            Dim invOpExcp As New InvalidOperationException("File logging is disabled, unable to delete log file.")
+            LogException(invOpExcp, Me)
+            Throw invOpExcp
+        End If
+    End Sub
+
+#End Region
 
     ''' <summary>
     ''' Write the <paramref name="message"/> to the Debug tracer is debugging, into the <see cref="LastEventsList" />
@@ -132,17 +207,7 @@ Public Class Logger
     ''' <param name="sender">What generated this message.</param>
     ''' <param name="LogToDisplay">A user-friendly, translated string to be shown.</param>
     Public Sub LogTracing(message As String, LvlError As LogLvl, sender As Object, Optional LogToDisplay As String = Nothing)
-        Dim Pid = TEventCache.ProcessId
-        Dim SenderName
-        ' Handle a null sender
-        If sender Is Nothing Then
-            SenderName = "Nothing"
-        Else
-            SenderName = sender.GetType.Name
-        End If
-
-        Dim EventTime = Now.ToLocalTime
-        Dim FinalMsg = EventTime & " Pid: " & Pid & " " & SenderName & " : " & message
+        Dim FinalMsg = FormatLogLine(message, LvlError, sender)
 
         ' Always write log messages to the attached debug messages window.
 #If DEBUG Then
@@ -166,4 +231,31 @@ Public Class Logger
             RaiseEvent NewData(sender)
         End If
     End Sub
+
+    Public Sub LogException(ex As Exception, sender As Object)
+        Dim sb As New StringBuilder
+        sb.AppendLine(ex.GetType().ToString() & " thrown in " & ex.Source)
+        sb.AppendLine("Message: " & ex.Message)
+        sb.AppendLine(ex.StackTrace)
+
+        LogTracing(sb.ToString(), LogLvl.LOG_ERROR, sender)
+
+        If ex.InnerException IsNot Nothing Then
+            LogTracing("Inner exception present:", LogLvl.LOG_ERROR, sender)
+            LogException(ex.InnerException, ex)
+        End If
+
+        LogTracing("Exception report complete.", LogLvl.LOG_NOTICE, Me)
+    End Sub
+
+    Private Function FormatLogLine(message As String, logLvl As LogLvl, Optional sender As Object = Nothing)
+        Dim Pid = TEventCache.ProcessId
+        Dim SenderName = "Nothing"
+
+        If sender IsNot Nothing Then
+            SenderName = sender.GetType.Name
+        End If
+
+        Return String.Format("{0} [{1}, {2}]: {3}", Date.Now.ToString(_DateTimeFormatInfo), Pid, SenderName, message)
+    End Function
 End Class

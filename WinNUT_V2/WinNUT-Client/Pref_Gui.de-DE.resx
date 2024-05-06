@@ -165,9 +165,6 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Optionen</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>Zeit zwischen jeder Aktualisierung der USV-Daten (Standard = 5).Wertebereich: Numerischer Wert von 1 bis 60 Sekunden.</value>
-  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>Name der zu überwachenden USV. Wertebereich: Name der auf dem NUT-Server konfigurierten USV.</value>
   </data>
@@ -186,9 +183,6 @@
   <data name="Tb_BattV_Max.ToolTip" xml:space="preserve">
     <value>Maximale Akkuspannung. Wertebereich: Numerischer Wert von 0 bis 100.</value>
   </data>
-  <data name="Tb_Load_Max.ToolTip" xml:space="preserve">
-    <value>Maximaler Last der USV. Wertebereich: Numerischer Wert von 0 bis 100.</value>
-  </data>
   <data name="Tb_OutV_Max.ToolTip" xml:space="preserve">
     <value>Maximale Ausgangsspannung. Wertebereich: Numerischer Wert von 0 bis 999.</value>
   </data>
@@ -197,9 +191,6 @@
   </data>
   <data name="Tb_BattV_Min.ToolTip" xml:space="preserve">
     <value>Minimale Akkuspannung. Wertebereich: Numerischer Wert von 0 bis 100.</value>
-  </data>
-  <data name="Tb_Load_Min.ToolTip" xml:space="preserve">
-    <value>Mindestladezustand der USV. Wertebereich: Numerischer Wert von 0 bis 100.</value>
   </data>
   <data name="Tb_OutV_Min.ToolTip" xml:space="preserve">
     <value>Minimale Ausgangsspannung. Wertebereich: Numerischer Wert von 0 bis 999.</value>
@@ -225,9 +216,6 @@
   <data name="Lbl_LevelLog.ToolTip" xml:space="preserve">
     <value>Detailstufe für die Logdatei</value>
   </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>Eine Logdatei (Datei WinNUT-client.log im WinNUT-Installationsverzeichnis) erstellen.</value>
-  </data>
   <data name="CB_Start_W_Win.ToolTip" xml:space="preserve">
     <value>Startet WinNUT beim Start von Windows.</value>
   </data>
@@ -244,7 +232,7 @@
     <value>Limit für zusätzliche Verzögerung. Wertebereich: Numerischer Wert von 0 bis 3600.</value>
   </data>
   <data name="Cb_ExtendTime.ToolTip" xml:space="preserve">
-    <value>Zusätzliche Zeit zum Herunterfahrens erlauben. Hinweis: Diese zusätzliche Zeit kann über die Verfügbarkeit der USV hinausgehen - MIT VORSICHT VERWENDEN !!!</value>
+    <value>USV-Name</value>
   </data>
   <data name="Tb_Delay_Stop.ToolTip" xml:space="preserve">
     <value>Prozedurverzögerung bei Verzögerung stoppen. Wertebereich: Numerischer Wert von 0 bis 3600.</value>
@@ -293,5 +281,20 @@
   </data>
   <data name="CB_Follow_FSD.ToolTip" xml:space="preserve">
     <value>Gibt an ob ein Herunterfahren durchgeführt werden soll wenn der NUT-Server ein erzwungenes Herunterfahren signalisiert (FSD = Force ShutDown).</value>
+  </data>
+  <data name="Cbx_Freq_Input.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_BattV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_OutV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_InF_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
   </data>
 </root>

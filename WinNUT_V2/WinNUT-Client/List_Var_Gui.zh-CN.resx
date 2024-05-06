@@ -22,19 +22,19 @@
     <value>名称：</value>
   </data>
   <data name="GB1.Text" xml:space="preserve">
-    <value>物产</value>
+    <value>项目属性</value>
   </data>
   <data name="Btn_Reload.Text" xml:space="preserve">
-    <value>重装</value>
+    <value>重载</value>
   </data>
   <data name="Btn_Clear.Text" xml:space="preserve">
-    <value>清洁</value>
+    <value>清空</value>
   </data>
   <data name="Btn_Close.Text" xml:space="preserve">
     <value>关闭</value>
   </data>
   <data name="Btn_Clip.Text" xml:space="preserve">
-    <value>复印</value>
+    <value>复制</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>UPS变量列表</value>

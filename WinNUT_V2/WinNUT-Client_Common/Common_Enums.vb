@@ -124,6 +124,7 @@ End Enum
 Public Enum PowerMethod
     Unavailable ' No methods are available to calculate power.
     RealPower ' The ups.realpower variable is available for direct reading.
+    RealOutputPower ' output.realpower is available for direct reading.
     RPNomLoadPct ' Power is calcualted as the load percentage of nominal realpower.
     InputNomVALoadPct ' Power is given as the nominal power calculated from nominal input volts/amps (and PF), multiplied by the percent load.
     OutputVACalc ' Power is calculated with output voltage and current (seen on Huawei, issue #150)

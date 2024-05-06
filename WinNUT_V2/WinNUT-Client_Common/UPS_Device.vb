@@ -258,15 +258,27 @@ Public Class UPS_Device
                     LogFile.LogException(ex, Me)
                 End If
             End Try
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
+                .Output_Power = value
+                LogFile.LogTracing("output.power: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+
+            End Try
         End With
 
         ' Determine optimal method for measuring power output from the UPS.
         LogFile.LogTracing("Determining best method to calculate power usage...", LogLvl.LOG_NOTICE, Me)
         ' Start with directly reading a variable from the UPS.
         Try
-            GetUPSVar("ups.realpower")
-            _PowerCalculationMethod = PowerMethod.RealPower
-            LogFile.LogTracing("Using RealPower method.", LogLvl.LOG_NOTICE, Me)
+            If freshData.UPS_Value.Output_Power <> Nothing Then
+                _PowerCalculationMethod = PowerMethod.RealOutputPower
+                LogFile.LogTracing("Using RealOutputPower method.", LogLvl.LOG_NOTICE, Me)
+            Else
+                GetUPSVar("ups.realpower")
+                _PowerCalculationMethod = PowerMethod.RealPower
+                LogFile.LogTracing("Using RealPower method.", LogLvl.LOG_NOTICE, Me)
+            End If
         Catch
             Try
                 GetUPSVar("ups.realpower.nominal")
@@ -327,6 +339,9 @@ Public Class UPS_Device
                                 Case PowerMethod.RealPower
                                     parsedValue = Double.Parse(GetUPSVar("ups.realpower"), INVARIANT_CULTURE)
 
+                                Case PowerMethod.RealOutputPower
+                                    parsedValue = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
+
                                 Case PowerMethod.RPNomLoadPct
                                     parsedValue = Double.Parse(GetUPSVar("ups.realpower.nominal"), INVARIANT_CULTURE)
                                     parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
@@ -336,13 +351,13 @@ Public Class UPS_Device
                                     Dim nomVoltage = Double.Parse(GetUPSVar("input.voltage.nominal"), INVARIANT_CULTURE)
 
                                     parsedValue = nomCurrent * nomVoltage * POWER_FACTOR
-                                    parsedValue = UPS_Datas.UPS_Value.Load / 100.0
+                                    parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
                                 Case PowerMethod.OutputVACalc
                                     .Output_Current = Single.Parse(GetUPSVar("output.current"), INVARIANT_CULTURE)
                                     parsedValue = .Output_Current * .Output_Voltage * POWER_FACTOR
                                 Case Else
                                     ' Should not trigger - something has gone wrong.
-                                    Throw New InvalidOperationException("Insufficient variables to calculate power.")
+                                    Throw New InvalidOperationException("Reached Else case when attempting to get power output for method " & _PowerCalculationMethod)
                             End Select
                         Catch ex As FormatException
                             LogFile.LogTracing("Unexpected format trying to parse value from UPS. Exception:", LogLvl.LOG_ERROR, Me)
@@ -352,7 +367,9 @@ Public Class UPS_Device
                             LogFile.LogException(ex, Me)
                         End Try
 
-                        .Output_Power = parsedValue
+                        ' Apply rounding to this number since calculations have extended to three decimal places.
+                        ' TODO: Remove this round function once gauges can handle decimal places better.
+                        .Output_Power = Math.Round(parsedValue, 1)
                     End If
 
                     ' Handle out-of-range battery charge

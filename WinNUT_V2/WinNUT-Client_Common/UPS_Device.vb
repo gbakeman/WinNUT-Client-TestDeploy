@@ -13,7 +13,7 @@ Imports System.Windows.Forms
 Public Class UPS_Device
 #Region "Statics/Defaults"
     Private ReadOnly INVARIANT_CULTURE = CultureInfo.InvariantCulture
-    Private Const CosPhi As Double = 0.6
+    Private Const POWER_FACTOR = 0.8
 
     ' How many milliseconds to wait before the Reconnect routine tries again.
     Private Const DEFAULT_RECONNECT_WAIT_MS As Double = 5000
@@ -238,27 +238,69 @@ Public Class UPS_Device
             Trim(GetUPSVar("ups.serial", "Unknown")),
             Trim(GetUPSVar("ups.firmware", "Unknown")))
 
+        With freshData.UPS_Value
+            LogFile.LogTracing("Initializing other well-known UPS variables...", LogLvl.LOG_DEBUG, Me)
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.current"), INVARIANT_CULTURE)
+                .Output_Current = value
+                LogFile.LogTracing("output.current: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+                If ex.GetType() <> GetType(NutException) Then
+                    LogFile.LogException(ex, Me)
+                End If
+            End Try
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.voltage"), INVARIANT_CULTURE)
+                .Output_Voltage = value
+                LogFile.LogTracing("output.voltage: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+                If ex.GetType() <> GetType(NutException) Then
+                    LogFile.LogException(ex, Me)
+                End If
+            End Try
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
+                .Output_Power = value
+                LogFile.LogTracing("output.power: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+
+            End Try
+        End With
+
+        ' Determine optimal method for measuring power output from the UPS.
         LogFile.LogTracing("Determining best method to calculate power usage...", LogLvl.LOG_NOTICE, Me)
+        ' Start with directly reading a variable from the UPS.
         Try
-            GetUPSVar("ups.realpower")
-            _PowerCalculationMethod = PowerMethod.RealPower
-            LogFile.LogTracing("Using RealPower method to calculate power usage.", LogLvl.LOG_NOTICE, Me)
+            If freshData.UPS_Value.Output_Power <> Nothing Then
+                _PowerCalculationMethod = PowerMethod.RealOutputPower
+                LogFile.LogTracing("Using RealOutputPower method.", LogLvl.LOG_NOTICE, Me)
+            Else
+                GetUPSVar("ups.realpower")
+                _PowerCalculationMethod = PowerMethod.RealPower
+                LogFile.LogTracing("Using RealPower method.", LogLvl.LOG_NOTICE, Me)
+            End If
         Catch
             Try
                 GetUPSVar("ups.realpower.nominal")
                 GetUPSVar("ups.load")
-                _PowerCalculationMethod = PowerMethod.NominalPowerCalc
-                LogFile.LogTracing("Using NominalPowerCalc method to calculate power usage.", LogLvl.LOG_NOTICE, Me)
+                _PowerCalculationMethod = PowerMethod.RPNomLoadPct
+                LogFile.LogTracing("Using RPNomLoadPct method.", LogLvl.LOG_NOTICE, Me)
             Catch
                 Try
                     GetUPSVar("input.current.nominal")
                     GetUPSVar("input.voltage.nominal")
                     GetUPSVar("ups.load")
-                    _PowerCalculationMethod = PowerMethod.VoltAmpCalc
-                    LogFile.LogTracing("Using VoltAmpCalc method to calculate power usage.", LogLvl.LOG_NOTICE, Me)
+                    _PowerCalculationMethod = PowerMethod.InputNomVALoadPct
+                    LogFile.LogTracing("Using InputNomVALoadPct method.", LogLvl.LOG_NOTICE, Me)
                 Catch
-                    _PowerCalculationMethod = PowerMethod.Unavailable
-                    LogFile.LogTracing("Unable to find a suitable method to calculate power usage.", LogLvl.LOG_WARNING, Me)
+                    If freshData.UPS_Value.Output_Current IsNot Nothing AndAlso
+                            freshData.UPS_Value.Output_Voltage <> Nothing Then
+                        _PowerCalculationMethod = PowerMethod.OutputVACalc
+                        LogFile.LogTracing("Using OutputVACalc method.", LogLvl.LOG_NOTICE, Me)
+                    Else
+                        _PowerCalculationMethod = PowerMethod.Unavailable
+                        LogFile.LogTracing("Unable to find a suitable method to calculate power usage.", LogLvl.LOG_WARNING, Me)
+                    End If
                 End Try
             End Try
         End Try
@@ -283,9 +325,9 @@ Public Class UPS_Device
                     .Batt_Charge = Double.Parse(GetUPSVar("battery.charge", -1), INVARIANT_CULTURE)
                     .Batt_Voltage = Double.Parse(GetUPSVar("battery.voltage", -1), INVARIANT_CULTURE)
                     .Batt_Runtime = Double.Parse(GetUPSVar("battery.runtime", -1), INVARIANT_CULTURE)
-                    .Power_Frequency = Double.Parse(GetUPSVar("input.frequency", Double.Parse(GetUPSVar("output.frequency", Freq_Fallback), INVARIANT_CULTURE)), INVARIANT_CULTURE)
+                    .Power_Frequency = Double.Parse(GetUPSVar("input.frequency", Freq_Fallback), INVARIANT_CULTURE)
                     .Input_Voltage = Double.Parse(GetUPSVar("input.voltage", -1), INVARIANT_CULTURE)
-                    .Output_Voltage = Double.Parse(GetUPSVar("output.voltage", .Input_Voltage), INVARIANT_CULTURE)
+                    .Output_Voltage = Double.Parse(GetUPSVar("output.voltage", -1), INVARIANT_CULTURE)
                     .Load = Double.Parse(GetUPSVar("ups.load", 0), INVARIANT_CULTURE)
 
                     ' Retrieve and/or calculate output power if possible.
@@ -293,28 +335,41 @@ Public Class UPS_Device
                         Dim parsedValue As Double
 
                         Try
-                            If _PowerCalculationMethod = PowerMethod.RealPower Then
-                                parsedValue = Double.Parse(GetUPSVar("ups.realpower"), INVARIANT_CULTURE)
+                            Select Case _PowerCalculationMethod
+                                Case PowerMethod.RealPower
+                                    parsedValue = Double.Parse(GetUPSVar("ups.realpower"), INVARIANT_CULTURE)
 
-                            ElseIf _PowerCalculationMethod = PowerMethod.NominalPowerCalc Then
-                                parsedValue = Double.Parse(GetUPSVar("ups.realpower.nominal"), INVARIANT_CULTURE)
-                                parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
+                                Case PowerMethod.RealOutputPower
+                                    parsedValue = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
 
-                            ElseIf _PowerCalculationMethod = PowerMethod.VoltAmpCalc Then
-                                Dim nomCurrent = Double.Parse(GetUPSVar("input.current.nominal"), INVARIANT_CULTURE)
-                                Dim nomVoltage = Double.Parse(GetUPSVar("input.voltage.nominal"), INVARIANT_CULTURE)
+                                Case PowerMethod.RPNomLoadPct
+                                    parsedValue = Double.Parse(GetUPSVar("ups.realpower.nominal"), INVARIANT_CULTURE)
+                                    parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
 
-                                parsedValue = (nomCurrent * nomVoltage * 0.8) * (UPS_Datas.UPS_Value.Load / 100.0)
-                            Else
-                                Throw New InvalidOperationException("Insufficient variables to calculate power.")
-                            End If
+                                Case PowerMethod.InputNomVALoadPct
+                                    Dim nomCurrent = Double.Parse(GetUPSVar("input.current.nominal"), INVARIANT_CULTURE)
+                                    Dim nomVoltage = Double.Parse(GetUPSVar("input.voltage.nominal"), INVARIANT_CULTURE)
+
+                                    parsedValue = nomCurrent * nomVoltage * POWER_FACTOR
+                                    parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
+                                Case PowerMethod.OutputVACalc
+                                    .Output_Current = Single.Parse(GetUPSVar("output.current"), INVARIANT_CULTURE)
+                                    parsedValue = .Output_Current * .Output_Voltage * POWER_FACTOR
+                                Case Else
+                                    ' Should not trigger - something has gone wrong.
+                                    Throw New InvalidOperationException("Reached Else case when attempting to get power output for method " & _PowerCalculationMethod)
+                            End Select
                         Catch ex As FormatException
                             LogFile.LogTracing("Unexpected format trying to parse value from UPS. Exception:", LogLvl.LOG_ERROR, Me)
                             LogFile.LogTracing(ex.ToString(), LogLvl.LOG_ERROR, Me)
                             LogFile.LogTracing("parsedValue: " & parsedValue, LogLvl.LOG_ERROR, Me)
+                        Catch ex As Exception
+                            LogFile.LogException(ex, Me)
                         End Try
 
-                        .Output_Power = parsedValue
+                        ' Apply rounding to this number since calculations have extended to three decimal places.
+                        ' TODO: Remove this round function once gauges can handle decimal places better.
+                        .Output_Power = Math.Round(parsedValue, 1)
                     End If
 
                     ' Handle out-of-range battery charge
@@ -428,7 +483,6 @@ Public Class UPS_Device
                     LogFile.LogTracing("Apply Fallback Value when retrieving " & varName, LogLvl.LOG_WARNING, Me)
                     Return Fallback_value
                 Else
-                    LogFile.LogTracing("Unhandled error while getting " & varName, LogLvl.LOG_ERROR, Me)
                     Throw
                 End If
             End Try

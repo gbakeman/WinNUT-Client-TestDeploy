@@ -101,6 +101,10 @@
   <data name="Lbl_Login_Nut.Text" xml:space="preserve">
     <value>登录</value>
   </data>
+  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
+    <value>从NUT服务器更新数据时间间隔（单位：毫秒）。
+最小值: 100, 最大值: 60 000。</value>
+  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>监控的 UPS 名称。
 允许值：在 UPS 的 Nut 服务端所配置的名称。</value>
@@ -160,6 +164,9 @@
   </data>
   <data name="CB_Use_Logfile.Text" xml:space="preserve">
     <value>创建日志文件</value>
+  </data>
+  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
+    <value>将日志事件写入文件。</value>
   </data>
   <data name="CB_Start_W_Win.Text" xml:space="preserve">
     <value>随 Windows 启动当前应用</value>
@@ -315,18 +322,5 @@
   </data>
   <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
-  </data>
-  <data name="Cbx_Freq_Input.Items" xml:space="preserve">
-    <value>50</value>
-  </data>
-  <data name="Cbx_Freq_Input.Items1" xml:space="preserve">
-    <value>60</value>
-  </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>从NUT服务器更新数据时间间隔（单位：毫秒）。
-最小值: 100, 最大值: 60 000。</value>
-  </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>将日志事件写入文件。</value>
   </data>
 </root>

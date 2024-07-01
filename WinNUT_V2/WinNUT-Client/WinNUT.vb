@@ -345,6 +345,9 @@ Public Class WinNUT
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
+            Case Microsoft.Win32.PowerModes.Suspend
+                LogFile.LogTracing("Suspending WinNUT operations...", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_GOTOSLEEP))
+                UPSDisconnect()
             Case Microsoft.Win32.PowerModes.Resume
                 LogFile.LogTracing("Restarting WinNUT after waking up from Windows", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
                 If My.Settings.NUT_AutoReconnect Then

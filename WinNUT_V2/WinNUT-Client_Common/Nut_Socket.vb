@@ -161,16 +161,14 @@ Public Class Nut_Socket
     ''' <summary>
     ''' Perform various functions necessary to disconnect the socket from the NUT server.
     ''' </summary>
-    ''' <param name="Forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
+    ''' <param name="forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
     Public Sub Disconnect(Optional forceful = False)
         If Not forceful AndAlso IsConnected AndAlso IsLoggedIn Then
-            Try
-                Query_Data("LOGOUT")
-            Finally
-                Close_Socket()
-                RaiseEvent SocketDisconnected()
-            End Try
+            Query_Data("LOGOUT")
         End If
+
+        Close_Socket()
+        RaiseEvent SocketDisconnected()
     End Sub
 
     ''' <summary>

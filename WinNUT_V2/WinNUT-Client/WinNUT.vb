@@ -330,14 +330,19 @@ Public Class WinNUT
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
+            ' Note: Windows does not wait for applications to handle a Suspend event.
             Case Microsoft.Win32.PowerModes.Suspend
                 LogFile.LogTracing("Suspending WinNUT operations...", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_GOTOSLEEP))
                 UPSDisconnect()
             Case Microsoft.Win32.PowerModes.Resume
+                If UPS_Device IsNot Nothing AndAlso UPS_Device.IsConnected Then
+                    LogFile.LogTracing("Trying to disconnect connected UPS after system resume...", LogLvl.LOG_NOTICE, Me)
+                    UPSDisconnect()
+                End If
                 If My.Settings.NUT_AutoReconnect Then
-                        LogFile.LogTracing("Reconnecting after system resume.", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
-                        UPS_Connect(True)
-                    End If
+                    LogFile.LogTracing("Reconnecting after system resume.", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
+                    UPS_Connect(True)
+                End If
         End Select
     End Sub
 

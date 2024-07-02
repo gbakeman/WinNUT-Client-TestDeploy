@@ -11,6 +11,7 @@
 
 ' Class dealing only with the management of the communication socket with the Nut server
 Imports System.IO
+Imports System.Net
 Imports System.Net.Sockets
 
 Public Class Nut_Socket
@@ -18,11 +19,7 @@ Public Class Nut_Socket
 #Region "Properties"
     Public ReadOnly Property ConnectionStatus As Boolean
         Get
-            If NutSocket IsNot Nothing Then
-                Return NutSocket.Connected
-            Else
-                Return False
-            End If
+            Return client.Connected
         End Get
     End Property
 
@@ -58,8 +55,7 @@ Public Class Nut_Socket
     Private NutConfig As Nut_Parameter
 
     'Socket Variables
-    Private NutSocket As Socket
-    Private NutTCP As TcpClient
+    Private client As New TcpClient
     Private NutStream As NetworkStream
     Private ReaderStream As StreamReader
     Private WriterStream As StreamWriter
@@ -70,11 +66,6 @@ Public Class Nut_Socket
     Private streamInUse As Boolean
 
     Public Event Socket_Broken(ex As NutException)
-
-    ''' <summary>
-    ''' Socket was disconnected as a part of normal operations.
-    ''' </summary>
-    Public Event SocketDisconnected()
 
     Public Sub New(Nut_Config As Nut_Parameter, ByRef logger As Logger)
         LogFile = logger
@@ -93,67 +84,53 @@ Public Class Nut_Socket
         End If
 
         Try
-            ' NutSocket = New Socket(AddressFamily.InterNetwork, ProtocolType.IP)
-            NutSocket = New Socket(SocketType.Stream, ProtocolType.IP)
             LogFile.LogTracing(String.Format("Attempting TCP socket connection to {0}:{1}...", Host, Port), LogLvl.LOG_NOTICE, Me)
-            NutSocket.Connect(Host, Port)
-            NutTCP = New TcpClient(Host, Port)
-            NutStream = NutTCP.GetStream
+
+            client.Connect(Host, Port)
+            NutStream = client.GetStream()
             ReaderStream = New StreamReader(NutStream)
             WriterStream = New StreamWriter(NutStream)
-            LogFile.LogTracing(String.Format("Connection established and streams ready for {0}:{1}", Host, Port), LogLvl.LOG_NOTICE, Me)
 
-            ' Something went wrong - cleanup and pass along error.
+            LogFile.LogTracing("Connection established and streams ready.", LogLvl.LOG_NOTICE, Me)
+
         Catch Excep As Exception
             Disconnect(True)
             Throw ' Pass exception on up to UPS
         End Try
 
-        If ConnectionStatus Then
-            Try
-                AuthLogin(Login, Password)
-            Catch ex As NutException
-                ' TODO: Make friendly message string for user.
-                LogFile.LogTracing("Error while attempting to log in: " & ex.Message, LogLvl.LOG_ERROR, Me)
-            End Try
+        Dim Nut_Query = Query_Data("VER")
 
-            Dim Nut_Query = Query_Data("VER")
-
-            If Nut_Query.ResponseType = NUTResponse.OK Then
-                Nut_Ver = (Nut_Query.RawResponse.Split(" "c))(4)
-            End If
-            Nut_Query = Query_Data("NETVER")
-
-            If Nut_Query.ResponseType = NUTResponse.OK Then
-                Net_Ver = Nut_Query.RawResponse
-            End If
-
-            LogFile.LogTracing(String.Format("NUT server reports VER: {0} NETVER: {1}", Nut_Ver, Net_Ver), LogLvl.LOG_NOTICE, Me)
+        If Nut_Query.ResponseType = NUTResponse.OK Then
+            Nut_Ver = (Nut_Query.RawResponse.Split(" "c))(4)
         End If
+        Nut_Query = Query_Data("NETVER")
+
+        If Nut_Query.ResponseType = NUTResponse.OK Then
+            Net_Ver = Nut_Query.RawResponse
+        End If
+
+        LogFile.LogTracing(String.Format("NUT server reports VER: {0} NETVER: {1}", Nut_Ver, Net_Ver), LogLvl.LOG_NOTICE, Me)
     End Sub
 
-    ''' <summary>
-    ''' Register with the UPSd server as being dependant on it for power.
-    ''' </summary>
-    ''' <param name="Login"></param>
-    ''' <param name="Password"></param>
-    ''' <exception cref="NutException">A protocol error was encountered while trying to authenticate.</exception>
-    Private Sub AuthLogin(Login As String, Password As String)
+    Public Sub Login()
         If _isLoggedIn Then
             Throw New InvalidOperationException("Attempted to login when already logged in.")
         End If
 
-        LogFile.LogTracing("Attempting authentication...", LogLvl.LOG_NOTICE, Me)
+        LogFile.LogTracing(String.Format("Logging in to UPS [{0}] as user [{1}] ({2})...",
+                            NutConfig.UPSName, NutConfig.Login,
+                            If(String.IsNullOrEmpty(NutConfig.Password),
+                                "NO Password", "Password provided")), LogLvl.LOG_NOTICE, Me)
 
-        If Not String.IsNullOrEmpty(Login) Then
-            Query_Data("USERNAME " & Login)
+        If Not String.IsNullOrEmpty(NutConfig.Login) Then
+            Query_Data("USERNAME " & NutConfig.Login)
 
-            If Not String.IsNullOrEmpty(Password) Then
-                Query_Data("PASSWORD " & Password)
+            If Not String.IsNullOrEmpty(NutConfig.Password) Then
+                Query_Data("PASSWORD " & NutConfig.Password)
             End If
         End If
 
-        Query_Data("LOGIN")
+        Query_Data("LOGIN " & NutConfig.UPSName)
         _isLoggedIn = True
         LogFile.LogTracing("Authenticated successfully.", LogLvl.LOG_NOTICE, Me)
     End Sub
@@ -163,12 +140,29 @@ Public Class Nut_Socket
     ''' </summary>
     ''' <param name="forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
     Public Sub Disconnect(Optional forceful = False)
-        If Not forceful AndAlso IsConnected AndAlso IsLoggedIn Then
-            Query_Data("LOGOUT")
-        End If
+        If IsConnected Then
+            If IsLoggedIn AndAlso Not forceful Then
+                Query_Data("LOGOUT")
+            End If
 
-        Close_Socket()
-        RaiseEvent SocketDisconnected()
+            If WriterStream IsNot Nothing Then
+                WriterStream.Close()
+            End If
+
+            If ReaderStream IsNot Nothing Then
+                ReaderStream.Close()
+            End If
+
+            If NutStream IsNot Nothing Then
+                NutStream.Close()
+            End If
+
+            If client IsNot Nothing Then
+                client.Close()
+            End If
+        Else
+            Throw New InvalidOperationException("NUT Socket is already disconnected.")
+        End If
     End Sub
 
     ''' <summary>
@@ -382,32 +376,5 @@ Public Class Nut_Socket
             Disconnect(True)
             RaiseEvent Socket_Broken(New NutException(Nut_Query))
         End If
-    End Sub
-
-    Private Sub Close_Socket()
-        Try
-            If WriterStream IsNot Nothing Then
-                WriterStream.Close()
-            End If
-
-            If ReaderStream IsNot Nothing Then
-                ReaderStream.Close()
-            End If
-
-            If NutStream IsNot Nothing Then
-                NutStream.Close()
-            End If
-
-            If NutTCP IsNot Nothing Then
-                NutTCP.Close()
-            End If
-
-            If NutSocket IsNot Nothing Then
-                NutSocket.Close()
-            End If
-        Catch Excep As Exception
-            LogFile.LogTracing("Error encountered while shutting down socket: " & vbNewLine & Excep.ToString(),
-                               LogLvl.LOG_ERROR, Me)
-        End Try
     End Sub
 End Class

@@ -37,8 +37,7 @@ Public Class UPS_Device
             Return (Nut_Socket.IsConnected)
         End Get
     End Property
-
-    Public ReadOnly Property IsAuthenticated As Boolean
+    Public ReadOnly Property IsLoggedIn As Boolean
         Get
             Return Nut_Socket.IsLoggedIn
         End Get
@@ -154,6 +153,7 @@ Public Class UPS_Device
             UPS_Datas = GetUPSProductInfo()
             Update_Data.Start()
             RaiseEvent Connected(Me)
+
         Catch ex As NutException
             ' This is how we determine if we have a valid UPS name entered, among other errors.
             RaiseEvent EncounteredNUTException(Me, ex)
@@ -168,6 +168,21 @@ Public Class UPS_Device
         End Try
     End Sub
 
+    Public Sub Login()
+        If Not IsConnected OrElse IsLoggedIn Then
+            Throw New InvalidOperationException("UPS is in an invalid state to login.")
+        End If
+
+        If Not String.IsNullOrEmpty(Nut_Config.Login) Then
+            Try
+                Nut_Socket.Login()
+            Catch ex As NutException
+                LogFile.LogTracing("Error while attempting to log in.", LogLvl.LOG_ERROR, Me)
+                RaiseEvent EncounteredNUTException(Me, ex)
+            End Try
+        End If
+    End Sub
+
     Public Sub Disconnect(Optional cancelReconnect As Boolean = True, Optional forceful As Boolean = False)
         LogFile.LogTracing("Processing request to disconnect...", LogLvl.LOG_DEBUG, Me)
 
@@ -179,7 +194,7 @@ Public Class UPS_Device
 
         Retry = 0
         Try
-            Nut_Socket.Disconnect(forceful)
+
         Catch nutEx As NutException
             RaiseEvent EncounteredNUTException(Me, nutEx)
         Finally
@@ -188,12 +203,6 @@ Public Class UPS_Device
     End Sub
 
 #Region "Socket Interaction"
-
-    Private Sub SocketDisconnected() Handles Nut_Socket.SocketDisconnected
-        LogFile.LogTracing("NutSocket raised Disconnected event.", LogLvl.LOG_DEBUG, Me)
-
-        RaiseEvent Disconnected()
-    End Sub
 
     Private Sub Socket_Broken() Handles Nut_Socket.Socket_Broken
         LogFile.LogTracing("Socket has reported a Broken event.", LogLvl.LOG_WARNING, Me)
@@ -215,6 +224,11 @@ Public Class UPS_Device
                 LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_DEBUG, Me)
                 Reconnect_Nut.Stop()
                 Retry = 0
+
+                If Not String.IsNullOrEmpty(Nut_Config.Login) Then
+                    Login()
+                End If
+
                 RaiseEvent ReConnected(Me)
             End If
         Else

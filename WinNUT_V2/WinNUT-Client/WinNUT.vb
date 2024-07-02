@@ -383,6 +383,10 @@ Public Class WinNUT
         UPS_Device = New UPS_Device(Nut_Config, LogFile, My.Settings.NUT_PollIntervalMsec, My.Settings.CAL_FreqInNom)
         AddHandler UPS_Device.EncounteredNUTException, AddressOf HandleNUTException
         UPS_Device.Connect_UPS(retryOnConnFailure)
+
+        If Not String.IsNullOrEmpty(Nut_Config.Login) Then
+            UPS_Device.Login()
+        End If
     End Sub
 
     ''' <summary>
@@ -409,8 +413,8 @@ Public Class WinNUT
     End Sub
 
     Private Sub ConnectionError(sender As UPS_Device, ex As Exception) Handles UPS_Device.ConnectionError
-        LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsAuthenticated: {2}",
-                               sender.Name, sender.IsConnected, sender.IsAuthenticated), LogLvl.LOG_ERROR, Me,
+        LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsLoggedIn: {2}",
+                               sender.Name, sender.IsConnected, sender.IsLoggedIn), LogLvl.LOG_ERROR, Me,
                                String.Format(StrLog.Item(AppResxStr.STR_LOG_CON_FAILED), sender.Nut_Config.Host, sender.Nut_Config.Port,
                                              ex.Message))
     End Sub

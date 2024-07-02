@@ -12,20 +12,6 @@ Imports WinNUT_Client_Common
 Public Class WinNUT
 #Region "Properties"
 
-    Public Property UpdateMethod() As String
-        Get
-            If mUpdate Then
-                mUpdate = False
-                Return True
-            Else
-                Return False
-            End If
-        End Get
-        Set(Value As String)
-            mUpdate = Value
-        End Set
-    End Property
-
     Public WriteOnly Property HasCrashed() As Boolean
         Set(Value As Boolean)
             WinNUT_Crashed = Value
@@ -78,7 +64,6 @@ Public Class WinNUT
     Public UPS_InputA As Double
 
     Private HasFocus As Boolean = True
-    Private mUpdate As Boolean = False
     Private FormText As String
     Private WinNUT_Crashed As Boolean = False
 
@@ -349,10 +334,10 @@ Public Class WinNUT
                 LogFile.LogTracing("Suspending WinNUT operations...", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_GOTOSLEEP))
                 UPSDisconnect()
             Case Microsoft.Win32.PowerModes.Resume
-                LogFile.LogTracing("Restarting WinNUT after waking up from Windows", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
                 If My.Settings.NUT_AutoReconnect Then
-                    UPS_Connect(True)
-                End If
+                        LogFile.LogTracing("Reconnecting after system resume.", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
+                        UPS_Connect(True)
+                    End If
         End Select
     End Sub
 
@@ -1048,12 +1033,11 @@ Public Class WinNUT
     End Sub
 
     Private Sub Menu_Update_Click(sender As Object, e As EventArgs) Handles Menu_Update.Click
-        mUpdate = True
         'Dim th As System.Threading.Thread = New Threading.Thread(New System.Threading.ParameterizedThreadStart(AddressOf Run_Update))
         'th.SetApartmentState(System.Threading.ApartmentState.STA)
         'th.Start(Me.UpdateMethod)
         LogFile.LogTracing("Open About Gui From Menu", LogLvl.LOG_DEBUG, Me)
-        Dim Update_Frm = New Update_Gui(mUpdate)
+        Dim Update_Frm = New Update_Gui(True)
         Update_Frm.Activate()
         Update_Frm.Visible = True
         HasFocus = False

@@ -383,16 +383,12 @@ Public Class WinNUT
         UPS_Device = New UPS_Device(Nut_Config, LogFile, My.Settings.NUT_PollIntervalMsec, My.Settings.CAL_FreqInNom)
         AddHandler UPS_Device.EncounteredNUTException, AddressOf HandleNUTException
         UPS_Device.Connect_UPS(retryOnConnFailure)
-
-        If Not String.IsNullOrEmpty(Nut_Config.Login) Then
-            UPS_Device.Login()
-        End If
     End Sub
 
     ''' <summary>
     ''' Prepare the form to begin receiving data from a connected UPS.
     ''' </summary>
-    Private Sub UPSReady(nutUps As UPS_Device) Handles UPS_Device.Connected, UPS_Device.ReConnected
+    Private Sub UPSReady(nutUps As UPS_Device) Handles UPS_Device.Connected
         Dim upsConf = nutUps.Nut_Config
         LogFile.LogTracing(upsConf.UPSName & " has indicated it's ready to start sending data.", LogLvl.LOG_DEBUG, Me)
 
@@ -410,6 +406,10 @@ Public Class WinNUT
         LogFile.LogTracing("Connection to Nut Host Established", LogLvl.LOG_NOTICE, Me,
                            String.Format(StrLog.Item(AppResxStr.STR_LOG_CONNECTED),
                                          upsConf.Host, upsConf.Port))
+
+        If Not String.IsNullOrEmpty(upsConf.Login) Then
+            UPS_Device.Login()
+        End If
     End Sub
 
     Private Sub ConnectionError(sender As UPS_Device, ex As Exception) Handles UPS_Device.ConnectionError
@@ -596,7 +596,8 @@ Public Class WinNUT
             Event_Unknown_UPS()
         End If
 
-        LogFile.LogTracing("NUT protocol error encoutnered:" + vbNewLine + ex.ToString(), LogLvl.LOG_NOTICE, sender)
+        LogFile.LogTracing("NUT protocol error encoutnered:", LogLvl.LOG_NOTICE, sender)
+        LogFile.LogException(ex, Me)
     End Sub
 
     Public Sub Event_Unknown_UPS() ' Handles UPS_Device.Unknown_UPS
@@ -623,7 +624,7 @@ Public Class WinNUT
     End Sub
 
     Public Shared Sub Event_ChangeStatus() Handles Me.On_Battery, Me.On_Line,
-        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected, UPS_Device.New_Retry, UPS_Device.ReConnected
+        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected, UPS_Device.New_Retry
         ', UPS_Device.Unknown_UPS
         ', UPS_Device.InvalidLogin
 

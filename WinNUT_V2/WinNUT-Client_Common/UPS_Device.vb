@@ -1,13 +1,4 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.Windows.Forms
 
 Public Class UPS_Device
@@ -47,13 +38,10 @@ Public Class UPS_Device
     ''' How often UPS data is updated, in milliseconds.
     ''' </summary>
     ''' <returns></returns>
-    Public Property PollingInterval As Integer
+    Public ReadOnly Property PollingInterval As Integer
         Get
             Return Update_Data.Interval
         End Get
-        Set(value As Integer)
-            Update_Data.Interval = value
-        End Set
     End Property
 
     Public Property IsUpdatingData As Boolean
@@ -89,7 +77,6 @@ Public Class UPS_Device
 #Region "Events"
     Public Event DataUpdated()
     Public Event Connected(sender As UPS_Device)
-    Public Event ReConnected(sender As UPS_Device)
     ' Notify that the connection was closed gracefully.
     Public Event Disconnected()
     ' Notify of an unexpectedly lost connection (??)
@@ -127,7 +114,6 @@ Public Class UPS_Device
     Public Sub New(ByRef Nut_Config As Nut_Parameter, ByRef LogFile As Logger, pollInterval As Integer, defaultFrequency As Integer)
         Me.LogFile = LogFile
         Me.Nut_Config = Nut_Config
-        PollingInterval = pollInterval
         Freq_Fallback = defaultFrequency
         Nut_Socket = New Nut_Socket(Me.Nut_Config, LogFile)
 
@@ -138,7 +124,7 @@ Public Class UPS_Device
         End With
 
         With Update_Data
-            .Interval = DEFAULT_UPDATE_INTERVAL_MS
+            .Interval = pollInterval
             .Enabled = False
             AddHandler .Tick, AddressOf Retrieve_UPS_Datas
         End With
@@ -194,9 +180,12 @@ Public Class UPS_Device
 
         Retry = 0
         Try
-
+            Nut_Socket.Disconnect(forceful)
         Catch nutEx As NutException
             RaiseEvent EncounteredNUTException(Me, nutEx)
+        Catch ex As Exception
+            LogFile.LogTracing("Unexpected exception while Disconnecting.", LogLvl.LOG_ERROR, Me)
+            LogFile.LogException(ex, Me)
         Finally
             RaiseEvent Disconnected()
         End Try
@@ -224,12 +213,6 @@ Public Class UPS_Device
                 LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_DEBUG, Me)
                 Reconnect_Nut.Stop()
                 Retry = 0
-
-                If Not String.IsNullOrEmpty(Nut_Config.Login) Then
-                    Login()
-                End If
-
-                RaiseEvent ReConnected(Me)
             End If
         Else
             LogFile.LogTracing("Max Retry reached. Stop Process Autoreconnect and wait for manual Reconnection", LogLvl.LOG_ERROR, Me, StrLog.Item(AppResxStr.STR_LOG_STOP_RETRY))

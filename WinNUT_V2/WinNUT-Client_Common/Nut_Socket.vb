@@ -1,17 +1,4 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-
-
-' Class dealing only with the management of the communication socket with the Nut server
-Imports System.IO
-Imports System.Net
+﻿Imports System.IO
 Imports System.Net.Sockets
 
 Public Class Nut_Socket
@@ -19,7 +6,7 @@ Public Class Nut_Socket
 #Region "Properties"
     Public ReadOnly Property ConnectionStatus As Boolean
         Get
-            Return client.Connected
+            Return If(client IsNot Nothing, client.Connected, False)
         End Get
     End Property
 
@@ -55,7 +42,7 @@ Public Class Nut_Socket
     Private NutConfig As Nut_Parameter
 
     'Socket Variables
-    Private client As New TcpClient
+    Private client As TcpClient
     Private NutStream As NetworkStream
     Private ReaderStream As StreamReader
     Private WriterStream As StreamWriter
@@ -86,7 +73,7 @@ Public Class Nut_Socket
         Try
             LogFile.LogTracing(String.Format("Attempting TCP socket connection to {0}:{1}...", Host, Port), LogLvl.LOG_NOTICE, Me)
 
-            client.Connect(Host, Port)
+            client = New TcpClient(Host, Port)
             NutStream = client.GetStream()
             ReaderStream = New StreamReader(NutStream)
             WriterStream = New StreamWriter(NutStream)
@@ -140,28 +127,24 @@ Public Class Nut_Socket
     ''' </summary>
     ''' <param name="forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
     Public Sub Disconnect(Optional forceful = False)
-        If IsConnected Then
-            If IsLoggedIn AndAlso Not forceful Then
-                Query_Data("LOGOUT")
-            End If
+        If IsLoggedIn AndAlso Not forceful Then
+            Query_Data("LOGOUT")
+        End If
 
-            If WriterStream IsNot Nothing Then
-                WriterStream.Close()
-            End If
+        If WriterStream IsNot Nothing Then
+            WriterStream.Dispose()
+        End If
 
-            If ReaderStream IsNot Nothing Then
-                ReaderStream.Close()
-            End If
+        If ReaderStream IsNot Nothing Then
+            ReaderStream.Dispose()
+        End If
 
-            If NutStream IsNot Nothing Then
-                NutStream.Close()
-            End If
+        If NutStream IsNot Nothing Then
+            NutStream.Dispose()
+        End If
 
-            If client IsNot Nothing Then
-                client.Close()
-            End If
-        Else
-            Throw New InvalidOperationException("NUT Socket is already disconnected.")
+        If client IsNot Nothing Then
+            client.Close()
         End If
     End Sub
 

@@ -10,12 +10,6 @@ Public Class Nut_Socket
         End Get
     End Property
 
-    Public ReadOnly Property IsConnected() As Boolean
-        Get
-            Return ConnectionStatus
-        End Get
-    End Property
-
     Private _isLoggedIn As Boolean = False
     Public ReadOnly Property IsLoggedIn() As Boolean
         Get
@@ -23,19 +17,8 @@ Public Class Nut_Socket
         End Get
     End Property
 
-    Private Nut_Ver As String
-    Public ReadOnly Property Nut_Version() As String
-        Get
-            Return Nut_Ver
-        End Get
-    End Property
-
-    Private Net_Ver As String
-    Public ReadOnly Property Net_Version() As String
-        Get
-            Return Net_Ver
-        End Get
-    End Property
+    Public ReadOnly Property NUTVersion As String
+    Public ReadOnly Property NetVersion As String
 #End Region
 
     Private LogFile As Logger
@@ -80,23 +63,37 @@ Public Class Nut_Socket
 
             LogFile.LogTracing("Connection established and streams ready.", LogLvl.LOG_NOTICE, Me)
 
+            LogFile.LogTracing("Gathering basic info about the NUT server...", LogLvl.LOG_DEBUG, Me)
+
+            Try
+                Dim Nut_Query = Query_Data("VER")
+
+                If Nut_Query.ResponseType = NUTResponse.OK Then
+                    _NUTVersion = (Nut_Query.RawResponse.Split(" "c))(4)
+                    LogFile.LogTracing("Server version: " & NUTVersion, LogLvl.LOG_NOTICE, Me)
+                End If
+            Catch nutEx As NutException
+                LogFile.LogTracing("Error retrieving server version.", LogLvl.LOG_WARNING, Me)
+                LogFile.LogException(nutEx, Me)
+            End Try
+
+            Try
+                Dim Nut_Query = Query_Data("NETVER")
+
+                If Nut_Query.ResponseType = NUTResponse.OK Then
+                    _NetVersion = Nut_Query.RawResponse
+                    LogFile.LogTracing("Protocol version: " & NetVersion, LogLvl.LOG_NOTICE, Me)
+                End If
+            Catch nutEx As NutException
+                LogFile.LogTracing("Error retrieving protocol version.", LogLvl.LOG_WARNING, Me)
+                LogFile.LogException(nutEx, Me)
+            End Try
+
+            LogFile.LogTracing("Completed gathering basic info about NUT server.", LogLvl.LOG_DEBUG, Me)
         Catch Excep As Exception
             Disconnect(True)
             Throw ' Pass exception on up to UPS
         End Try
-
-        Dim Nut_Query = Query_Data("VER")
-
-        If Nut_Query.ResponseType = NUTResponse.OK Then
-            Nut_Ver = (Nut_Query.RawResponse.Split(" "c))(4)
-        End If
-        Nut_Query = Query_Data("NETVER")
-
-        If Nut_Query.ResponseType = NUTResponse.OK Then
-            Net_Ver = Nut_Query.RawResponse
-        End If
-
-        LogFile.LogTracing(String.Format("NUT server reports VER: {0} NETVER: {1}", Nut_Ver, Net_Ver), LogLvl.LOG_NOTICE, Me)
     End Sub
 
     Public Sub Login()
@@ -169,7 +166,7 @@ Public Class Nut_Socket
                 Response = NUTResponse.ENDLIST
             Case "ERR"
                 Response = DirectCast([Enum].Parse(GetType(NUTResponse), SplitString(1)), NUTResponse)
-            Case "NETWORK", "1.0", "1.1", "1.2"
+            Case "NETWORK", "1.0", "1.1", "1.2", "1.3"
                 'In case of "VER" or "NETVER" Query
                 Response = NUTResponse.OK
             Case Else

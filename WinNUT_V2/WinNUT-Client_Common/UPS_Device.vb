@@ -25,7 +25,7 @@ Public Class UPS_Device
 
     Public ReadOnly Property IsConnected As Boolean
         Get
-            Return (Nut_Socket.IsConnected)
+            Return (Nut_Socket.ConnectionStatus)
         End Get
     End Property
     Public ReadOnly Property IsLoggedIn As Boolean

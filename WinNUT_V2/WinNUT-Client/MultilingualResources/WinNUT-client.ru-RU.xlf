@@ -783,9 +783,9 @@ Cancel to Save Msi and Install Later</source>
           <source>..\Resources\WinNUT-Updater.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
           <target state="final">..\Resources\WinNUT-Updater.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
         </trans-unit>
-        <trans-unit id="XP_Information" translate="yes" extype="System.Resources.ResXFileRef, System.Windows.Forms" xml:space="preserve">
+        <trans-unit id="XP_Information" translate="no" extype="System.Resources.ResXFileRef, System.Windows.Forms" xml:space="preserve">
           <source>..\Resources\XP_Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
-          <target state="needs-review-translation">..\Resources\XP_Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
+          <target state="final">..\Resources\XP_Information.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
         </trans-unit>
         <trans-unit id="DetectedPreviousPrefsData" translate="yes" xml:space="preserve">
           <source>Previous preferences data detected in the Registry.</source>
@@ -1275,24 +1275,6 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
         <trans-unit id="Lbl_Login_Nut.Text" translate="yes" xml:space="preserve">
           <source>Login</source>
           <target state="final">Логин</target>
-        </trans-unit>
-        <trans-unit id="Tb_Delay_Com.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>154, 101</source>
-          <target state="final">154, 101</target>
-        </trans-unit>
-        <trans-unit id="Tb_Delay_Com.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>162, 20</source>
-          <target state="final">162, 20</target>
-        </trans-unit>
-        <trans-unit id="Tb_Delay_Com.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>12</source>
-          <target state="final">12</target>
-        </trans-unit>
-        <trans-unit id="Tb_Delay_Com.ToolTip" translate="yes" xml:space="preserve">
-          <source>Milliseconds between data updates from NUT server.
-Min: 100, Max: 60 000.</source>
-          <target state="new">Milliseconds between data updates from NUT server.
-Min: 100, Max: 60 000.</target>
         </trans-unit>
         <trans-unit id="Tb_UPS_Name.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>154, 71</source>
@@ -2475,6 +2457,50 @@ Accepted value: Numeric value from 0 to 100.</source>
         <trans-unit id="Lbl_LoadUPS.Font" translate="yes" extype="System.Drawing.Font, System.Drawing" xml:space="preserve">
           <source>Microsoft Sans Serif, 8.25pt, style=Italic</source>
           <target state="needs-review-translation">Microsoft Sans Serif, 8.25pt, style=Italic</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
+          <source>Right</source>
+          <target state="needs-review-translation">Right</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.AutoSize" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
+          <source>True</source>
+          <target state="needs-review-translation">True</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>251, 102</source>
+          <target state="needs-review-translation">251, 102</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>49, 13</source>
+          <target state="needs-review-translation">49, 13</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>20</source>
+          <target state="needs-review-translation">20</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalUnitLabel.Text" translate="yes" xml:space="preserve">
+          <source>Seconds</source>
+          <target state="new">Seconds</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalValue.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>154, 100</source>
+          <target state="needs-review-translation">154, 100</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalValue.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>91, 20</source>
+          <target state="needs-review-translation">91, 20</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalValue.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>19</source>
+          <target state="needs-review-translation">19</target>
+        </trans-unit>
+        <trans-unit id="pollingIntervalValue.ToolTip" translate="yes" xml:space="preserve">
+          <source>How often WinNUT refreshes data from the NUT server.</source>
+          <target state="new">How often WinNUT refreshes data from the NUT server.</target>
+        </trans-unit>
+        <trans-unit id="Btn_Apply.Enabled" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
+          <source>False</source>
+          <target state="needs-review-translation">False</target>
         </trans-unit>
       </group>
     </body>

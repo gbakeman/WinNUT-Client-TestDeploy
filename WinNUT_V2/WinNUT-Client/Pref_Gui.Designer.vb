@@ -26,12 +26,13 @@ Partial Class Pref_Gui
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Pref_Gui))
         Me.TabControl_Options = New System.Windows.Forms.TabControl()
         Me.Tab_Connexion = New System.Windows.Forms.TabPage()
+        Me.pollingIntervalUnitLabel = New System.Windows.Forms.Label()
+        Me.pollingIntervalValue = New System.Windows.Forms.NumericUpDown()
         Me.Tb_Pwd_Nut = New System.Windows.Forms.TextBox()
         Me.Tb_Login_Nut = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Lbl_Pwd_Nut = New System.Windows.Forms.Label()
         Me.Lbl_Login_Nut = New System.Windows.Forms.Label()
-        Me.Tb_Delay_Com = New System.Windows.Forms.TextBox()
         Me.Tb_UPS_Name = New System.Windows.Forms.TextBox()
         Me.Tb_Port = New System.Windows.Forms.TextBox()
         Me.Tb_Server_IP = New System.Windows.Forms.TextBox()
@@ -96,6 +97,7 @@ Partial Class Pref_Gui
         Me.Pref_TlTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.TabControl_Options.SuspendLayout()
         Me.Tab_Connexion.SuspendLayout()
+        CType(Me.pollingIntervalValue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Tab_Calibrage.SuspendLayout()
         Me.Tab_Miscellanous.SuspendLayout()
         Me.Tab_Shutdown.SuspendLayout()
@@ -115,12 +117,13 @@ Partial Class Pref_Gui
         '
         'Tab_Connexion
         '
+        Me.Tab_Connexion.Controls.Add(Me.pollingIntervalUnitLabel)
+        Me.Tab_Connexion.Controls.Add(Me.pollingIntervalValue)
         Me.Tab_Connexion.Controls.Add(Me.Tb_Pwd_Nut)
         Me.Tab_Connexion.Controls.Add(Me.Tb_Login_Nut)
         Me.Tab_Connexion.Controls.Add(Me.Label3)
         Me.Tab_Connexion.Controls.Add(Me.Lbl_Pwd_Nut)
         Me.Tab_Connexion.Controls.Add(Me.Lbl_Login_Nut)
-        Me.Tab_Connexion.Controls.Add(Me.Tb_Delay_Com)
         Me.Tab_Connexion.Controls.Add(Me.Tb_UPS_Name)
         Me.Tab_Connexion.Controls.Add(Me.Tb_Port)
         Me.Tab_Connexion.Controls.Add(Me.Tb_Server_IP)
@@ -132,6 +135,21 @@ Partial Class Pref_Gui
         resources.ApplyResources(Me.Tab_Connexion, "Tab_Connexion")
         Me.Tab_Connexion.Name = "Tab_Connexion"
         Me.Tab_Connexion.UseVisualStyleBackColor = True
+        '
+        'pollingIntervalUnitLabel
+        '
+        resources.ApplyResources(Me.pollingIntervalUnitLabel, "pollingIntervalUnitLabel")
+        Me.pollingIntervalUnitLabel.Name = "pollingIntervalUnitLabel"
+        '
+        'pollingIntervalValue
+        '
+        Me.pollingIntervalValue.DecimalPlaces = 1
+        Me.pollingIntervalValue.Increment = New Decimal(New Integer() {1, 0, 0, 65536})
+        resources.ApplyResources(Me.pollingIntervalValue, "pollingIntervalValue")
+        Me.pollingIntervalValue.Minimum = New Decimal(New Integer() {1, 0, 0, 65536})
+        Me.pollingIntervalValue.Name = "pollingIntervalValue"
+        Me.Pref_TlTip.SetToolTip(Me.pollingIntervalValue, resources.GetString("pollingIntervalValue.ToolTip"))
+        Me.pollingIntervalValue.Value = New Decimal(New Integer() {1, 0, 0, 65536})
         '
         'Tb_Pwd_Nut
         '
@@ -160,12 +178,6 @@ Partial Class Pref_Gui
         '
         resources.ApplyResources(Me.Lbl_Login_Nut, "Lbl_Login_Nut")
         Me.Lbl_Login_Nut.Name = "Lbl_Login_Nut"
-        '
-        'Tb_Delay_Com
-        '
-        resources.ApplyResources(Me.Tb_Delay_Com, "Tb_Delay_Com")
-        Me.Tb_Delay_Com.Name = "Tb_Delay_Com"
-        Me.Pref_TlTip.SetToolTip(Me.Tb_Delay_Com, resources.GetString("Tb_Delay_Com.ToolTip"))
         '
         'Tb_UPS_Name
         '
@@ -602,6 +614,7 @@ Partial Class Pref_Gui
         Me.TabControl_Options.ResumeLayout(False)
         Me.Tab_Connexion.ResumeLayout(False)
         Me.Tab_Connexion.PerformLayout()
+        CType(Me.pollingIntervalValue, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Tab_Calibrage.ResumeLayout(False)
         Me.Tab_Calibrage.PerformLayout()
         Me.Tab_Miscellanous.ResumeLayout(False)
@@ -630,7 +643,6 @@ Partial Class Pref_Gui
     Friend WithEvents Btn_Cancel As Button
     Friend WithEvents Tb_Server_IP As TextBox
     Friend WithEvents Tb_Port As TextBox
-    Friend WithEvents Tb_Delay_Com As TextBox
     Friend WithEvents Tb_UPS_Name As TextBox
     Friend WithEvents Lbl_InputV As Label
     Friend WithEvents Lbl_BattV As Label
@@ -684,4 +696,6 @@ Partial Class Pref_Gui
     Friend WithEvents Lbl_Pwd_Nut As Label
     Friend WithEvents Lbl_Login_Nut As Label
     Friend WithEvents CB_Follow_FSD As CheckBox
+    Friend WithEvents pollingIntervalUnitLabel As Label
+    Private WithEvents pollingIntervalValue As NumericUpDown
 End Class

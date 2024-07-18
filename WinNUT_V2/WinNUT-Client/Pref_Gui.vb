@@ -8,15 +8,13 @@
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
 Imports LogLvl = WinNUT_Client_Common.LogLvl
-Imports System.IO
 Imports WinNUT_Client_Common
 
 Public Class Pref_Gui
     Private IsShowed As Boolean = False
     Private PrefsModified As Boolean = False
 
-    ' Indicate that parameters have been saved (and if one or more were changed)
-    Public Event SavedPreferences(isModified As Boolean)
+    Public Event SavedPreferences()
 
     Private Sub Btn_Cancel_Click(sender As Object, e As EventArgs) Handles Btn_Cancel.Click
         LogFile.LogTracing("Close Pref Gui from Button Cancel", LogLvl.LOG_DEBUG, Me)
@@ -25,12 +23,11 @@ Public Class Pref_Gui
 
     Private Sub Save_Params()
         Try
-            ' PrefsModified = False
             LogFile.LogTracing("Save Parameters.", LogLvl.LOG_DEBUG, Me)
             My.Settings.NUT_ServerAddress = Tb_Server_IP.Text
             My.Settings.NUT_ServerPort = CInt(Tb_Port.Text)
             My.Settings.NUT_UPSName = Tb_UPS_Name.Text
-            My.Settings.NUT_PollIntervalMsec = CInt(Tb_Delay_Com.Text)
+            My.Settings.NUT_PollIntervalMsec = CInt(pollingIntervalValue.Value * 1000D)
             My.Settings.NUT_Username = Tb_Login_Nut.Text
             My.Settings.NUT_Password = Tb_Pwd_Nut.Text
             My.Settings.NUT_AutoReconnect = Cb_Reconnect.Checked
@@ -75,20 +72,22 @@ Public Class Pref_Gui
                 End If
             End If
 
-            RaiseEvent SavedPreferences(PrefsModified)
+            RaiseEvent SavedPreferences()
 
             SetLogControlsStatus()
             LogFile.LogTracing("Preferences Saved", LogLvl.LOG_NOTICE, Me)
 
-            ' PrefsModified = True
+            PrefsModified = False
         Catch e As Exception
-            ' PrefsModified = False
+            LogFile.LogTracing("Error when trying to save preferences.", LogLvl.LOG_ERROR, Me)
+            LogFile.LogException(e, Me)
+            MessageBox.Show(e.ToString(), "Error while saving")
         End Try
     End Sub
 
     Private Sub Btn_Apply_Click(sender As Object, e As EventArgs) Handles Btn_Apply.Click
         Save_Params()
-        If PrefsModified Then
+        If Not PrefsModified Then
             Btn_Apply.Enabled = False
         End If
     End Sub
@@ -106,7 +105,7 @@ Public Class Pref_Gui
             Tb_Server_IP.Text = My.Settings.NUT_ServerAddress
             Tb_Port.Text = My.Settings.NUT_ServerPort
             Tb_UPS_Name.Text = My.Settings.NUT_UPSName
-            Tb_Delay_Com.Text = My.Settings.NUT_PollIntervalMsec
+            pollingIntervalValue.Value = My.Settings.NUT_PollIntervalMsec / 1000D
             Tb_Login_Nut.Text = My.Settings.NUT_Username
             Tb_Pwd_Nut.Text = My.Settings.NUT_Password
             Cb_Reconnect.Checked = My.Settings.NUT_AutoReconnect
@@ -178,7 +177,8 @@ Public Class Pref_Gui
                     AddHandler CmbBox.SelectedIndexChanged, AddressOf Event_Ctrl_Value_Changed
                 Next
             Next
-            Btn_Apply.Enabled = False
+            AddHandler pollingIntervalValue.ValueChanged, AddressOf Event_Ctrl_Value_Changed
+
             SetLogControlsStatus()
             IsShowed = True
             LogFile.LogTracing("Pref Gui Opened.", LogLvl.LOG_DEBUG, Me)
@@ -229,7 +229,7 @@ Public Class Pref_Gui
         End If
     End Sub
 
-    Private Sub Number_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Tb_Port.Validating, Tb_OutV_Min.Validating, Tb_OutV_Max.Validating, Tb_InV_Min.Validating, Tb_InV_Max.Validating, Tb_InF_Min.Validating, Tb_InF_Max.Validating, Tb_GraceTime.Validating, Tb_Delay_Stop.Validating, Tb_Delay_Com.Validating, Tb_BattV_Min.Validating, Tb_BattV_Max.Validating, Tb_BattLimit_Time.Validating, Tb_BattLimit_Load.Validating
+    Private Sub Number_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Tb_Port.Validating, Tb_OutV_Min.Validating, Tb_OutV_Max.Validating, Tb_InV_Min.Validating, Tb_InV_Max.Validating, Tb_InF_Min.Validating, Tb_InF_Max.Validating, Tb_GraceTime.Validating, Tb_Delay_Stop.Validating, Tb_BattV_Min.Validating, Tb_BattV_Max.Validating, Tb_BattLimit_Time.Validating, Tb_BattLimit_Load.Validating
         If IsShowed Then
             Dim StrTest As String = sender.Text
             Dim Result As Object = 0
@@ -237,9 +237,6 @@ Public Class Pref_Gui
 
             LogFile.LogTracing(String.Format("Check that the value of {0} for {1} is correct.", sender.Text, sender.Name), LogLvl.LOG_DEBUG, Me)
             Select Case sender.Name
-                Case "Tb_Delay_Com"
-                    MinValue = 100
-                    MaxValue = 60000
                 Case "Tb_Port"
                     MinValue = 1
                     MaxValue = 65536

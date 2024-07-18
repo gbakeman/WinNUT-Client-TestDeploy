@@ -101,10 +101,6 @@
   <data name="Lbl_Login_Nut.Text" xml:space="preserve">
     <value>登录</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>从NUT服务器更新数据时间间隔（单位：毫秒）。
-最小值: 100, 最大值: 60 000。</value>
-  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>监控的 UPS 名称。
 允许值：在 UPS 的 Nut 服务端所配置的名称。</value>
@@ -322,5 +318,32 @@
   </data>
   <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Anchor" xml:space="preserve" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.AutoSize" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>251, 102</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="pollingIntervalValue.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>154, 100</value>
+  </data>
+  <data name="pollingIntervalValue.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>91, 20</value>
+  </data>
+  <data name="pollingIntervalValue.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="Btn_Apply.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
 </root>

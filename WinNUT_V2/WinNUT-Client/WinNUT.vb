@@ -637,15 +637,6 @@ Public Class WinNUT
         End If
     End Sub
 
-    'TODO: FIX
-    'Public Shared Sub Event_ReConnected() Handles UPS_Device.ReConnected
-    '    With WinNUT
-    '        .Update_Data.Start()
-    '        .Device_Data = .UPS_Device.Retrieve_UPS_Datas()
-    '        .Update_UPS_Data()
-    '    End With
-    'End Sub
-
     Private Sub Update_UPS_Data() Handles UPS_Device.DataUpdated
         LogFile.LogTracing("Updating UPS data for Form.", LogLvl.LOG_DEBUG, Me)
 

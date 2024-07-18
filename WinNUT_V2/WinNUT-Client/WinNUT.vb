@@ -12,20 +12,6 @@ Imports WinNUT_Client_Common
 Public Class WinNUT
 #Region "Properties"
 
-    Public Property UpdateMethod() As String
-        Get
-            If mUpdate Then
-                mUpdate = False
-                Return True
-            Else
-                Return False
-            End If
-        End Get
-        Set(Value As String)
-            mUpdate = Value
-        End Set
-    End Property
-
     Public WriteOnly Property HasCrashed() As Boolean
         Set(Value As Boolean)
             WinNUT_Crashed = Value
@@ -78,7 +64,6 @@ Public Class WinNUT
     Public UPS_InputA As Double
 
     Private HasFocus As Boolean = True
-    Private mUpdate As Boolean = False
     Private FormText As String
     Private WinNUT_Crashed As Boolean = False
 
@@ -345,9 +330,17 @@ Public Class WinNUT
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
+            ' Note: Windows does not wait for applications to handle a Suspend event.
+            Case Microsoft.Win32.PowerModes.Suspend
+                LogFile.LogTracing("Suspending WinNUT operations...", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_GOTOSLEEP))
+                UPSDisconnect()
             Case Microsoft.Win32.PowerModes.Resume
-                LogFile.LogTracing("Restarting WinNUT after waking up from Windows", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
+                If UPS_Device IsNot Nothing AndAlso UPS_Device.IsConnected Then
+                    LogFile.LogTracing("Trying to disconnect connected UPS after system resume...", LogLvl.LOG_NOTICE, Me)
+                    UPSDisconnect()
+                End If
                 If My.Settings.NUT_AutoReconnect Then
+                    LogFile.LogTracing("Reconnecting after system resume.", LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_MAIN_EXITSLEEP))
                     UPS_Connect(True)
                 End If
         End Select
@@ -395,7 +388,7 @@ Public Class WinNUT
     ''' <summary>
     ''' Prepare the form to begin receiving data from a connected UPS.
     ''' </summary>
-    Private Sub UPSReady(nutUps As UPS_Device) Handles UPS_Device.Connected, UPS_Device.ReConnected
+    Private Sub UPSReady(nutUps As UPS_Device) Handles UPS_Device.Connected
         Dim upsConf = nutUps.Nut_Config
         LogFile.LogTracing(upsConf.UPSName & " has indicated it's ready to start sending data.", LogLvl.LOG_DEBUG, Me)
 
@@ -413,11 +406,15 @@ Public Class WinNUT
         LogFile.LogTracing("Connection to Nut Host Established", LogLvl.LOG_NOTICE, Me,
                            String.Format(StrLog.Item(AppResxStr.STR_LOG_CONNECTED),
                                          upsConf.Host, upsConf.Port))
+
+        If Not String.IsNullOrEmpty(upsConf.Login) Then
+            UPS_Device.Login()
+        End If
     End Sub
 
     Private Sub ConnectionError(sender As UPS_Device, ex As Exception) Handles UPS_Device.ConnectionError
-        LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsAuthenticated: {2}",
-                               sender.Name, sender.IsConnected, sender.IsAuthenticated), LogLvl.LOG_ERROR, Me,
+        LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsLoggedIn: {2}",
+                               sender.Name, sender.IsConnected, sender.IsLoggedIn), LogLvl.LOG_ERROR, Me,
                                String.Format(StrLog.Item(AppResxStr.STR_LOG_CON_FAILED), sender.Nut_Config.Host, sender.Nut_Config.Port,
                                              ex.Message))
     End Sub
@@ -599,7 +596,8 @@ Public Class WinNUT
             Event_Unknown_UPS()
         End If
 
-        LogFile.LogTracing("NUT protocol error encoutnered:" + vbNewLine + ex.ToString(), LogLvl.LOG_NOTICE, sender)
+        LogFile.LogTracing("NUT protocol error encoutnered:", LogLvl.LOG_NOTICE, sender)
+        LogFile.LogException(ex, Me)
     End Sub
 
     Public Sub Event_Unknown_UPS() ' Handles UPS_Device.Unknown_UPS
@@ -626,7 +624,7 @@ Public Class WinNUT
     End Sub
 
     Public Shared Sub Event_ChangeStatus() Handles Me.On_Battery, Me.On_Line,
-        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected, UPS_Device.New_Retry, UPS_Device.ReConnected
+        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected, UPS_Device.New_Retry
         ', UPS_Device.Unknown_UPS
         ', UPS_Device.InvalidLogin
 
@@ -1045,12 +1043,11 @@ Public Class WinNUT
     End Sub
 
     Private Sub Menu_Update_Click(sender As Object, e As EventArgs) Handles Menu_Update.Click
-        mUpdate = True
         'Dim th As System.Threading.Thread = New Threading.Thread(New System.Threading.ParameterizedThreadStart(AddressOf Run_Update))
         'th.SetApartmentState(System.Threading.ApartmentState.STA)
         'th.Start(Me.UpdateMethod)
         LogFile.LogTracing("Open About Gui From Menu", LogLvl.LOG_DEBUG, Me)
-        Dim Update_Frm = New Update_Gui(mUpdate)
+        Dim Update_Frm = New Update_Gui(True)
         Update_Frm.Activate()
         Update_Frm.Visible = True
         HasFocus = False

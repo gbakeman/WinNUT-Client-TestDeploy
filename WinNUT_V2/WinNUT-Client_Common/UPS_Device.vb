@@ -1,13 +1,4 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.Windows.Forms
 
 Public Class UPS_Device
@@ -34,11 +25,10 @@ Public Class UPS_Device
 
     Public ReadOnly Property IsConnected As Boolean
         Get
-            Return (Nut_Socket.IsConnected)
+            Return (Nut_Socket.ConnectionStatus)
         End Get
     End Property
-
-    Public ReadOnly Property IsAuthenticated As Boolean
+    Public ReadOnly Property IsLoggedIn As Boolean
         Get
             Return Nut_Socket.IsLoggedIn
         End Get
@@ -48,13 +38,10 @@ Public Class UPS_Device
     ''' How often UPS data is updated, in milliseconds.
     ''' </summary>
     ''' <returns></returns>
-    Public Property PollingInterval As Integer
+    Public ReadOnly Property PollingInterval As Integer
         Get
             Return Update_Data.Interval
         End Get
-        Set(value As Integer)
-            Update_Data.Interval = value
-        End Set
     End Property
 
     Public Property IsUpdatingData As Boolean
@@ -90,7 +77,6 @@ Public Class UPS_Device
 #Region "Events"
     Public Event DataUpdated()
     Public Event Connected(sender As UPS_Device)
-    Public Event ReConnected(sender As UPS_Device)
     ' Notify that the connection was closed gracefully.
     Public Event Disconnected()
     ' Notify of an unexpectedly lost connection (??)
@@ -128,7 +114,6 @@ Public Class UPS_Device
     Public Sub New(ByRef Nut_Config As Nut_Parameter, ByRef LogFile As Logger, pollInterval As Integer, defaultFrequency As Integer)
         Me.LogFile = LogFile
         Me.Nut_Config = Nut_Config
-        PollingInterval = pollInterval
         Freq_Fallback = defaultFrequency
         Nut_Socket = New Nut_Socket(Me.Nut_Config, LogFile)
 
@@ -139,7 +124,7 @@ Public Class UPS_Device
         End With
 
         With Update_Data
-            .Interval = DEFAULT_UPDATE_INTERVAL_MS
+            .Interval = pollInterval
             .Enabled = False
             AddHandler .Tick, AddressOf Retrieve_UPS_Datas
         End With
@@ -154,6 +139,7 @@ Public Class UPS_Device
             UPS_Datas = GetUPSProductInfo()
             Update_Data.Start()
             RaiseEvent Connected(Me)
+
         Catch ex As NutException
             ' This is how we determine if we have a valid UPS name entered, among other errors.
             RaiseEvent EncounteredNUTException(Me, ex)
@@ -166,6 +152,21 @@ Public Class UPS_Device
                 Reconnect_Nut.Start()
             End If
         End Try
+    End Sub
+
+    Public Sub Login()
+        If Not IsConnected OrElse IsLoggedIn Then
+            Throw New InvalidOperationException("UPS is in an invalid state to login.")
+        End If
+
+        If Not String.IsNullOrEmpty(Nut_Config.Login) Then
+            Try
+                Nut_Socket.Login()
+            Catch ex As NutException
+                LogFile.LogTracing("Error while attempting to log in.", LogLvl.LOG_ERROR, Me)
+                RaiseEvent EncounteredNUTException(Me, ex)
+            End Try
+        End If
     End Sub
 
     Public Sub Disconnect(Optional cancelReconnect As Boolean = True, Optional forceful As Boolean = False)
@@ -182,18 +183,15 @@ Public Class UPS_Device
             Nut_Socket.Disconnect(forceful)
         Catch nutEx As NutException
             RaiseEvent EncounteredNUTException(Me, nutEx)
+        Catch ex As Exception
+            LogFile.LogTracing("Unexpected exception while Disconnecting.", LogLvl.LOG_ERROR, Me)
+            LogFile.LogException(ex, Me)
         Finally
             RaiseEvent Disconnected()
         End Try
     End Sub
 
 #Region "Socket Interaction"
-
-    Private Sub SocketDisconnected() Handles Nut_Socket.SocketDisconnected
-        LogFile.LogTracing("NutSocket raised Disconnected event.", LogLvl.LOG_DEBUG, Me)
-
-        RaiseEvent Disconnected()
-    End Sub
 
     Private Sub Socket_Broken() Handles Nut_Socket.Socket_Broken
         LogFile.LogTracing("Socket has reported a Broken event.", LogLvl.LOG_WARNING, Me)
@@ -215,7 +213,6 @@ Public Class UPS_Device
                 LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_DEBUG, Me)
                 Reconnect_Nut.Stop()
                 Retry = 0
-                RaiseEvent ReConnected(Me)
             End If
         Else
             LogFile.LogTracing("Max Retry reached. Stop Process Autoreconnect and wait for manual Reconnection", LogLvl.LOG_ERROR, Me, StrLog.Item(AppResxStr.STR_LOG_STOP_RETRY))

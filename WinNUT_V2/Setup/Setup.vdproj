@@ -117,12 +117,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_125AAFC5ACA769ECF8F8850600756DC0"
-        "OwnerKey" = "8:_D20AE0448FA041DB8F5DD65C05E507C1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_13A50E0B7226F53EDD2CF77F7D306D9D"
         "OwnerKey" = "8:_D20AE0448FA041DB8F5DD65C05E507C1"
         "MsmSig" = "8:_UNDEFINED"
@@ -4251,6 +4245,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E36552FBC440876890B403CE90C8A565"
+        "OwnerKey" = "8:_D20AE0448FA041DB8F5DD65C05E507C1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_E6CAC81FA0DD7E67B3730F837AE59C9F"
         "OwnerKey" = "8:_D20AE0448FA041DB8F5DD65C05E507C1"
         "MsmSig" = "8:_UNDEFINED"
@@ -5476,7 +5476,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_125AAFC5ACA769ECF8F8850600756DC0"
+        "OwnerKey" = "8:_E36552FBC440876890B403CE90C8A565"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -6665,37 +6665,6 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_125AAFC5ACA769ECF8F8850600756DC0"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:AGauge, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_125AAFC5ACA769ECF8F8850600756DC0"
-                    {
-                    "Name" = "8:AGauge.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:AGauge.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_7A1917372AF14D75845D775AAEB7CD48"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -11422,7 +11391,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WinNUT-Client_Common, Version=2.3.8965.30162, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:WinNUT-Client_Common, Version=2.3.8970.24507, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CB7240238DDFA669FCF3046E48D0A447"
@@ -12193,6 +12162,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E36552FBC440876890B403CE90C8A565"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:AGaugeClassic, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E36552FBC440876890B403CE90C8A565"
+                    {
+                    "Name" = "8:AGaugeClassic.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:AGaugeClassic.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_7A1917372AF14D75845D775AAEB7CD48"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E6CAC81FA0DD7E67B3730F837AE59C9F"
             {
             "AssemblyRegister" = "3:1"
@@ -12776,15 +12776,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WinNUT Client"
-        "ProductCode" = "8:{0C2A0FDE-2836-4944-99D1-6977AFD17195}"
-        "PackageCode" = "8:{A1BC1168-779F-4187-9F79-83C4E642E68D}"
+        "ProductCode" = "8:{F1106DCF-21E5-41EB-81C0-4F5B8E676150}"
+        "PackageCode" = "8:{3C841A4D-6565-4B62-BD03-A5F8FDDB924C}"
         "UpgradeCode" = "8:{7EA17151-76E7-4E29-8F6A-621C1B4144C2}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.3.8965"
+        "ProductVersion" = "8:2.3.8970"
         "Manufacturer" = "8:NUTDotNet"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/nutdotnet/WinNUT-Client/discussions"

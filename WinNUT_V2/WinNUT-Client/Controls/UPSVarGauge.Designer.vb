@@ -11,7 +11,7 @@ Namespace Controls
 
     <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
     Partial Class UPSVarGauge
-        Inherits AGauge
+        Inherits AGaugeClassic.AGauge
 
         'Control overrides dispose to clean up the component list.
         <System.Diagnostics.DebuggerNonUserCode()>

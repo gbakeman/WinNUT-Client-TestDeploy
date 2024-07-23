@@ -9,6 +9,7 @@
 
 Imports System.ComponentModel
 Imports System.Drawing.Drawing2D
+Imports AGaugeClassic
 
 Namespace Controls
 

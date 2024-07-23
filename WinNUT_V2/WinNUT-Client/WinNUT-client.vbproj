@@ -435,7 +435,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AGauge.Classic">
-      <Version>2.1.0-prerelease.1</Version>
+      <Version>2.1.1-prerelease.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
       <Version>7.1.3</Version>

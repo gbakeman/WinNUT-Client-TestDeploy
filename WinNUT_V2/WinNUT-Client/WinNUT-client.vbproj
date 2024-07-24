@@ -227,6 +227,9 @@
     <EmbeddedResource Include="About_Gui.ru-RU.resx">
       <DependentUpon>About_Gui.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="About_Gui.uk-UA.resx">
+      <DependentUpon>About_Gui.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="About_Gui.zh-CN.resx">
       <DependentUpon>About_Gui.vb</DependentUpon>
     </EmbeddedResource>
@@ -245,6 +248,9 @@
     <EmbeddedResource Include="List_Var_Gui.ru-RU.resx">
       <DependentUpon>List_Var_Gui.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="List_Var_Gui.uk-UA.resx">
+      <DependentUpon>List_Var_Gui.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="List_Var_Gui.zh-CN.resx">
       <DependentUpon>List_Var_Gui.vb</DependentUpon>
     </EmbeddedResource>
@@ -254,6 +260,7 @@
     <EmbeddedResource Include="My Project\Resources.de-DE.resx" />
     <EmbeddedResource Include="My Project\Resources.fr-FR.resx" />
     <EmbeddedResource Include="My Project\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="My Project\Resources.uk-UA.resx" />
     <EmbeddedResource Include="My Project\Resources.zh-CN.resx" />
     <EmbeddedResource Include="My Project\Resources.zh-TW.resx" />
     <EmbeddedResource Include="Pref_Gui.de-DE.resx">
@@ -267,6 +274,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Pref_Gui.ru-RU.resx">
+      <DependentUpon>Pref_Gui.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pref_Gui.uk-UA.resx">
       <DependentUpon>Pref_Gui.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Pref_Gui.zh-CN.resx">
@@ -287,6 +297,9 @@
     <EmbeddedResource Include="Shutdown_Gui.ru-RU.resx">
       <DependentUpon>Shutdown_Gui.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shutdown_Gui.uk-UA.resx">
+      <DependentUpon>Shutdown_Gui.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shutdown_Gui.zh-CN.resx">
       <DependentUpon>Shutdown_Gui.vb</DependentUpon>
     </EmbeddedResource>
@@ -305,6 +318,9 @@
     <EmbeddedResource Include="Update_Gui.ru-RU.resx">
       <DependentUpon>Update_Gui.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Update_Gui.uk-UA.resx">
+      <DependentUpon>Update_Gui.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Update_Gui.zh-CN.resx">
       <DependentUpon>Update_Gui.vb</DependentUpon>
     </EmbeddedResource>
@@ -321,6 +337,9 @@
       <DependentUpon>UpgradePrefsDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpgradePrefsDialog.ru-RU.resx">
+      <DependentUpon>UpgradePrefsDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpgradePrefsDialog.uk-UA.resx">
       <DependentUpon>UpgradePrefsDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpgradePrefsDialog.zh-CN.resx">
@@ -346,6 +365,9 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="WinNUT.ru-RU.resx">
+      <DependentUpon>WinNUT.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinNUT.uk-UA.resx">
       <DependentUpon>WinNUT.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinNUT.zh-CN.resx">
@@ -424,6 +446,7 @@
     <XliffResource Include="MultilingualResources\WinNUT-client.de-DE.xlf" />
     <XliffResource Include="MultilingualResources\WinNUT-client.fr-FR.xlf" />
     <XliffResource Include="MultilingualResources\WinNUT-client.ru-RU.xlf" />
+    <XliffResource Include="MultilingualResources\WinNUT-client.uk-UA.xlf" />
     <XliffResource Include="MultilingualResources\WinNUT-client.zh-CN.xlf" />
     <XliffResource Include="MultilingualResources\WinNUT-Client.zh-TW.xlf" />
   </ItemGroup>

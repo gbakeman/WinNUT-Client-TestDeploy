@@ -309,10 +309,10 @@ Public Class WinNUT
             If NotifyIcon.Visible = False Then
                 Text = FormText
             Else
-                Text = "WinNUT"
+                Text = ProgramName
             End If
         ElseIf sender.WindowState = FormWindowState.Maximized Or sender.WindowState = FormWindowState.Normal Then
-            Text = "WinNUT"
+            Text = ProgramName
         End If
     End Sub
 

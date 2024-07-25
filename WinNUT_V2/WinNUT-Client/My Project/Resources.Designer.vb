@@ -379,6 +379,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property disconnect2() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("disconnect2", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Old ups.ini imported
         '''Ini File Moved to {0}.old.
         '''</summary>
@@ -581,6 +591,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property internetconnection() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("internetconnection", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to WinNut Preferences Changed.
         '''</summary>
         Public ReadOnly Property Log_Str_01() As String
@@ -712,6 +732,16 @@ Namespace My.Resources
         Public ReadOnly Property regedit_exe_14_100_0() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("regedit_exe_14_100_0", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Public ReadOnly Property RepeatHS() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("RepeatHS", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

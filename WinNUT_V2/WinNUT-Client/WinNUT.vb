@@ -7,6 +7,8 @@
 '
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
+Imports System.ComponentModel
+Imports Microsoft.Win32
 Imports WinNUT_Client_Common
 
 Public Class WinNUT
@@ -24,13 +26,19 @@ Public Class WinNUT
         End Get
     End Property
 
+    Private ReadOnly Property IsUPSConnected As Boolean
+        Get
+            Return UPS_Device IsNot Nothing AndAlso UPS_Device.IsConnected
+        End Get
+    End Property
+
 #End Region
+
     Private WithEvents LogFile As Logger = WinNUT_Globals.LogFile
 
     'Object for UPS management
     Public WithEvents UPS_Device As UPS_Device
 
-    Private AutoReconnect As Boolean
     Private UPS_Retry As Integer = 0
     Private UPS_MaxRetry As Integer = 30
 
@@ -208,8 +216,9 @@ Public Class WinNUT
             HasFocus = False
         End If
 
-        AddHandler Microsoft.Win32.SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
+        AddHandler SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
         AddHandler RequestConnect, AddressOf UPS_Connect
+        AddHandler My.Settings.PropertyChanged, AddressOf SettingsPropertyChanged
 
         LogFile.LogTracing(String.Format("{0} v{1} completed initialization.", My.Application.Info.ProductName, My.Application.Info.Version),
                            LogLvl.LOG_NOTICE, Me)
@@ -327,6 +336,35 @@ Public Class WinNUT
     End Sub
 
 #End Region
+
+    Private Sub SettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        LogFile.LogTracing("SettingsPropertyChanged: " & e.PropertyName, LogLvl.LOG_DEBUG, Me)
+
+        UpdateMainMenuState()
+    End Sub
+
+    Private Sub UpdateMainMenuState()
+        Menu_Persist.Checked = My.Settings.NUT_AutoReconnect
+
+        If OldParams.WinNUT_Params.RegistryKeyRoot IsNot Nothing Then
+            ManageOldPrefsToolStripMenuItem.Enabled = True
+            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Enabled_TooltipText
+        Else
+            ManageOldPrefsToolStripMenuItem.Enabled = False
+            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Disabled_TooltipText
+        End If
+
+        If IsUPSConnected Then
+            Menu_Connect.Enabled = False
+            Menu_Disconnect.Enabled = True
+            Menu_UPS_Var.Enabled = True
+        Else
+            Menu_Connect.Enabled = True
+            Menu_Disconnect.Enabled = False
+            Menu_UPS_Var.Enabled = False
+        End If
+    End Sub
+
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
@@ -346,26 +384,12 @@ Public Class WinNUT
         End Select
     End Sub
 
-    ''' <summary>
-    ''' Updates the Manage old prefs File menu item status depending on the presence of old preferences.
-    ''' </summary>
-    Private Sub UpdateManageOldPrefsMenuItemStatus()
-        If OldParams.WinNUT_Params.RegistryKeyRoot IsNot Nothing Then
-
-            ManageOldPrefsToolStripMenuItem.Enabled = True
-            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Enabled_TooltipText
-        Else
-            ManageOldPrefsToolStripMenuItem.Enabled = False
-            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Disabled_TooltipText
-        End If
-    End Sub
-
     Private Sub RunRegPrefsUpgrade()
         LogFile.LogTracing("Starting Upgrade dialog.", LogLvl.LOG_NOTICE, Me)
         Dim upPrefsDg As New Forms.UpgradePrefsDialog()
         upPrefsDg.ShowDialog()
 
-        UpdateManageOldPrefsMenuItemStatus()
+        UpdateMainMenuState()
         ApplyApplicationPreferences()
     End Sub
 
@@ -399,7 +423,7 @@ Public Class WinNUT
             Lbl_VFirmware.Text = .Firmware
         End With
 
-        Menu_UPS_Var.Enabled = True
+        UpdateMainMenuState()
         UpdateIcon_NotifyIcon()
         LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
         RaiseEvent UpdateNotifyIconStr("Connected", Nothing)
@@ -436,7 +460,6 @@ Public Class WinNUT
     Private Sub UPS_Lostconnect() Handles UPS_Device.Lost_Connect
         LogFile.LogTracing("Notify user of lost connection", LogLvl.LOG_ERROR, Me,
             String.Format(StrLog.Item(AppResxStr.STR_MAIN_LOSTCONNECT), UPS_Device.Nut_Config.Host, UPS_Device.Nut_Config.Port))
-        ' UPSDisconnect()
 
         ReInitDisplayValues()
         If UPS_Device.Nut_Config.AutoReconnect And UPS_Retry <= UPS_MaxRetry Then
@@ -456,6 +479,7 @@ Public Class WinNUT
     ''' </summary>
     Private Sub UPSDisconnectedEvent() Handles UPS_Device.Disconnected
         ReInitDisplayValues()
+        UpdateMainMenuState()
         ActualAppIconIdx = AppIconIdx.IDX_ICO_OFFLINE
         LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
         UpdateIcon_NotifyIcon()
@@ -815,7 +839,7 @@ Public Class WinNUT
         End With
     End Sub
 
-    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Reconnect.Click
+    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Connect.Click
         LogFile.LogTracing("Force Reconnect from menu", LogLvl.LOG_DEBUG, Me)
         UPSDisconnect()
 
@@ -1046,6 +1070,11 @@ Public Class WinNUT
 
     Private Sub ManageOldPrefsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOldPrefsToolStripMenuItem.Click
         RunRegPrefsUpgrade()
+    End Sub
+
+    Private Sub Menu_Persist_CheckedChanged(sender As Object, e As EventArgs) Handles Menu_Persist.CheckedChanged
+        LogFile.LogTracing("Menu_Persist checked state changing to " & Menu_Persist.Checked, LogLvl.LOG_DEBUG, Me)
+        My.Settings.NUT_AutoReconnect = Menu_Persist.Checked
     End Sub
 End Class
 

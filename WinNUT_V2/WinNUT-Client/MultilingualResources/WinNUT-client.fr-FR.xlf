@@ -1788,10 +1788,6 @@ Fichier Ini déplacé vers {0}.old</target>
           <source>Reconnection In Progress</source>
           <target state="final">Reconnexion en cours</target>
         </trans-unit>
-        <trans-unit id="Frm_Main_Str_04" translate="yes" xml:space="preserve">
-          <source>Try {0} of {1}</source>
-          <target state="final">Essai {0} sur {1}</target>
-        </trans-unit>
         <trans-unit id="Frm_Main_Str_05" translate="yes" xml:space="preserve">
           <source>Not Connected</source>
           <target state="final">Non connecté</target>
@@ -1831,14 +1827,6 @@ Fichier Ini déplacé vers {0}.old</target>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
           <target state="final">Déconnectée du serveur NUT</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
-          <source>Try Reconnect {0} / {1}</source>
-          <target state="final">Tentative de reconnexion {0} / {1}</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_07" translate="yes" xml:space="preserve">
-          <source>Max Retry reached. Wait for manual Reconnection</source>
-          <target state="final">Nombre maximale d'essai atteint. En attente de reconnexion manuelle</target>
         </trans-unit>
         <trans-unit id="Log_Str_08" translate="yes" xml:space="preserve">
           <source>Conditions met for launching the Extinguishing Process</source>

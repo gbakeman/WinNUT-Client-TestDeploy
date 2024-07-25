@@ -417,15 +417,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Try {0} of {1}.
-        '''</summary>
-        Public ReadOnly Property Frm_Main_Str_04() As String
-            Get
-                Return ResourceManager.GetString("Frm_Main_Str_04", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to Not Connected.
         '''</summary>
         Public ReadOnly Property Frm_Main_Str_05() As String
@@ -642,24 +633,6 @@ Namespace My.Resources
         Public ReadOnly Property Log_Str_05() As String
             Get
                 Return ResourceManager.GetString("Log_Str_05", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Try Reconnect {0} / {1}.
-        '''</summary>
-        Public ReadOnly Property Log_Str_06() As String
-            Get
-                Return ResourceManager.GetString("Log_Str_06", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Max Retry reached. Wait for manual Reconnection.
-        '''</summary>
-        Public ReadOnly Property Log_Str_07() As String
-            Get
-                Return ResourceManager.GetString("Log_Str_07", resourceCulture)
             End Get
         End Property
         

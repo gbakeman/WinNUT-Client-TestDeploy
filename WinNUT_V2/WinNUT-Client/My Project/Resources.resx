@@ -228,9 +228,6 @@ Ini File Moved to {0}.old</value>
   <data name="Frm_Main_Str_03" xml:space="preserve">
     <value>Reconnection In Progress</value>
   </data>
-  <data name="Frm_Main_Str_04" xml:space="preserve">
-    <value>Try {0} of {1}</value>
-  </data>
   <data name="Frm_Main_Str_05" xml:space="preserve">
     <value>Not Connected</value>
   </data>
@@ -305,12 +302,6 @@ Cancel to Save Msi and Install Later</value>
   </data>
   <data name="Log_Str_05" xml:space="preserve">
     <value>Disconnected from Nut Host</value>
-  </data>
-  <data name="Log_Str_06" xml:space="preserve">
-    <value>Try Reconnect {0} / {1}</value>
-  </data>
-  <data name="Log_Str_07" xml:space="preserve">
-    <value>Max Retry reached. Wait for manual Reconnection</value>
   </data>
   <data name="Log_Str_08" xml:space="preserve">
     <value>Conditions met for launching the Extinguishing Process</value>

@@ -636,10 +636,6 @@ Ini File Moved to {0}.old</source>
           <source>Reconnection In Progress</source>
           <target state="final">Переподключение в процессе</target>
         </trans-unit>
-        <trans-unit id="Frm_Main_Str_04" translate="yes" xml:space="preserve">
-          <source>Try {0} of {1}</source>
-          <target state="final">Попытка {0} из {1}</target>
-        </trans-unit>
         <trans-unit id="Frm_Main_Str_05" translate="yes" xml:space="preserve">
           <source>Not Connected</source>
           <target state="final">Не подключено</target>
@@ -737,15 +733,6 @@ Cancel to Save Msi and Install Later</source>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
           <target state="final">Отключиться от сервера NUT</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
-          <source>Try Reconnect {0} / {1}</source>
-          <target state="final">Попытка переподключения {0} / {1}</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_07" translate="yes" xml:space="preserve">
-          <source>Max Retry reached. Wait for manual Reconnection</source>
-          <target state="final">Достигнуто макимальное количество попыток повторного подключения.
-Ожидается ручное переподключение</target>
         </trans-unit>
         <trans-unit id="Log_Str_08" translate="yes" xml:space="preserve">
           <source>Conditions met for launching the Extinguishing Process</source>

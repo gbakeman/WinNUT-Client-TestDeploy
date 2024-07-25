@@ -46,9 +46,6 @@ Fichier Ini déplacé vers {0}.old</value>
   <data name="Frm_Main_Str_03" xml:space="preserve">
     <value>Reconnexion en cours</value>
   </data>
-  <data name="Frm_Main_Str_04" xml:space="preserve">
-    <value>Essai {0} sur {1}</value>
-  </data>
   <data name="Frm_Main_Str_05" xml:space="preserve">
     <value>Non connecté</value>
   </data>
@@ -78,12 +75,6 @@ Fichier Ini déplacé vers {0}.old</value>
   </data>
   <data name="Log_Str_05" xml:space="preserve">
     <value>Déconnectée du serveur NUT</value>
-  </data>
-  <data name="Log_Str_06" xml:space="preserve">
-    <value>Tentative de reconnexion {0} / {1}</value>
-  </data>
-  <data name="Log_Str_07" xml:space="preserve">
-    <value>Nombre maximale d'essai atteint. En attente de reconnexion manuelle</value>
   </data>
   <data name="Log_Str_08" xml:space="preserve">
     <value>Conditions atteintes pour le lancement du Processus d'Extinction</value>

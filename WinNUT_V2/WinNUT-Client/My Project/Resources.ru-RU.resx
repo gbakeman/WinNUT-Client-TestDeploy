@@ -24,9 +24,6 @@
   <data name="Frm_Main_Str_03" xml:space="preserve">
     <value>Переподключение в процессе</value>
   </data>
-  <data name="Frm_Main_Str_04" xml:space="preserve">
-    <value>Попытка {0} из {1}</value>
-  </data>
   <data name="Frm_Main_Str_05" xml:space="preserve">
     <value>Не подключено</value>
   </data>
@@ -95,13 +92,6 @@
   </data>
   <data name="Log_Str_05" xml:space="preserve">
     <value>Отключиться от сервера NUT</value>
-  </data>
-  <data name="Log_Str_06" xml:space="preserve">
-    <value>Попытка переподключения {0} / {1}</value>
-  </data>
-  <data name="Log_Str_07" xml:space="preserve">
-    <value>Достигнуто макимальное количество попыток повторного подключения.
-Ожидается ручное переподключение</value>
   </data>
   <data name="Log_Str_08" xml:space="preserve">
     <value>Достигнуты условия для запуска процесса отключения</value>

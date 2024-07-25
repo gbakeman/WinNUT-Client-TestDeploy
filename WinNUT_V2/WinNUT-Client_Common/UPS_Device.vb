@@ -28,6 +28,13 @@ Public Class UPS_Device
             Return (Nut_Socket.ConnectionStatus)
         End Get
     End Property
+
+    Public ReadOnly Property IsReconnecting As Boolean
+        Get
+            Return Reconnect_Nut.Enabled
+        End Get
+    End Property
+
     Public ReadOnly Property IsLoggedIn As Boolean
         Get
             Return Nut_Socket.IsLoggedIn
@@ -79,11 +86,10 @@ Public Class UPS_Device
     Public Event Connected(sender As UPS_Device)
     ' Notify that the connection was closed gracefully.
     Public Event Disconnected()
-    ' Notify of an unexpectedly lost connection (??)
+    ' Notify of an unexpectedly lost connection.
     Public Event Lost_Connect()
     ' Error encountered when trying to connect.
     Public Event ConnectionError(sender As UPS_Device, innerException As Exception)
-    Public Event New_Retry()
 
     ''' <summary>
     ''' Raised when the NUT server returns an error during normal communication and is deemed important for the client
@@ -107,9 +113,7 @@ Public Class UPS_Device
 
     Private Freq_Fallback As Double
     Public Nut_Config As Nut_Parameter
-    Public Retry As Integer = 0
-    Public MaxRetry As Integer = 30
-    Private LogFile As Logger
+    Private ReadOnly LogFile As Logger
 
     Public Sub New(ByRef Nut_Config As Nut_Parameter, ByRef LogFile As Logger, pollInterval As Integer, defaultFrequency As Integer)
         Me.LogFile = LogFile
@@ -147,7 +151,7 @@ Public Class UPS_Device
         Catch ex As Exception
             RaiseEvent ConnectionError(Me, ex)
 
-            If retryOnConnFailure Then
+            If retryOnConnFailure AndAlso IsReconnecting = False Then
                 LogFile.LogTracing("Reconnection Process Started", LogLvl.LOG_NOTICE, Me)
                 Reconnect_Nut.Start()
             End If
@@ -178,7 +182,6 @@ Public Class UPS_Device
             Reconnect_Nut.Stop()
         End If
 
-        Retry = 0
         Try
             Nut_Socket.Disconnect(forceful)
         Catch nutEx As NutException
@@ -195,6 +198,7 @@ Public Class UPS_Device
 
     Private Sub Socket_Broken() Handles Nut_Socket.Socket_Broken
         LogFile.LogTracing("Socket has reported a Broken event.", LogLvl.LOG_WARNING, Me)
+        Update_Data.Stop()
         RaiseEvent Lost_Connect()
 
         If Nut_Config.AutoReconnect Then
@@ -204,19 +208,11 @@ Public Class UPS_Device
     End Sub
 
     Private Sub AttemptReconnect(sender As Object, e As EventArgs)
-        Retry += 1
-        If Retry <= MaxRetry Then
-            RaiseEvent New_Retry()
-            LogFile.LogTracing(String.Format("Try Reconnect {0} / {1}", Retry, MaxRetry), LogLvl.LOG_NOTICE, Me, String.Format(StrLog.Item(AppResxStr.STR_LOG_NEW_RETRY), Retry, MaxRetry))
-            Connect_UPS()
-            If IsConnected Then
-                LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_DEBUG, Me)
-                Reconnect_Nut.Stop()
-                Retry = 0
-            End If
-        Else
-            LogFile.LogTracing("Max Retry reached. Stop Process Autoreconnect and wait for manual Reconnection", LogLvl.LOG_ERROR, Me, StrLog.Item(AppResxStr.STR_LOG_STOP_RETRY))
-            Disconnect(True)
+        LogFile.LogTracing("Attempting reconnection...", LogLvl.LOG_NOTICE, Me)
+        Connect_UPS()
+        If IsConnected Then
+            LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_NOTICE, Me)
+            Reconnect_Nut.Stop()
         End If
     End Sub
 
@@ -429,7 +425,6 @@ Public Class UPS_Device
         Catch Excep As Exception
             LogFile.LogTracing("Something went wrong in Retrieve_UPS_Datas:", LogLvl.LOG_ERROR, Me)
             LogFile.LogException(Excep, Me)
-            Disconnect(False, True)
             Socket_Broken()
         End Try
     End Sub

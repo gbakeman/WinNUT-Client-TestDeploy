@@ -625,10 +625,6 @@ Ini 文件重命名为 {0}.old</target>
           <source>Reconnection In Progress</source>
           <target state="final">重连中</target>
         </trans-unit>
-        <trans-unit id="Frm_Main_Str_04" translate="yes" xml:space="preserve">
-          <source>Try {0} of {1}</source>
-          <target state="final">尝试 {1} 的 {0}</target>
-        </trans-unit>
         <trans-unit id="Frm_Main_Str_05" translate="yes" xml:space="preserve">
           <source>Not Connected</source>
           <target state="final">未连接</target>
@@ -718,14 +714,6 @@ Cancel to Save Msi and Install Later</source>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
           <target state="final">从 Nut 主机断开了连接</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
-          <source>Try Reconnect {0} / {1}</source>
-          <target state="final">尝试重连 {0} / {1}</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_07" translate="yes" xml:space="preserve">
-          <source>Max Retry reached. Wait for manual Reconnection</source>
-          <target state="final">达到最大重试次数。等待手动重连。</target>
         </trans-unit>
         <trans-unit id="Log_Str_08" translate="yes" xml:space="preserve">
           <source>Conditions met for launching the Extinguishing Process</source>

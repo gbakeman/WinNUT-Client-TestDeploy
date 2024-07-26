@@ -1,16 +1,16 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.Windows.Forms
 
 Public Class UPS_Device
+#Region "Statics/Defaults"
+    Private ReadOnly INVARIANT_CULTURE = CultureInfo.InvariantCulture
+    Private Const POWER_FACTOR = 0.8
+
+    ' How many milliseconds to wait before the Reconnect routine tries again.
+    Private Const DEFAULT_RECONNECT_WAIT_MS As Double = 5000
+    Private Const DEFAULT_UPDATE_INTERVAL_MS As Double = 1000
+#End Region
+
 #Region "Properties"
 
     Public ReadOnly Property Name As String
@@ -25,23 +25,23 @@ Public Class UPS_Device
 
     Public ReadOnly Property IsConnected As Boolean
         Get
-            Return (Nut_Socket.IsConnected)
+            Return (Nut_Socket.ConnectionStatus)
         End Get
     End Property
-
-    Public ReadOnly Property IsAuthenticated As Boolean
+    Public ReadOnly Property IsLoggedIn As Boolean
         Get
             Return Nut_Socket.IsLoggedIn
         End Get
     End Property
 
-    Public Property PollingInterval As Integer
+    ''' <summary>
+    ''' How often UPS data is updated, in milliseconds.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property PollingInterval As Integer
         Get
             Return Update_Data.Interval
         End Get
-        Set(value As Integer)
-            Update_Data.Interval = value
-        End Set
     End Property
 
     Public Property IsUpdatingData As Boolean
@@ -64,14 +64,19 @@ Public Class UPS_Device
         End Set
     End Property
 
+    Private _PowerCalculationMethod As PowerMethod
+
+    Public ReadOnly Property PowerCalculationMethod As PowerMethod
+        Get
+            Return _PowerCalculationMethod
+        End Get
+    End Property
+
 #End Region
 
 #Region "Events"
-
-    ' Public Event Unknown_UPS()
     Public Event DataUpdated()
     Public Event Connected(sender As UPS_Device)
-    Public Event ReConnected(sender As UPS_Device)
     ' Notify that the connection was closed gracefully.
     Public Event Disconnected()
     ' Notify of an unexpectedly lost connection (??)
@@ -79,8 +84,6 @@ Public Class UPS_Device
     ' Error encountered when trying to connect.
     Public Event ConnectionError(sender As UPS_Device, innerException As Exception)
     Public Event New_Retry()
-    ' Public Event Shutdown_Condition()
-    ' Public Event Stop_Shutdown()
 
     ''' <summary>
     ''' Raised when the NUT server returns an error during normal communication and is deemed important for the client
@@ -90,51 +93,40 @@ Public Class UPS_Device
     ''' <param name="nutEx">An exception detailing the error and cirucmstances surrounding it.</param>
     Public Event EncounteredNUTException(sender As UPS_Device, nutEx As NutException)
 
-#End Region
-
-    Private Const CosPhi As Double = 0.6
-    ' How many milliseconds to wait before the Reconnect routine tries again.
-    Private Const DEFAULT_RECONNECT_WAIT_MS As Double = 5000
-
-    Private WithEvents Update_Data As New Timer
-    'Private Nut_Conn As Nut_Comm
-    ' Private LogFile As Logger
-    Private Freq_Fallback As Double
-    Private ciClone As CultureInfo
-
-    Public Nut_Config As Nut_Parameter
-
-    ' Public UPSData As New UPSData
-
-
-    Public WithEvents Nut_Socket As Nut_Socket
-
-    Public Retry As Integer = 0
-    Public MaxRetry As Integer = 30
-    Private WithEvents Reconnect_Nut As New System.Windows.Forms.Timer
-
-
-
-
-    Private LogFile As Logger
-
     ''' <summary>
     ''' Raise an event when a status code is added to the UPS that wasn't there before.
     ''' </summary>
     ''' <param name="newStatuses">The bitmask of status flags that are currently set on the UPS.</param>
     Public Event StatusesChanged(sender As UPS_Device, newStatuses As UPS_States)
 
-    Public Sub New(ByRef Nut_Config As Nut_Parameter, ByRef LogFile As Logger, pollInterval As Integer)
+#End Region
+
+    Private WithEvents Update_Data As New Timer
+    Private WithEvents Reconnect_Nut As New Timer
+    Private WithEvents Nut_Socket As Nut_Socket
+
+    Private Freq_Fallback As Double
+    Public Nut_Config As Nut_Parameter
+    Public Retry As Integer = 0
+    Public MaxRetry As Integer = 30
+    Private LogFile As Logger
+
+    Public Sub New(ByRef Nut_Config As Nut_Parameter, ByRef LogFile As Logger, pollInterval As Integer, defaultFrequency As Integer)
         Me.LogFile = LogFile
         Me.Nut_Config = Nut_Config
-        PollingInterval = pollInterval
-        ciClone = CType(CultureInfo.InvariantCulture.Clone(), CultureInfo)
-        ciClone.NumberFormat.NumberDecimalSeparator = "."
+        Freq_Fallback = defaultFrequency
         Nut_Socket = New Nut_Socket(Me.Nut_Config, LogFile)
 
         With Reconnect_Nut
             .Interval = DEFAULT_RECONNECT_WAIT_MS
             .Enabled = False
+            AddHandler .Tick, AddressOf AttemptReconnect
+        End With
+
+        With Update_Data
+            .Interval = pollInterval
+            .Enabled = False
+            AddHandler .Tick, AddressOf Retrieve_UPS_Datas
         End With
     End Sub
 
@@ -147,6 +139,7 @@ Public Class UPS_Device
             UPS_Datas = GetUPSProductInfo()
             Update_Data.Start()
             RaiseEvent Connected(Me)
+
         Catch ex As NutException
             ' This is how we determine if we have a valid UPS name entered, among other errors.
             RaiseEvent EncounteredNUTException(Me, ex)
@@ -159,6 +152,21 @@ Public Class UPS_Device
                 Reconnect_Nut.Start()
             End If
         End Try
+    End Sub
+
+    Public Sub Login()
+        If Not IsConnected OrElse IsLoggedIn Then
+            Throw New InvalidOperationException("UPS is in an invalid state to login.")
+        End If
+
+        If Not String.IsNullOrEmpty(Nut_Config.Login) Then
+            Try
+                Nut_Socket.Login()
+            Catch ex As NutException
+                LogFile.LogTracing("Error while attempting to log in.", LogLvl.LOG_ERROR, Me)
+                RaiseEvent EncounteredNUTException(Me, ex)
+            End Try
+        End If
     End Sub
 
     Public Sub Disconnect(Optional cancelReconnect As Boolean = True, Optional forceful As Boolean = False)
@@ -175,18 +183,15 @@ Public Class UPS_Device
             Nut_Socket.Disconnect(forceful)
         Catch nutEx As NutException
             RaiseEvent EncounteredNUTException(Me, nutEx)
+        Catch ex As Exception
+            LogFile.LogTracing("Unexpected exception while Disconnecting.", LogLvl.LOG_ERROR, Me)
+            LogFile.LogException(ex, Me)
         Finally
             RaiseEvent Disconnected()
         End Try
     End Sub
 
 #Region "Socket Interaction"
-
-    Private Sub SocketDisconnected() Handles Nut_Socket.SocketDisconnected
-        LogFile.LogTracing("NutSocket raised Disconnected event.", LogLvl.LOG_DEBUG, Me)
-
-        RaiseEvent Disconnected()
-    End Sub
 
     Private Sub Socket_Broken() Handles Nut_Socket.Socket_Broken
         LogFile.LogTracing("Socket has reported a Broken event.", LogLvl.LOG_WARNING, Me)
@@ -198,7 +203,7 @@ Public Class UPS_Device
         End If
     End Sub
 
-    Private Sub Reconnect_Socket(sender As Object, e As EventArgs) Handles Reconnect_Nut.Tick
+    Private Sub AttemptReconnect(sender As Object, e As EventArgs)
         Retry += 1
         If Retry <= MaxRetry Then
             RaiseEvent New_Retry()
@@ -208,7 +213,6 @@ Public Class UPS_Device
                 LogFile.LogTracing("Nut Host Reconnected", LogLvl.LOG_DEBUG, Me)
                 Reconnect_Nut.Stop()
                 Retry = 0
-                RaiseEvent ReConnected(Me)
             End If
         Else
             LogFile.LogTracing("Max Retry reached. Stop Process Autoreconnect and wait for manual Reconnection", LogLvl.LOG_ERROR, Me, StrLog.Item(AppResxStr.STR_LOG_STOP_RETRY))
@@ -223,76 +227,188 @@ Public Class UPS_Device
     ''' </summary>
     ''' <returns></returns>
     Private Function GetUPSProductInfo() As UPSData
+        LogFile.LogTracing("Retrieving basic UPS product information...", LogLvl.LOG_NOTICE, Me)
+
         Dim freshData = New UPSData(
             Trim(GetUPSVar("ups.mfr", "Unknown")),
             Trim(GetUPSVar("ups.model", "Unknown")),
             Trim(GetUPSVar("ups.serial", "Unknown")),
             Trim(GetUPSVar("ups.firmware", "Unknown")))
 
-        ' Other constant values for UPS calibration.
-        freshData.UPS_Value.Batt_Capacity = Double.Parse(GetUPSVar("battery.capacity", 7), ciClone)
-        Freq_Fallback = Double.Parse(GetUPSVar("output.frequency.nominal", (50 + CInt(Arr_Reg_Key.Item("FrequencySupply")) * 10)), ciClone)
+        With freshData.UPS_Value
+            LogFile.LogTracing("Initializing other well-known UPS variables...", LogLvl.LOG_DEBUG, Me)
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.current"), INVARIANT_CULTURE)
+                .Output_Current = value
+                LogFile.LogTracing("output.current: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+                If ex.GetType() <> GetType(NutException) Then
+                    LogFile.LogException(ex, Me)
+                End If
+            End Try
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.voltage"), INVARIANT_CULTURE)
+                .Output_Voltage = value
+                LogFile.LogTracing("output.voltage: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
+                If ex.GetType() <> GetType(NutException) Then
+                    LogFile.LogException(ex, Me)
+                End If
+            End Try
+            Try
+                Dim value = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
+                .Output_Power = value
+                LogFile.LogTracing("output.power: " & value, LogLvl.LOG_DEBUG, Me)
+            Catch ex As Exception
 
+            End Try
+        End With
+
+        ' Determine optimal method for measuring power output from the UPS.
+        LogFile.LogTracing("Determining best method to calculate power usage...", LogLvl.LOG_NOTICE, Me)
+        ' Start with directly reading a variable from the UPS.
+        Try
+            If freshData.UPS_Value.Output_Power <> Nothing Then
+                _PowerCalculationMethod = PowerMethod.RealOutputPower
+                LogFile.LogTracing("Using RealOutputPower method.", LogLvl.LOG_NOTICE, Me)
+            Else
+                GetUPSVar("ups.realpower")
+                _PowerCalculationMethod = PowerMethod.RealPower
+                LogFile.LogTracing("Using RealPower method.", LogLvl.LOG_NOTICE, Me)
+            End If
+        Catch
+            Try
+                GetUPSVar("ups.realpower.nominal")
+                GetUPSVar("ups.load")
+                _PowerCalculationMethod = PowerMethod.RPNomLoadPct
+                LogFile.LogTracing("Using RPNomLoadPct method.", LogLvl.LOG_NOTICE, Me)
+            Catch
+                Try
+                    GetUPSVar("input.current.nominal")
+                    GetUPSVar("input.voltage.nominal")
+                    GetUPSVar("ups.load")
+                    _PowerCalculationMethod = PowerMethod.InputNomVALoadPct
+                    LogFile.LogTracing("Using InputNomVALoadPct method.", LogLvl.LOG_NOTICE, Me)
+                Catch
+                    If freshData.UPS_Value.Output_Current IsNot Nothing AndAlso
+                            freshData.UPS_Value.Output_Voltage <> Nothing Then
+                        _PowerCalculationMethod = PowerMethod.OutputVACalc
+                        LogFile.LogTracing("Using OutputVACalc method.", LogLvl.LOG_NOTICE, Me)
+                    Else
+                        _PowerCalculationMethod = PowerMethod.Unavailable
+                        LogFile.LogTracing("Unable to find a suitable method to calculate power usage.", LogLvl.LOG_WARNING, Me)
+                    End If
+                End Try
+            End Try
+        End Try
+
+        ' Other constant values for UPS calibration.
+        freshData.UPS_Value.Batt_Capacity = Double.Parse(GetUPSVar("battery.capacity", -1), INVARIANT_CULTURE)
+        Freq_Fallback = Double.Parse(GetUPSVar("output.frequency.nominal", Freq_Fallback), INVARIANT_CULTURE)
+
+        LogFile.LogTracing("Completed retrieval of basic UPS product information.", LogLvl.LOG_NOTICE, Me)
         Return freshData
     End Function
 
     Private oldStatusBitmask As Integer
-
-    Public Sub Retrieve_UPS_Datas() Handles Update_Data.Tick ' As UPSData
+    Private Sub Retrieve_UPS_Datas(sender As Object, e As EventArgs)
         LogFile.LogTracing("Enter Retrieve_UPS_Datas", LogLvl.LOG_DEBUG, Me)
+
         Try
             Dim UPS_rt_Status As String
-            Dim InputA As Double
 
             If IsConnected Then
                 With UPS_Datas.UPS_Value
-                    .Batt_Charge = Double.Parse(GetUPSVar("battery.charge", 255), ciClone)
-                    .Batt_Voltage = Double.Parse(GetUPSVar("battery.voltage", 12), ciClone)
-                    .Batt_Runtime = Double.Parse(GetUPSVar("battery.runtime", 86400), ciClone)
-                    .Power_Frequency = Double.Parse(GetUPSVar("input.frequency", Double.Parse(GetUPSVar("output.frequency", Freq_Fallback), ciClone)), ciClone)
-                    .Input_Voltage = Double.Parse(GetUPSVar("input.voltage", 220), ciClone)
-                    .Output_Voltage = Double.Parse(GetUPSVar("output.voltage", .Input_Voltage), ciClone)
-                    .Load = Double.Parse(GetUPSVar("ups.load", 100), ciClone)
-                    UPS_rt_Status = GetUPSVar("ups.status", UPS_States.None)
-                    .Output_Power = Double.Parse((GetUPSVar("ups.realpower.nominal", 0)), ciClone)
-                    If .Output_Power = 0 Then
-                        .Output_Power = Double.Parse((GetUPSVar("ups.power.nominal", 0)), ciClone)
-                        If .Output_Power = 0 Then
-                            InputA = Double.Parse(GetUPSVar("ups.current.nominal", 1), ciClone)
-                            .Output_Power = Math.Round(.Input_Voltage * 0.95 * InputA * CosPhi)
-                        Else
-                            .Output_Power = Math.Round(.Output_Power * (.Load / 100) * CosPhi)
-                        End If
-                    Else
-                        .Output_Power = Math.Round(.Output_Power * (.Load / 100))
-                    End If
-                    Dim PowerDivider As Double = 0.5
-                    Select Case .Load
-                        Case 76 To 100
-                            PowerDivider = 0.4
-                        Case 51 To 75
-                            PowerDivider = 0.3
-                    End Select
-                    If .Batt_Charge = 255 Then
-                        Dim nBatt = Math.Floor(.Batt_Voltage / 12)
-                        .Batt_Charge = Math.Floor((.Batt_Voltage - (11.6 * nBatt)) / (0.02 * nBatt))
-                    End If
-                    If .Batt_Runtime >= 86400 Then
-                        'If Load is 0, the calculation results in infinity. This causes an exception in DataUpdated(), causing Me.Disconnect to run in the exception handler below.
-                        'Thus a connection is established, but is forcefully disconneced almost immediately. This cycle repeats on each connect until load is <> 0
-                        '(Example: I have a 0% load if only Pi, Microtik Router, Wifi AP and switches are running)
-                        .Load = If(.Load <> 0, .Load, 0.1)
-                        Dim BattInstantCurrent = (.Output_Voltage * .Load) / (.Batt_Voltage * 100)
-                        .Batt_Runtime = Math.Floor(.Batt_Capacity * 0.6 * .Batt_Charge * (1 - PowerDivider) * 3600 / (BattInstantCurrent * 100))
+                    .Batt_Charge = Double.Parse(GetUPSVar("battery.charge", -1), INVARIANT_CULTURE)
+                    .Batt_Voltage = Double.Parse(GetUPSVar("battery.voltage", -1), INVARIANT_CULTURE)
+                    .Batt_Runtime = Double.Parse(GetUPSVar("battery.runtime", -1), INVARIANT_CULTURE)
+                    .Power_Frequency = Double.Parse(GetUPSVar("input.frequency", Freq_Fallback), INVARIANT_CULTURE)
+                    .Input_Voltage = Double.Parse(GetUPSVar("input.voltage", -1), INVARIANT_CULTURE)
+                    .Output_Voltage = Double.Parse(GetUPSVar("output.voltage", -1), INVARIANT_CULTURE)
+                    .Load = Double.Parse(GetUPSVar("ups.load", 0), INVARIANT_CULTURE)
+
+                    ' Retrieve and/or calculate output power if possible.
+                    If _PowerCalculationMethod <> PowerMethod.Unavailable Then
+                        Dim parsedValue As Double
+
+                        Try
+                            Select Case _PowerCalculationMethod
+                                Case PowerMethod.RealPower
+                                    parsedValue = Double.Parse(GetUPSVar("ups.realpower"), INVARIANT_CULTURE)
+
+                                Case PowerMethod.RealOutputPower
+                                    parsedValue = Single.Parse(GetUPSVar("output.realpower"), INVARIANT_CULTURE)
+
+                                Case PowerMethod.RPNomLoadPct
+                                    parsedValue = Double.Parse(GetUPSVar("ups.realpower.nominal"), INVARIANT_CULTURE)
+                                    parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
+
+                                Case PowerMethod.InputNomVALoadPct
+                                    Dim nomCurrent = Double.Parse(GetUPSVar("input.current.nominal"), INVARIANT_CULTURE)
+                                    Dim nomVoltage = Double.Parse(GetUPSVar("input.voltage.nominal"), INVARIANT_CULTURE)
+
+                                    parsedValue = nomCurrent * nomVoltage * POWER_FACTOR
+                                    parsedValue *= UPS_Datas.UPS_Value.Load / 100.0
+                                Case PowerMethod.OutputVACalc
+                                    .Output_Current = Single.Parse(GetUPSVar("output.current"), INVARIANT_CULTURE)
+                                    parsedValue = .Output_Current * .Output_Voltage * POWER_FACTOR
+                                Case Else
+                                    ' Should not trigger - something has gone wrong.
+                                    Throw New InvalidOperationException("Reached Else case when attempting to get power output for method " & _PowerCalculationMethod)
+                            End Select
+                        Catch ex As FormatException
+                            LogFile.LogTracing("Unexpected format trying to parse value from UPS. Exception:", LogLvl.LOG_ERROR, Me)
+                            LogFile.LogTracing(ex.ToString(), LogLvl.LOG_ERROR, Me)
+                            LogFile.LogTracing("parsedValue: " & parsedValue, LogLvl.LOG_ERROR, Me)
+                        Catch ex As Exception
+                            LogFile.LogException(ex, Me)
+                        End Try
+
+                        ' Apply rounding to this number since calculations have extended to three decimal places.
+                        ' TODO: Remove this round function once gauges can handle decimal places better.
+                        .Output_Power = Math.Round(parsedValue, 1)
                     End If
 
+                    ' Handle out-of-range battery charge
+                    If .Batt_Charge < 0 OrElse .Batt_Charge > 100 Then
+                        If .Batt_Voltage > 0 Then
+                            Dim nBatt = Math.Floor(.Batt_Voltage / 12)
+                            .Batt_Charge = Math.Floor((.Batt_Voltage - (11.6 * nBatt)) / (0.02 * nBatt))
+                        Else
+                            LogFile.LogTracing("Unable to calculate UPS Batt_Charge: Batt_Voltage (" & .Batt_Voltage & ") out of range.", LogLvl.LOG_WARNING, Me)
+                        End If
+                    End If
+
+                    ' Attempt to calculate battery runtime if not given by the UPS.
+                    If .Batt_Runtime = -1 Then
+                        If .Output_Voltage = -1 OrElse .Batt_Voltage = -1 OrElse .Batt_Capacity = -1 OrElse .Batt_Charge = -1 Then
+                            LogFile.LogTracing("Unable to calculate battery runtime, missing UPS variables.", LogLvl.LOG_WARNING, Me)
+                            LogFile.LogTracing(String.Format("Output_Voltage: {0}, Batt_Voltage: {1}, Batt_Capacity: {2}, Batt_Charge: {3}",
+                                .Output_Voltage, .Batt_Voltage, .Batt_Capacity, .Batt_Charge), LogLvl.LOG_WARNING, Me)
+
+                        Else
+                            Dim PowerDivider As Double = 0.5
+                            Select Case .Load
+                                Case 76 To 100
+                                    PowerDivider = 0.4
+                                Case 51 To 75
+                                    PowerDivider = 0.3
+                            End Select
+
+                            .Load = If(.Load <> 0, .Load, 0.1)
+                            Dim BattInstantCurrent = (.Output_Voltage * .Load) / (.Batt_Voltage * 100)
+                            .Batt_Runtime = Math.Floor(.Batt_Capacity * 0.6 * .Batt_Charge * (1 - PowerDivider) * 3600 / (BattInstantCurrent * 100))
+                        End If
+                    End If
+
+                    UPS_rt_Status = GetUPSVar("ups.status", UPS_States.None)
                     ' Prepare the status string for Enum parsing by replacing spaces with commas.
                     UPS_rt_Status = UPS_rt_Status.Replace(" ", ",")
                     Try
                         .UPS_Status = [Enum].Parse(GetType(UPS_States), UPS_rt_Status)
                     Catch ex As ArgumentException
                         LogFile.LogTracing("Likely encountered an unknown/invalid UPS status. Using previous status." &
-                                           vbNewLine & ex.Message, LogLvl.LOG_ERROR, Me)
+                                    vbNewLine & ex.Message, LogLvl.LOG_ERROR, Me)
                     End Try
 
                     ' Get the difference between the old and new statuses, and filter only for active ones.
@@ -309,9 +425,10 @@ Public Class UPS_Device
                 End With
                 RaiseEvent DataUpdated()
             End If
-        Catch Excep As Exception
             ' Something went wrong while trying to read the data... Consider the socket broken and proceed from here.
-            LogFile.LogTracing("Something went wrong in Retrieve_UPS_Datas: " & Excep.ToString(), LogLvl.LOG_ERROR, Me)
+        Catch Excep As Exception
+            LogFile.LogTracing("Something went wrong in Retrieve_UPS_Datas:", LogLvl.LOG_ERROR, Me)
+            LogFile.LogException(Excep, Me)
             Disconnect(False, True)
             Socket_Broken()
         End Try
@@ -363,7 +480,6 @@ Public Class UPS_Device
                     LogFile.LogTracing("Apply Fallback Value when retrieving " & varName, LogLvl.LOG_WARNING, Me)
                     Return Fallback_value
                 Else
-                    LogFile.LogTracing("Unhandled error while getting " & varName, LogLvl.LOG_ERROR, Me)
                     Throw
                 End If
             End Try

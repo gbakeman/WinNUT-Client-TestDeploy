@@ -115,4 +115,19 @@ Public Enum UPS_States
     OVER = 1 << 10
     TRIM = 1 << 11
     BOOST = 1 << 12
+    ALARM = 1 << 13
+    ECO = 1 << 14 ' eConversion mode
+    RB = 1 << 15 ' Batteries need to be replaced 
+End Enum
+
+''' <summary>
+''' Ref. https://github.com/nutdotnet/WinNUT-Client/pull/112
+''' </summary>
+Public Enum PowerMethod
+    Unavailable ' No methods are available to calculate power.
+    RealPower ' The ups.realpower variable is available for direct reading.
+    RealOutputPower ' output.realpower is available for direct reading.
+    RPNomLoadPct ' Power is calcualted as the load percentage of nominal realpower.
+    InputNomVALoadPct ' Power is given as the nominal power calculated from nominal input volts/amps (and PF), multiplied by the percent load.
+    OutputVACalc ' Power is calculated with output voltage and current (seen on Huawei, issue #150)
 End Enum

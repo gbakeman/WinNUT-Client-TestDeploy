@@ -7,6 +7,7 @@
 '
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
+Imports System.Configuration
 Imports System.Globalization
 Imports System.IO
 Imports System.Text.RegularExpressions
@@ -23,8 +24,8 @@ Namespace My
     ' NetworkAvailabilityChanged : Déclenché quand la connexion réseau est connectée ou déconnectée.
     Partial Friend Class MyApplication
         ' Default culture for output so logs can be shared with the project.
-        Private Shared DEF_CULTURE_INFO As CultureInfo = CultureInfo.InvariantCulture
-
+        Private Shared ReadOnly DEF_CULTURE_INFO As CultureInfo = CultureInfo.InvariantCulture
+        Private Shared ReadOnly CRASHBUG_OUTPUT_PATH = System.Windows.Forms.Application.LocalUserAppDataPath
 
         Private CrashBug_Form As New Form
         Private BtnClose As New Button
@@ -32,12 +33,31 @@ Namespace My
         Private Msg_Crash As New Label
         Private Msg_Error As New TextBox
 
+        Private SensitiveProperties As List(Of String) = New List(Of String)({"NUT_ServerAddress", "NUT_ServerPort", "NUT_UPSName",
+                                                           "NUT_Username", "NUT_Password"})
         Private crashReportData As String
 
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
             ' Uncomment below and comment out Handles line for _UnhandledException sub when debugging unhandled exceptions.
             ' AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf AppDomainUnhandledException
+
             Init_Globals()
+
+            ' If first run indicated by Settings, attempt upgrade in case older version is present.
+            ' Only necessary when deploying MSI. Remove once using pure ClickOnce.
+            If Settings.IsFirstRun Then
+                Try
+                    Settings.Upgrade()
+                    LogFile.LogTracing("Settings upgrade completed without exception.", LogLvl.LOG_NOTICE, Me)
+                Catch ex As ConfigurationErrorsException
+                    LogFile.LogTracing("Error encountered while trying to upgrade Settings:", LogLvl.LOG_ERROR, Me)
+                    LogFile.LogException(ex, Me)
+                End Try
+
+                Settings.IsFirstRun = False
+                Settings.Save()
+            End If
+
             LogFile.LogTracing("MyApplication_Startup complete.", LogLvl.LOG_DEBUG, Me)
         End Sub
 
@@ -107,7 +127,7 @@ Namespace My
             WinNUT.HasCrashed = True
         End Sub
 
-        Private Shared Function GenerateCrashReport(ex As Exception) As String
+        Private Function GenerateCrashReport(ex As Exception) As String
             Dim jsonSerializerSettings As New JsonSerializerSettings()
             jsonSerializerSettings.Culture = DEF_CULTURE_INFO
             jsonSerializerSettings.Formatting = Formatting.Indented
@@ -120,31 +140,22 @@ Namespace My
             reportStream.WriteLine("WinNUT Version: " & ProgramVersion)
 
 #Region "Config output"
-            Dim confCopy = New Dictionary(Of String, Object)
-
             reportStream.WriteLine()
-            reportStream.WriteLine("==== Parameters ====")
+            reportStream.WriteLine("==== Settings ====")
             reportStream.WriteLine()
 
-            ' Censor any identifying information
-            If Arr_Reg_Key IsNot Nothing AndAlso Arr_Reg_Key.Count > 0 Then
-                For Each kvp As KeyValuePair(Of String, Object) In Arr_Reg_Key
-                    Dim newVal As String
-                    Select Case kvp.Key
-                        Case "ServerAddress", "Port", "UPSName", "NutLogin", "NutPassword"
-                            newVal = "*****"
-                        Case Else
-                            newVal = kvp.Value
-                    End Select
+            For Each setProp As SettingsProperty In Settings.Properties
+                Dim setVal As String
 
-                    confCopy.Add(kvp.Key, newVal)
-                Next
+                If SensitiveProperties.Contains(setProp.Name) Then
+                    setVal = "{Removed}"
+                    SensitiveProperties.Remove(setProp.Name)
+                Else
+                    setVal = Settings.Item(setProp.Name)
+                End If
 
-                reportStream.WriteLine(JsonConvert.SerializeObject(confCopy, jsonSerializerSettings))
-                reportStream.WriteLine()
-            Else
-                reportStream.WriteLine("[EMPTY]")
-            End If
+                reportStream.WriteLine(setProp.Name & ": " & setVal & " (" & setProp.DefaultValue & ")")
+            Next
 #End Region
 
 #Region "Exceptions"
@@ -168,13 +179,13 @@ Namespace My
 
             Computer.Clipboard.SetText(crashReportData)
 
-            Directory.CreateDirectory(TEMP_DATA_PATH)
-            Dim CrashLog_Report = New StreamWriter(Path.Combine(TEMP_DATA_PATH, logFileName))
+            Directory.CreateDirectory(CRASHBUG_OUTPUT_PATH)
+            Dim CrashLog_Report = New StreamWriter(Path.Combine(CRASHBUG_OUTPUT_PATH, logFileName))
             CrashLog_Report.WriteLine(crashReportData)
             CrashLog_Report.Close()
 
             ' Open an Explorer window to the crash log.
-            Process.Start(TEMP_DATA_PATH)
+            Process.Start(CRASHBUG_OUTPUT_PATH)
             End
         End Sub
 

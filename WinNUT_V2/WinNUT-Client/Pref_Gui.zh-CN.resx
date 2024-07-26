@@ -22,10 +22,6 @@
     <value>最高电池电压。
 取值：0-100 之间的数值。</value>
   </data>
-  <data name="Tb_Load_Max.ToolTip" xml:space="preserve">
-    <value>最高 UPS 电量等级。
-取值：0-100 之间的数值。</value>
-  </data>
   <data name="Tb_OutV_Max.ToolTip" xml:space="preserve">
     <value>最高输出电压。
 取值：0-999 之间的数值。</value>
@@ -36,10 +32,6 @@
   </data>
   <data name="Tb_BattV_Min.ToolTip" xml:space="preserve">
     <value>最低电池电压。
-取值：0-100 之间的数值。</value>
-  </data>
-  <data name="Tb_Load_Min.ToolTip" xml:space="preserve">
-    <value>最低 UPS 电量等级。
 取值：0-100 之间的数值。</value>
   </data>
   <data name="Tb_OutV_Min.ToolTip" xml:space="preserve">
@@ -109,10 +101,6 @@
   <data name="Lbl_Login_Nut.Text" xml:space="preserve">
     <value>登录</value>
   </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>每次更新UPS数据之间的时间（默认= 5）。
-接受值：1到60秒之间的数值。</value>
-  </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>监控的 UPS 名称。
 允许值：在 UPS 的 Nut 服务端所配置的名称。</value>
@@ -174,7 +162,7 @@
     <value>创建日志文件</value>
   </data>
   <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>创建日志文件（""WinNUT-client.log"" 文件位于 WinNUT 的安装目录）。</value>
+    <value>将日志事件写入文件。</value>
   </data>
   <data name="CB_Start_W_Win.Text" xml:space="preserve">
     <value>随 Windows 启动当前应用</value>
@@ -278,7 +266,7 @@
     <value>每月</value>
   </data>
   <data name="Cbx_Delay_Verif.ToolTip" xml:space="preserve">
-    <value>验证频率。</value>
+    <value>检查更新频率。</value>
   </data>
   <data name="Lbl_Branch_Update.Text" xml:space="preserve">
     <value>稳定或开发分支</value>
@@ -299,7 +287,7 @@
     <value>检查应用更新。</value>
   </data>
   <data name="Btn_Ok.Text" xml:space="preserve">
-    <value>好的</value>
+    <value>确认</value>
   </data>
   <data name="Btn_Apply.Text" xml:space="preserve">
     <value>应用</value>
@@ -315,5 +303,47 @@
   </data>
   <data name="CB_Follow_FSD.ToolTip" xml:space="preserve">
     <value>指示当NUT服务器发出强制关机信号时是否应执行关机（FSD =强制关机）</value>
+  </data>
+  <data name="Cbx_Freq_Input.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_BattV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_OutV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_InF_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Anchor" xml:space="preserve" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.AutoSize" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>251, 102</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="pollingIntervalValue.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>154, 100</value>
+  </data>
+  <data name="pollingIntervalValue.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>91, 20</value>
+  </data>
+  <data name="pollingIntervalValue.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="Btn_Apply.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
 </root>

@@ -16,6 +16,7 @@ Public Class UPS_Values
     Public Batt_Runtime As Double = Nothing
     Public Input_Voltage As Double = Nothing
     Public Output_Voltage As Double = Nothing
+    Public Output_Current As Single?
     Public Power_Frequency As Double = Nothing
     Public Load As Double = Nothing
     Public Output_Power As Double = Nothing

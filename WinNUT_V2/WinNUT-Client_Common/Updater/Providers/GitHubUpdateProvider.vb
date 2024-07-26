@@ -11,7 +11,7 @@ Imports System.ComponentModel
 Imports System.Threading
 Imports Octokit
 
-Namespace Updater
+Namespace Updater.Providers
 
     Public Class GitHubUpdateProvider
         Implements IUpdateProvider

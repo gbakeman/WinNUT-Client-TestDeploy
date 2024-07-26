@@ -10,10 +10,11 @@
 Imports System.ComponentModel
 Imports Octokit
 
-Namespace Updater
+Namespace Updater.Providers
 
     ''' <summary>
-    ''' Defines an object that handles checking and retrieving updates for WinNUT.
+    ''' Defines an object that handles checking and retrieving updates for WinNUT. While methods of checking for and
+    ''' installing updates can differ, there will always be a GitHub Release object associated with an update.
     ''' </summary>
     Public Interface IUpdateProvider
         Inherits IComponent

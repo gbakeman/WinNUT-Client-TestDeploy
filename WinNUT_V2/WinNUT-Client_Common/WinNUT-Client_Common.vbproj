@@ -97,8 +97,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Nut_Socket.vb" />
-    <Compile Include="Updater\GitHubUpdateProvider.vb" />
-    <Compile Include="Updater\IUpdateProvider.vb" />
+    <Compile Include="Updater\Providers\BaseUpdateProvider.vb" />
+    <Compile Include="Updater\Providers\GitHubUpdateProvider.vb" />
+    <Compile Include="Updater\Providers\IUpdateProvider.vb" />
     <Compile Include="Updater\CheckForUpdateCompletedEventArgs.vb" />
     <Compile Include="Updater\UpdateProgressChangedEventArgs.vb" />
     <Compile Include="UPS_Device.vb" />

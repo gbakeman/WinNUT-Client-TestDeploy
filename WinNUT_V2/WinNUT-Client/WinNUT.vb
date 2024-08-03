@@ -189,6 +189,7 @@ Public Class WinNUT
         ' Start_Tray_Icon = Nothing
 
         ApplyApplicationPreferences()
+        UpdateMainMenuState()
 
         ' If this is the first time WinNUT has been launched with the Settings system, check if old preferences exist
         ' and prompt the user to upgrade.
@@ -212,7 +213,7 @@ Public Class WinNUT
         AddHandler RequestConnect, AddressOf UPS_Connect
         AddHandler My.Settings.PropertyChanged, AddressOf SettingsPropertyChanged
 
-        LogFile.LogTracing(String.Format("{0} v{1} completed initialization.", My.Application.Info.ProductName, My.Application.Info.Version),
+        LogFile.LogTracing(String.Format("WinNUT Form completed Load.", My.Application.Info.ProductName, My.Application.Info.Version),
                            LogLvl.LOG_NOTICE, Me)
     End Sub
 

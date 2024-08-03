@@ -10,6 +10,7 @@
 Imports System.Globalization
 Imports System.IO
 Imports System.Text
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.Logging
 
 Public Class Logger
@@ -22,8 +23,7 @@ Public Class Logger
     Private Shared ReadOnly DEFAULT_LOCATION = LogFileLocation.ExecutableDirectory
 #Else
     Private Shared ReadOnly DEFAULT_DATETIMEFORMAT = DateTimeFormatInfo.CurrentInfo
-    ' Actually goes to the Roaming folder.
-    Private Shared ReadOnly DEFAULT_LOCATION = LogFileLocation.LocalUserApplicationDirectory
+    Private Shared ReadOnly DEFAULT_LOCATION = Application.LocalUserAppDataPath
 #End If
 
     Private ReadOnly TEventCache As New TraceEventCache()
@@ -135,17 +135,12 @@ Public Class Logger
             .TraceOutputOptions = TraceOptions.DateTime Or TraceOptions.ProcessId,
             .Append = True,
             .AutoFlush = True,
-            .LogFileCreationSchedule = LOG_FILE_CREATION_SCHEDULE
+            .LogFileCreationSchedule = LOG_FILE_CREATION_SCHEDULE,
+            .CustomLocation = If(baseDataFolder Is Nothing, DEFAULT_LOCATION, baseDataFolder),
+            .Location = LogFileLocation.Custom
         }
 
-        If baseDataFolder Is Nothing Then
-            LogFile.Location = DEFAULT_LOCATION
-        Else
-            LogFile.Location = LogFileLocation.Custom
-            LogFile.CustomLocation = baseDataFolder
-        End If
-
-        LogTracing(String.Format("{0} {1} Log file init", ProgramName, ProgramVersion), LogLvl.LOG_NOTICE, Me)
+        LogTracing($"Init log file: { LogFilePath }", LogLvl.LOG_NOTICE, Me)
 
         If LastEventsList.Count > 0 Then
             ' Fill new file with the LastEventsList buffer

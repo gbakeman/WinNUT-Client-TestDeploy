@@ -16,6 +16,7 @@ Public Module WinNUT_Globals
     Public ReadOnly ShortProgramVersion = ProgramVersion.Substring(0, ProgramVersion.IndexOf(".", ProgramVersion.IndexOf(".") + 1))
     Public ReadOnly GitHubURL = My.Application.Info.Trademark
     Public ReadOnly Copyright = My.Application.Info.Copyright
+    Public ReadOnly DataDirectory = $"{ My.Application.Info.CompanyName }\{ ProgramName }\{ ProgramVersion }"
 
     Public WithEvents LogFile As Logger = New Logger(LogLvl.LOG_DEBUG)
     Public StrLog As New List(Of String)

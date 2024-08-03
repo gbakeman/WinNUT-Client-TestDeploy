@@ -33,9 +33,6 @@
   <data name="Menu_File.Text" xml:space="preserve">
     <value>Файл</value>
   </data>
-  <data name="Menu_Reconnect.Text" xml:space="preserve">
-    <value>Перепідключитись</value>
-  </data>
   <data name="Menu_Disconnect.Text" xml:space="preserve">
     <value>Відключитись</value>
   </data>
@@ -99,7 +96,46 @@
   <data name="Lbl_InF_Dial.Text" xml:space="preserve">
     <value>Частота</value>
   </data>
+  <data name="ManageOldPrefsToolStripMenuItem.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>177, 22</value>
+  </data>
   <data name="ManageOldPrefsToolStripMenuItem.Text" xml:space="preserve">
     <value>Керування старими налаштуваннями...</value>
+  </data>
+  <data name="Menu_Connect.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="AG_InV.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="AG_OutV.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="AG_BattCh.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="AG_Load.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="AG_BattV.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="AG_InF.Text" xml:space="preserve" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value></value>
+  </data>
+  <data name="ToolStripSeparator1.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="Menu_Persist.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="Menu_Disconnect.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="$this.ImeMode" xml:space="preserve" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="Menu_UPS_Var.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
 </root>

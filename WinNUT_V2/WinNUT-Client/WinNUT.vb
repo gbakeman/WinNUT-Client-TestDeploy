@@ -7,6 +7,8 @@
 '
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
+Imports System.ComponentModel
+Imports Microsoft.Win32
 Imports WinNUT_Client_Common
 
 Public Class WinNUT
@@ -24,15 +26,16 @@ Public Class WinNUT
         End Get
     End Property
 
+    Private ReadOnly Property IsUPSConnected As Boolean
+        Get
+            Return UPS_Device IsNot Nothing AndAlso UPS_Device.IsConnected
+        End Get
+    End Property
+
 #End Region
+
     Private WithEvents LogFile As Logger = WinNUT_Globals.LogFile
-
-    'Object for UPS management
     Public WithEvents UPS_Device As UPS_Device
-
-    Private AutoReconnect As Boolean
-    Private UPS_Retry As Integer = 0
-    Private UPS_MaxRetry As Integer = 30
 
     'Variable used with Toast Functionnality
     Public WithEvents FrmBuild As Update_Gui
@@ -83,7 +86,6 @@ Public Class WinNUT
         StrLog.Insert(AppResxStr.STR_MAIN_OLDINI_RENAMED, My.Resources.Frm_Main_Str_01)
         StrLog.Insert(AppResxStr.STR_MAIN_OLDINI, My.Resources.Frm_Main_Str_02)
         StrLog.Insert(AppResxStr.STR_MAIN_RECONNECT, My.Resources.Frm_Main_Str_03)
-        StrLog.Insert(AppResxStr.STR_MAIN_RETRY, My.Resources.Frm_Main_Str_04)
         StrLog.Insert(AppResxStr.STR_MAIN_NOTCONN, My.Resources.Frm_Main_Str_05)
         StrLog.Insert(AppResxStr.STR_MAIN_CONN, My.Resources.Frm_Main_Str_06)
         StrLog.Insert(AppResxStr.STR_MAIN_OL, My.Resources.Frm_Main_Str_07)
@@ -115,8 +117,6 @@ Public Class WinNUT
         StrLog.Insert(AppResxStr.STR_LOG_CON_FAILED, My.Resources.Log_Str_03)
         StrLog.Insert(AppResxStr.STR_LOG_CON_RETRY, My.Resources.Log_Str_04)
         StrLog.Insert(AppResxStr.STR_LOG_LOGOFF, My.Resources.Log_Str_05)
-        StrLog.Insert(AppResxStr.STR_LOG_NEW_RETRY, My.Resources.Log_Str_06)
-        StrLog.Insert(AppResxStr.STR_LOG_STOP_RETRY, My.Resources.Log_Str_07)
         StrLog.Insert(AppResxStr.STR_LOG_SHUT_START, My.Resources.Log_Str_08)
         StrLog.Insert(AppResxStr.STR_LOG_SHUT_STOP, My.Resources.Log_Str_09)
         StrLog.Insert(AppResxStr.STR_LOG_NO_UPDATE, My.Resources.Log_Str_10)
@@ -208,8 +208,9 @@ Public Class WinNUT
             HasFocus = False
         End If
 
-        AddHandler Microsoft.Win32.SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
+        AddHandler SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
         AddHandler RequestConnect, AddressOf UPS_Connect
+        AddHandler My.Settings.PropertyChanged, AddressOf SettingsPropertyChanged
 
         LogFile.LogTracing(String.Format("{0} v{1} completed initialization.", My.Application.Info.ProductName, My.Application.Info.Version),
                            LogLvl.LOG_NOTICE, Me)
@@ -300,10 +301,10 @@ Public Class WinNUT
             If NotifyIcon.Visible = False Then
                 Text = FormText
             Else
-                Text = "WinNUT"
+                Text = ProgramName
             End If
         ElseIf sender.WindowState = FormWindowState.Maximized Or sender.WindowState = FormWindowState.Normal Then
-            Text = "WinNUT"
+            Text = ProgramName
         End If
     End Sub
 
@@ -327,6 +328,35 @@ Public Class WinNUT
     End Sub
 
 #End Region
+
+    Private Sub SettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+        LogFile.LogTracing("SettingsPropertyChanged: " & e.PropertyName, LogLvl.LOG_DEBUG, Me)
+
+        UpdateMainMenuState()
+    End Sub
+
+    Private Sub UpdateMainMenuState()
+        Menu_Persist.Checked = My.Settings.NUT_AutoReconnect
+
+        If OldParams.WinNUT_Params.RegistryKeyRoot IsNot Nothing Then
+            ManageOldPrefsToolStripMenuItem.Enabled = True
+            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Enabled_TooltipText
+        Else
+            ManageOldPrefsToolStripMenuItem.Enabled = False
+            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Disabled_TooltipText
+        End If
+
+        If IsUPSConnected OrElse (UPS_Device IsNot Nothing AndAlso UPS_Device.IsReconnecting) Then
+            Menu_Connect.Enabled = False
+            Menu_Disconnect.Enabled = True
+            Menu_UPS_Var.Enabled = True
+        Else
+            Menu_Connect.Enabled = True
+            Menu_Disconnect.Enabled = False
+            Menu_UPS_Var.Enabled = False
+        End If
+    End Sub
+
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
@@ -346,26 +376,12 @@ Public Class WinNUT
         End Select
     End Sub
 
-    ''' <summary>
-    ''' Updates the Manage old prefs File menu item status depending on the presence of old preferences.
-    ''' </summary>
-    Private Sub UpdateManageOldPrefsMenuItemStatus()
-        If OldParams.WinNUT_Params.RegistryKeyRoot IsNot Nothing Then
-
-            ManageOldPrefsToolStripMenuItem.Enabled = True
-            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Enabled_TooltipText
-        Else
-            ManageOldPrefsToolStripMenuItem.Enabled = False
-            ManageOldPrefsToolStripMenuItem.ToolTipText = My.Resources.ManageOldPrefsToolstripMenuItem_Disabled_TooltipText
-        End If
-    End Sub
-
     Private Sub RunRegPrefsUpgrade()
         LogFile.LogTracing("Starting Upgrade dialog.", LogLvl.LOG_NOTICE, Me)
         Dim upPrefsDg As New Forms.UpgradePrefsDialog()
         upPrefsDg.ShowDialog()
 
-        UpdateManageOldPrefsMenuItemStatus()
+        UpdateMainMenuState()
         ApplyApplicationPreferences()
     End Sub
 
@@ -399,7 +415,7 @@ Public Class WinNUT
             Lbl_VFirmware.Text = .Firmware
         End With
 
-        Menu_UPS_Var.Enabled = True
+        UpdateMainMenuState()
         UpdateIcon_NotifyIcon()
         LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
         RaiseEvent UpdateNotifyIconStr("Connected", Nothing)
@@ -413,10 +429,12 @@ Public Class WinNUT
     End Sub
 
     Private Sub ConnectionError(sender As UPS_Device, ex As Exception) Handles UPS_Device.ConnectionError
-        LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsLoggedIn: {2}",
-                               sender.Name, sender.IsConnected, sender.IsLoggedIn), LogLvl.LOG_ERROR, Me,
-                               String.Format(StrLog.Item(AppResxStr.STR_LOG_CON_FAILED), sender.Nut_Config.Host, sender.Nut_Config.Port,
-                                             ex.Message))
+        If Not UPS_Device.IsReconnecting Then
+            LogFile.LogTracing(String.Format("Something went wrong connecting to UPS {0}. IsConnected: {1}, IsLoggedIn: {2}",
+                            sender.Name, sender.IsConnected, sender.IsLoggedIn), LogLvl.LOG_ERROR, Me,
+                            String.Format(StrLog.Item(AppResxStr.STR_LOG_CON_FAILED), sender.Nut_Config.Host, sender.Nut_Config.Port,
+                                            ex.Message))
+        End If
     End Sub
 
     ''' <summary>
@@ -434,21 +452,24 @@ Public Class WinNUT
     End Sub
 
     Private Sub UPS_Lostconnect() Handles UPS_Device.Lost_Connect
-        LogFile.LogTracing("Notify user of lost connection", LogLvl.LOG_ERROR, Me,
-            String.Format(StrLog.Item(AppResxStr.STR_MAIN_LOSTCONNECT), UPS_Device.Nut_Config.Host, UPS_Device.Nut_Config.Port))
-        ' UPSDisconnect()
+        LogFile.LogTracing("UPS reports lost (broken) connection.", LogLvl.LOG_ERROR, Me,
+                String.Format(StrLog.Item(AppResxStr.STR_MAIN_LOSTCONNECT), UPS_Device.Nut_Config.Host, UPS_Device.Nut_Config.Port))
 
         ReInitDisplayValues()
-        If UPS_Device.Nut_Config.AutoReconnect And UPS_Retry <= UPS_MaxRetry Then
+        If UPS_Device.Nut_Config.AutoReconnect Then
             ActualAppIconIdx = AppIconIdx.IDX_ICO_RETRY
+            Dim Message = String.Format(StrLog.Item(AppResxStr.STR_MAIN_RECONNECT))
+            LogFile.LogTracing("UPS reports it lost connection and is retrying.", LogLvl.LOG_WARNING, Me, Message)
+            RaiseEvent UpdateNotifyIconStr("Retry", Message)
         Else
+
             ActualAppIconIdx = AppIconIdx.IDX_ICO_OFFLINE
+            RaiseEvent UpdateNotifyIconStr("Lost Connect", Nothing)
         End If
 
         UpdateIcon_NotifyIcon()
-        RaiseEvent UpdateNotifyIconStr("Lost Connect", Nothing)
-        RaiseEvent UpdateBatteryState("Lost Connect")
         LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
+        RaiseEvent UpdateBatteryState("Lost Connect")
     End Sub
 
     ''' <summary>
@@ -456,6 +477,7 @@ Public Class WinNUT
     ''' </summary>
     Private Sub UPSDisconnectedEvent() Handles UPS_Device.Disconnected
         ReInitDisplayValues()
+        UpdateMainMenuState()
         ActualAppIconIdx = AppIconIdx.IDX_ICO_OFFLINE
         LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
         UpdateIcon_NotifyIcon()
@@ -498,13 +520,6 @@ Public Class WinNUT
             NotifyIcon.Visible = False
             WindowState = FormWindowState.Normal
         End If
-    End Sub
-
-    Private Sub NewRetry_NotifyIcon() Handles UPS_Device.New_Retry
-        Dim Message As String = String.Format(StrLog.Item(AppResxStr.STR_MAIN_RETRY), UPS_Device.Retry, UPS_Device.MaxRetry)
-        RaiseEvent UpdateNotifyIconStr("Retry", Message)
-        UpdateIcon_NotifyIcon()
-        LogFile.LogTracing("Update Icon", LogLvl.LOG_DEBUG, Me)
     End Sub
 
     Private Sub Event_UpdateNotifyIconStr(Optional Reason As String = Nothing, Optional Message As String = Nothing) Handles Me.UpdateNotifyIconStr
@@ -624,9 +639,7 @@ Public Class WinNUT
     End Sub
 
     Public Shared Sub Event_ChangeStatus() Handles Me.On_Battery, Me.On_Line,
-        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected, UPS_Device.New_Retry
-        ', UPS_Device.Unknown_UPS
-        ', UPS_Device.InvalidLogin
+        UPS_Device.Lost_Connect, UPS_Device.Connected, UPS_Device.Disconnected
 
         WinNUT.NotifyIcon.BalloonTipText = WinNUT.NotifyIcon.Text
         If WinNUT.AllowToast And WinNUT.NotifyIcon.BalloonTipText <> "" Then
@@ -815,7 +828,7 @@ Public Class WinNUT
         End With
     End Sub
 
-    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Reconnect.Click
+    Private Sub Menu_Reconnect_Click(sender As Object, e As EventArgs) Handles Menu_Connect.Click
         LogFile.LogTracing("Force Reconnect from menu", LogLvl.LOG_DEBUG, Me)
         UPSDisconnect()
 
@@ -1046,6 +1059,11 @@ Public Class WinNUT
 
     Private Sub ManageOldPrefsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOldPrefsToolStripMenuItem.Click
         RunRegPrefsUpgrade()
+    End Sub
+
+    Private Sub Menu_Persist_CheckedChanged(sender As Object, e As EventArgs) Handles Menu_Persist.CheckedChanged
+        LogFile.LogTracing("Menu_Persist checked state changing to " & Menu_Persist.Checked, LogLvl.LOG_DEBUG, Me)
+        My.Settings.NUT_AutoReconnect = Menu_Persist.Checked
     End Sub
 End Class
 

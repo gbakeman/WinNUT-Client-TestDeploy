@@ -24,9 +24,6 @@
   <data name="Frm_Main_Str_03" xml:space="preserve">
     <value>Перепідключення в процесі</value>
   </data>
-  <data name="Frm_Main_Str_04" xml:space="preserve">
-    <value>Спроба {0} из {1}</value>
-  </data>
   <data name="Frm_Main_Str_05" xml:space="preserve">
     <value>Не підключено</value>
   </data>
@@ -95,13 +92,6 @@
   </data>
   <data name="Log_Str_05" xml:space="preserve">
     <value>Від'єднатися від сервера NUT</value>
-  </data>
-  <data name="Log_Str_06" xml:space="preserve">
-    <value>Спроба перепідключення {0} / {1}</value>
-  </data>
-  <data name="Log_Str_07" xml:space="preserve">
-    <value>Досягнуто макимальної кількості спроб повторного з'єднання.
-Ожидается ручное переподключение</value>
   </data>
   <data name="Log_Str_08" xml:space="preserve">
     <value>Досягнуто умов для запуску процесу вимкнення</value>
@@ -179,5 +169,14 @@
   <data name="VariableUnavailable" xml:space="preserve">
     <value>Недоступно</value>
     <comment>Indicate that a variable is unavailable</comment>
+  </data>
+  <data name="RepeatHS" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RepeatHS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="disconnect2" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disconnect2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="internetconnection" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\internetconnection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

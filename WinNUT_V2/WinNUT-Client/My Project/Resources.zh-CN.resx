@@ -25,9 +25,6 @@ Ini 文件重命名为 {0}.old</value>
   <data name="Frm_Main_Str_03" xml:space="preserve">
     <value>重连中</value>
   </data>
-  <data name="Frm_Main_Str_04" xml:space="preserve">
-    <value>尝试 {1} 的 {0}</value>
-  </data>
   <data name="Frm_Main_Str_05" xml:space="preserve">
     <value>未连接</value>
   </data>
@@ -73,12 +70,6 @@ Ini 文件重命名为 {0}.old</value>
   </data>
   <data name="Log_Str_05" xml:space="preserve">
     <value>从 Nut 主机断开了连接</value>
-  </data>
-  <data name="Log_Str_06" xml:space="preserve">
-    <value>尝试重连 {0} / {1}</value>
-  </data>
-  <data name="Log_Str_07" xml:space="preserve">
-    <value>达到最大重试次数。等待手动重连。</value>
   </data>
   <data name="Log_Str_08" xml:space="preserve">
     <value>触发关机流程所需满足的条件</value>
@@ -159,5 +150,14 @@ Ini 文件重命名为 {0}.old</value>
   <data name="VariableUnavailable" xml:space="preserve">
     <value>参数无效</value>
     <comment>Indicate that a variable is unavailable</comment>
+  </data>
+  <data name="RepeatHS" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RepeatHS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="disconnect2" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\disconnect2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="internetconnection" xml:space="preserve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\internetconnection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

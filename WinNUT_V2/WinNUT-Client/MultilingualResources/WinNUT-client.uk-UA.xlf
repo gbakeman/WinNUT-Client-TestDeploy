@@ -491,10 +491,6 @@ Ini File Moved to {0}.old</source>
           <source>Reconnection In Progress</source>
           <target state="final">Перепідключення в процесі</target>
         </trans-unit>
-        <trans-unit id="Frm_Main_Str_04" translate="yes" xml:space="preserve">
-          <source>Try {0} of {1}</source>
-          <target state="final">Спроба {0} из {1}</target>
-        </trans-unit>
         <trans-unit id="Frm_Main_Str_05" translate="yes" xml:space="preserve">
           <source>Not Connected</source>
           <target state="final">Не підключено</target>
@@ -568,15 +564,6 @@ Remaining Time : {1}</source>
         <trans-unit id="Log_Str_05" translate="yes" xml:space="preserve">
           <source>Disconnected from Nut Host</source>
           <target state="final">Від'єднатися від сервера NUT</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_06" translate="yes" xml:space="preserve">
-          <source>Try Reconnect {0} / {1}</source>
-          <target state="final">Спроба перепідключення {0} / {1}</target>
-        </trans-unit>
-        <trans-unit id="Log_Str_07" translate="yes" xml:space="preserve">
-          <source>Max Retry reached. Wait for manual Reconnection</source>
-          <target state="final">Досягнуто макимальної кількості спроб повторного з'єднання.
-Ожидается ручное переподключение</target>
         </trans-unit>
         <trans-unit id="Log_Str_08" translate="yes" xml:space="preserve">
           <source>Conditions met for launching the Extinguishing Process</source>
@@ -694,6 +681,18 @@ Please correct the error, or cancel the upgrade dialog to continue with the defa
           <source>Unavailable</source>
           <target state="final">Недоступно</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Indicate that a variable is unavailable</note>
+        </trans-unit>
+        <trans-unit id="RepeatHS" translate="yes" xml:space="preserve" extype="System.Resources.ResXFileRef, System.Windows.Forms">
+          <source>..\Resources\RepeatHS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
+          <target state="needs-review-translation">..\Resources\RepeatHS.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
+        </trans-unit>
+        <trans-unit id="disconnect2" translate="yes" xml:space="preserve" extype="System.Resources.ResXFileRef, System.Windows.Forms">
+          <source>..\Resources\disconnect2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
+          <target state="needs-review-translation">..\Resources\disconnect2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
+        </trans-unit>
+        <trans-unit id="internetconnection" translate="yes" xml:space="preserve" extype="System.Resources.ResXFileRef, System.Windows.Forms">
+          <source>..\Resources\internetconnection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</source>
+          <target state="needs-review-translation">..\Resources\internetconnection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</target>
         </trans-unit>
         <trans-unit id="LogCheckingForUpdate" translate="yes" xml:space="preserve">
           <source>Checking for update...</source>
@@ -2388,8 +2387,8 @@ Accepted value: Numeric value from 0 to 100.</source>
           <target state="final">Змінні ДБЖ</target>
         </trans-unit>
         <trans-unit id="Menu_Quit.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>180, 22</source>
-          <target state="final">180, 22</target>
+          <source>177, 22</source>
+          <target state="final">177, 22</target>
         </trans-unit>
         <trans-unit id="Menu_Quit.Text" translate="yes" xml:space="preserve">
           <source>Exit</source>
@@ -2403,17 +2402,9 @@ Accepted value: Numeric value from 0 to 100.</source>
           <source>File</source>
           <target state="final">Файл</target>
         </trans-unit>
-        <trans-unit id="Menu_Reconnect.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>133, 22</source>
-          <target state="final">133, 22</target>
-        </trans-unit>
-        <trans-unit id="Menu_Reconnect.Text" translate="yes" xml:space="preserve">
-          <source>Reconnect</source>
-          <target state="final">Перепідключитись</target>
-        </trans-unit>
         <trans-unit id="Menu_Disconnect.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>133, 22</source>
-          <target state="final">133, 22</target>
+          <source>180, 22</source>
+          <target state="final">180, 22</target>
         </trans-unit>
         <trans-unit id="Menu_Disconnect.Text" translate="yes" xml:space="preserve">
           <source>Disconnect</source>
@@ -2472,8 +2463,8 @@ Accepted value: Numeric value from 0 to 100.</source>
           <target state="final">0, 24</target>
         </trans-unit>
         <trans-unit id="Main_Menu.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>351, 24</source>
-          <target state="final">351, 24</target>
+          <source>231, 24</source>
+          <target state="final">231, 24</target>
         </trans-unit>
         <trans-unit id="Main_Menu.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
           <source>0</source>
@@ -3584,8 +3575,8 @@ Accepted value: Numeric value from 0 to 100.</source>
           <target state="final">False</target>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>180, 22</source>
-          <target state="new">180, 22</target>
+          <source>177, 22</source>
+          <target state="needs-review-translation">177, 22</target>
         </trans-unit>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.Text" translate="yes" xml:space="preserve">
           <source>Manage Old Prefs...</source>
@@ -3594,6 +3585,62 @@ Accepted value: Numeric value from 0 to 100.</source>
         <trans-unit id="ManageOldPrefsToolStripMenuItem.ShortcutKeyDisplayString" translate="yes" xml:space="preserve">
           <source></source>
           <target state="new"></target>
+        </trans-unit>
+        <trans-unit id="Menu_Connect.Size" translate="yes" xml:space="preserve" extype="System.Drawing.Size, System.Drawing">
+          <source>180, 22</source>
+          <target state="needs-review-translation">180, 22</target>
+        </trans-unit>
+        <trans-unit id="Menu_Connect.Text" translate="yes" xml:space="preserve">
+          <source>Connect</source>
+          <target state="new">Connect</target>
+        </trans-unit>
+        <trans-unit id="AG_InV.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="AG_OutV.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="AG_BattCh.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="AG_Load.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="AG_BattV.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="AG_InF.Text" translate="yes" xml:space="preserve" extype="System.Resources.ResXNullRef, System.Windows.Forms">
+          <source></source>
+          <target state="needs-review-translation"></target>
+        </trans-unit>
+        <trans-unit id="ToolStripSeparator1.Size" translate="yes" xml:space="preserve" extype="System.Drawing.Size, System.Drawing">
+          <source>177, 6</source>
+          <target state="needs-review-translation">177, 6</target>
+        </trans-unit>
+        <trans-unit id="Menu_Persist.Size" translate="yes" xml:space="preserve" extype="System.Drawing.Size, System.Drawing">
+          <source>180, 22</source>
+          <target state="needs-review-translation">180, 22</target>
+        </trans-unit>
+        <trans-unit id="Menu_Persist.Text" translate="yes" xml:space="preserve">
+          <source>Persist</source>
+          <target state="new">Persist</target>
+        </trans-unit>
+        <trans-unit id="Menu_Disconnect.Enabled" translate="yes" xml:space="preserve" extype="System.Boolean, mscorlib">
+          <source>False</source>
+          <target state="needs-review-translation">False</target>
+        </trans-unit>
+        <trans-unit id="$this.ImeMode" translate="yes" xml:space="preserve" extype="System.Windows.Forms.ImeMode, System.Windows.Forms">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="Menu_UPS_Var.Enabled" translate="yes" xml:space="preserve" extype="System.Boolean, mscorlib">
+          <source>False</source>
+          <target state="needs-review-translation">False</target>
         </trans-unit>
       </group>
     </body>

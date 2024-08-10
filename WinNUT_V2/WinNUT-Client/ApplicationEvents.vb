@@ -8,6 +8,7 @@
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
 Imports System.Configuration
+Imports System.Deployment.Application
 Imports System.Globalization
 Imports System.IO
 Imports System.Text.RegularExpressions
@@ -42,6 +43,9 @@ Namespace My
             ' AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf AppDomainUnhandledException
 
             Init_Globals()
+            LogFile.LogTracing(String.Format("{0} v{1} starting up.", My.Application.Info.ProductName, My.Application.Info.Version),
+                           LogLvl.LOG_NOTICE, Me)
+            ' LogFile.LogTracing($"DataDirectory: { ApplicationDeployment.CurrentDeployment.DataDirectory }", LogLvl.LOG_NOTICE, Me)
 
             ' If first run indicated by Settings, attempt upgrade in case older version is present.
             ' Only necessary when deploying MSI. Remove once using pure ClickOnce.

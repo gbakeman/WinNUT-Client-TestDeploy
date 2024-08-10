@@ -63,21 +63,6 @@
   <data name="Frm_Shutdown_Str_01" xml:space="preserve">
     <value>電池電量：{0} 剩餘時間：{1}</value>
   </data>
-  <data name="Frm_Update_Str_01" xml:space="preserve">
-    <value>可用的新版本：{0}</value>
-  </data>
-  <data name="Frm_Update_Str_02" xml:space="preserve">
-    <value>顯示更新日誌</value>
-  </data>
-  <data name="Frm_Update_Str_03" xml:space="preserve">
-    <value>隱藏更新日誌</value>
-  </data>
-  <data name="Frm_Update_Str_04" xml:space="preserve">
-    <value>您是否要立即更新 WinNUT Client？點選確定以關閉 WinNUT 並安裝新版本，點選取消以儲存 msi 檔案並於稍後手動安裝。</value>
-  </data>
-  <data name="Frm_Update_Str_05" xml:space="preserve">
-    <value>下載新版本來源：</value>
-  </data>
   <data name="Log_Str_01" xml:space="preserve">
     <value>WinNUT 設定已變更</value>
   </data>

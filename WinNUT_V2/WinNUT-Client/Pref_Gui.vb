@@ -54,7 +54,6 @@ Public Class Pref_Gui
             My.Settings.PW_StopDelaySec = CInt(Tb_Delay_Stop.Text)
             My.Settings.PW_UserExtendStopTimer = Cb_ExtendTime.Checked
             My.Settings.PW_ExtendDelaySec = CInt(Tb_GraceTime.Text)
-            My.Settings.UP_AutoUpdate = Cb_Verify_Update.Checked
             My.Settings.UP_CheckAtStart = Cb_Update_At_Start.Checked
             My.Settings.UP_AutoChkDelay = Cbx_Delay_Verif.SelectedIndex
             My.Settings.UP_Branch = Cbx_Branch_Update.SelectedIndex
@@ -132,7 +131,6 @@ Public Class Pref_Gui
             Tb_Delay_Stop.Text = My.Settings.PW_StopDelaySec
             Cb_ExtendTime.Checked = My.Settings.PW_UserExtendStopTimer
             Tb_GraceTime.Text = My.Settings.PW_ExtendDelaySec
-            Cb_Verify_Update.Checked = My.Settings.UP_AutoUpdate
             Cb_Update_At_Start.Checked = My.Settings.UP_CheckAtStart
             Cbx_Delay_Verif.SelectedIndex = My.Settings.UP_AutoChkDelay
             Cbx_Branch_Update.SelectedIndex = My.Settings.UP_Branch
@@ -153,15 +151,8 @@ Public Class Pref_Gui
             Else
                 Tb_GraceTime.Enabled = False
             End If
-            If Cb_Verify_Update.Checked Then
-                Cb_Update_At_Start.Enabled = True
-                Cbx_Delay_Verif.Enabled = True
-                Cbx_Branch_Update.Enabled = True
-            Else
-                Cb_Update_At_Start.Enabled = False
-                Cbx_Delay_Verif.Enabled = False
-                Cbx_Branch_Update.Enabled = False
-            End If
+
+            Cb_Update_At_Start_CheckedChanged(Me, EventArgs.Empty)
 
             For Each TabCtrl In TabControl_Options.Controls.OfType(Of TabPage)()
                 Dim TBoxes = TabCtrl.Controls.OfType(Of TextBox)()
@@ -217,16 +208,8 @@ Public Class Pref_Gui
         End If
     End Sub
 
-    Private Sub Cb_Verify_Update_CheckedChanged(sender As Object, e As EventArgs) Handles Cb_Verify_Update.CheckedChanged
-        If Cb_Verify_Update.Checked Then
-            Cb_Update_At_Start.Enabled = True
-            Cbx_Delay_Verif.Enabled = True
-            Cbx_Branch_Update.Enabled = True
-        Else
-            Cb_Update_At_Start.Enabled = False
-            Cbx_Delay_Verif.Enabled = False
-            Cbx_Branch_Update.Enabled = False
-        End If
+    Private Sub Cb_Update_At_Start_CheckedChanged(sender As Object, e As EventArgs) Handles Cb_Update_At_Start.CheckedChanged
+        Cbx_Delay_Verif.Enabled = Cb_Update_At_Start.Checked
     End Sub
 
     Private Sub Number_Validating(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Tb_Port.Validating, Tb_OutV_Min.Validating, Tb_OutV_Max.Validating, Tb_InV_Min.Validating, Tb_InV_Max.Validating, Tb_InF_Min.Validating, Tb_InF_Max.Validating, Tb_GraceTime.Validating, Tb_Delay_Stop.Validating, Tb_BattV_Min.Validating, Tb_BattV_Max.Validating, Tb_BattLimit_Time.Validating, Tb_BattLimit_Load.Validating

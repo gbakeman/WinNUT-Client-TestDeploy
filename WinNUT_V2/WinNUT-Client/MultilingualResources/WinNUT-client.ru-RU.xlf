@@ -107,151 +107,6 @@ Remaining Time : {WinNUT.Lbl_VRTime.Text}</source>
       </group>
     </body>
   </file>
-  <file datatype="xml" source-language="en" target-language="ru-RU" original="WINNUT-CLIENT/UPDATE_GUI.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
-    <header>
-      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6916.0" tool-company="Microsoft" />
-    </header>
-    <body>
-      <group id="WINNUT-CLIENT/UPDATE_GUI.RESX" datatype="resx">
-        <trans-unit id="TB_ChgLog.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 42</source>
-          <target state="final">6, 42</target>
-        </trans-unit>
-        <trans-unit id="TB_ChgLog.Multiline" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
-          <source>True</source>
-          <target state="final">True</target>
-        </trans-unit>
-        <trans-unit id="TB_ChgLog.ScrollBars" translate="no" extype="System.Windows.Forms.ScrollBars, System.Windows.Forms" xml:space="preserve">
-          <source>Vertical</source>
-          <target state="final">Vertical</target>
-        </trans-unit>
-        <trans-unit id="TB_ChgLog.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>500, 160</source>
-          <target state="final">500, 160</target>
-        </trans-unit>
-        <trans-unit id="TB_ChgLog.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>1</source>
-          <target state="final">1</target>
-        </trans-unit>
-        <trans-unit id="Lbl.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
-          <source>True</source>
-          <target state="final">True</target>
-        </trans-unit>
-        <trans-unit id="Lbl.Font" translate="no" extype="System.Drawing.Font, System.Drawing" xml:space="preserve">
-          <source>Microsoft Sans Serif, 12pt</source>
-          <target state="final">Microsoft Sans Serif, 12pt</target>
-        </trans-unit>
-        <trans-unit id="Lbl.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 16</source>
-          <target state="final">6, 16</target>
-        </trans-unit>
-        <trans-unit id="Lbl.MaximumSize" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>500, 20</source>
-          <target state="final">500, 20</target>
-        </trans-unit>
-        <trans-unit id="Lbl.MinimumSize" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>500, 20</source>
-          <target state="final">500, 20</target>
-        </trans-unit>
-        <trans-unit id="Lbl.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>500, 20</source>
-          <target state="final">500, 20</target>
-        </trans-unit>
-        <trans-unit id="Lbl.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>0</source>
-          <target state="final">0</target>
-        </trans-unit>
-        <trans-unit id="Lbl.Text" translate="yes" xml:space="preserve">
-          <source>Update Available : Version {0}</source>
-          <target state="final">Доступно обновление: Версия {0}</target>
-        </trans-unit>
-        <trans-unit id="Lbl.TextAlign" translate="no" extype="System.Drawing.ContentAlignment, System.Drawing" xml:space="preserve">
-          <source>MiddleCenter</source>
-          <target state="final">MiddleCenter</target>
-        </trans-unit>
-        <trans-unit id="GB1.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>12, 12</source>
-          <target state="final">12, 12</target>
-        </trans-unit>
-        <trans-unit id="GB1.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>513, 212</source>
-          <target state="final">513, 212</target>
-        </trans-unit>
-        <trans-unit id="GB1.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>0</source>
-          <target state="final">0</target>
-        </trans-unit>
-        <trans-unit id="Update_Btn.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>18, 230</source>
-          <target state="final">18, 230</target>
-        </trans-unit>
-        <trans-unit id="Update_Btn.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>145, 23</source>
-          <target state="final">145, 23</target>
-        </trans-unit>
-        <trans-unit id="Update_Btn.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>2</source>
-          <target state="final">2</target>
-        </trans-unit>
-        <trans-unit id="Update_Btn.Text" translate="yes" xml:space="preserve">
-          <source>Update</source>
-          <target state="final">Обновить</target>
-        </trans-unit>
-        <trans-unit id="ShowLog_Button.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>196, 230</source>
-          <target state="final">196, 230</target>
-        </trans-unit>
-        <trans-unit id="ShowLog_Button.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>145, 23</source>
-          <target state="final">145, 23</target>
-        </trans-unit>
-        <trans-unit id="ShowLog_Button.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>3</source>
-          <target state="final">3</target>
-        </trans-unit>
-        <trans-unit id="ShowLog_Button.Text" translate="yes" xml:space="preserve">
-          <source>Show ChangeLog</source>
-          <target state="final">Показать список изменений</target>
-        </trans-unit>
-        <trans-unit id="Close_Btn.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>374, 230</source>
-          <target state="final">374, 230</target>
-        </trans-unit>
-        <trans-unit id="Close_Btn.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>145, 23</source>
-          <target state="final">145, 23</target>
-        </trans-unit>
-        <trans-unit id="Close_Btn.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>4</source>
-          <target state="final">4</target>
-        </trans-unit>
-        <trans-unit id="Close_Btn.Text" translate="yes" xml:space="preserve">
-          <source>Close</source>
-          <target state="final">Закрыть</target>
-        </trans-unit>
-        <trans-unit id="$this.AutoScaleDimensions" translate="no" extype="System.Drawing.SizeF, System.Drawing" xml:space="preserve">
-          <source>6, 13</source>
-          <target state="final">6, 13</target>
-        </trans-unit>
-        <trans-unit id="$this.ClientSize" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>536, 264</source>
-          <target state="final">536, 264</target>
-        </trans-unit>
-        <trans-unit id="$this.StartPosition" translate="no" extype="System.Windows.Forms.FormStartPosition, System.Windows.Forms" xml:space="preserve">
-          <source>CenterScreen</source>
-          <target state="final">CenterScreen</target>
-        </trans-unit>
-        <trans-unit id="$this.Text" translate="yes" xml:space="preserve">
-          <source>Update</source>
-          <target state="final">Обновить</target>
-        </trans-unit>
-        <trans-unit id="$this.Localizable" translate="no" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
-          <source>True</source>
-          <target state="final">True</target>
-        </trans-unit>
-      </group>
-    </body>
-  </file>
   <file datatype="xml" source-language="en" target-language="ru-RU" original="WINNUT-CLIENT/LIST_VAR_GUI.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
     <header>
       <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6916.0" tool-company="Microsoft" />
@@ -690,30 +545,6 @@ Remaining Time : {1}</source>
           <target state="final">Заряд : {0}
 Осталось времени : {1}</target>
         </trans-unit>
-        <trans-unit id="Frm_Update_Str_01" translate="yes" xml:space="preserve">
-          <source>Update Available : Version {0}</source>
-          <target state="final">Доступно обновление: Версия {0}</target>
-        </trans-unit>
-        <trans-unit id="Frm_Update_Str_02" translate="yes" xml:space="preserve">
-          <source>Show ChangeLog</source>
-          <target state="final">Показать список изменений</target>
-        </trans-unit>
-        <trans-unit id="Frm_Update_Str_03" translate="yes" xml:space="preserve">
-          <source>Hide ChangeLog</source>
-          <target state="final">Скрыть список изменений</target>
-        </trans-unit>
-        <trans-unit id="Frm_Update_Str_04" translate="yes" xml:space="preserve">
-          <source>Update WinNUT-Client Now?
-Ok to Close WinNut and Install New Version
-Cancel to Save Msi and Install Later</source>
-          <target state="final">Обновить WinNUT сейчас?
-"ОК" - закрыть WinNUT и установить новую версию.
-"Отмена" - сохранить MSI и установить позже.</target>
-        </trans-unit>
-        <trans-unit id="Frm_Update_Str_05" translate="yes" xml:space="preserve">
-          <source>Download New Version from :</source>
-          <target state="final">Скачать новую версию с:</target>
-        </trans-unit>
         <trans-unit id="GitHub_URL" translate="no" xml:space="preserve">
           <source>https://github.com/nutdotnet/WinNUT-Client</source>
           <target state="final">https://github.com/nutdotnet/WinNUT-Client</target>
@@ -864,6 +695,11 @@ Please correct the error, or cancel the upgrade dialog to continue with the defa
           <target state="new">Unavailable</target>
           <note from="MultilingualBuild" annotates="source" priority="2">Indicate that a variable is unavailable</note>
         </trans-unit>
+        <trans-unit id="LogCheckingForUpdate" translate="yes" xml:space="preserve">
+          <source>Checking for update...</source>
+          <target state="new">Checking for update...</target>
+          <note from="MultilingualBuild" annotates="source" priority="2">Inform the user that WinNUT is checking for an update.</note>
+        </trans-unit>
       </group>
     </body>
   </file>
@@ -993,8 +829,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
           <target state="final">Отладочная версия</target>
         </trans-unit>
         <trans-unit id="Cbx_Branch_Update.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>196, 101</source>
-          <target state="final">196, 101</target>
+          <source>196, 63</source>
+          <target state="final">196, 63</target>
         </trans-unit>
         <trans-unit id="Cbx_Branch_Update.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>120, 21</source>
@@ -1021,8 +857,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
           <target state="final">Ежемесячно</target>
         </trans-unit>
         <trans-unit id="Cbx_Delay_Verif.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>196, 71</source>
-          <target state="final">196, 71</target>
+          <source>196, 36</source>
+          <target state="final">196, 36</target>
         </trans-unit>
         <trans-unit id="Cbx_Delay_Verif.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>120, 21</source>
@@ -1041,8 +877,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
           <target state="final">True</target>
         </trans-unit>
         <trans-unit id="Lbl_Branch_Update.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 102</source>
-          <target state="final">6, 102</target>
+          <source>3, 66</source>
+          <target state="final">3, 66</target>
         </trans-unit>
         <trans-unit id="Lbl_Branch_Update.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>111, 13</source>
@@ -1061,8 +897,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
           <target state="final">True</target>
         </trans-unit>
         <trans-unit id="Lbl_Delay_Verif.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 72</source>
-          <target state="final">6, 72</target>
+          <source>3, 39</source>
+          <target state="final">3, 39</target>
         </trans-unit>
         <trans-unit id="Lbl_Delay_Verif.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>134, 13</source>
@@ -1085,8 +921,8 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
           <target state="final">MiddleRight</target>
         </trans-unit>
         <trans-unit id="Cb_Update_At_Start.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 42</source>
-          <target state="final">6, 42</target>
+          <source>3, 13</source>
+          <target state="final">3, 13</target>
         </trans-unit>
         <trans-unit id="Cb_Update_At_Start.MinimumSize" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
           <source>310, 0</source>
@@ -1107,38 +943,6 @@ along with this program. If not, see https://www.gnu.org/licenses/.</target>
         <trans-unit id="Cb_Update_At_Start.ToolTip" translate="yes" xml:space="preserve">
           <source>Checks for updates at startup.</source>
           <target state="final">Проверяет обновления при запуске.</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.AutoSize" translate="no" extype="System.Boolean, mscorlib" xml:space="preserve">
-          <source>True</source>
-          <target state="final">True</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.CheckAlign" translate="no" extype="System.Drawing.ContentAlignment, System.Drawing" xml:space="preserve">
-          <source>MiddleRight</source>
-          <target state="final">MiddleRight</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
-          <source>6, 12</source>
-          <target state="final">6, 12</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.MinimumSize" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>310, 0</source>
-          <target state="final">310, 0</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
-          <source>310, 17</source>
-          <target state="final">310, 17</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.TabIndex" translate="no" extype="System.Int32, mscorlib" xml:space="preserve">
-          <source>0</source>
-          <target state="final">0</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.Text" translate="yes" xml:space="preserve">
-          <source>Verify Update</source>
-          <target state="final">Проверять обновления</target>
-        </trans-unit>
-        <trans-unit id="Cb_Verify_Update.ToolTip" translate="yes" xml:space="preserve">
-          <source>Check for updates.</source>
-          <target state="final">Проверка обновлений.</target>
         </trans-unit>
         <trans-unit id="Tab_Update.Location" translate="no" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
           <source>4, 22</source>
@@ -4091,6 +3895,255 @@ Accepted value: Numeric value from 0 to 100.</source>
         <trans-unit id="$this.TrayHeight" translate="yes" extype="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
           <source>44</source>
           <target state="needs-review-translation">44</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+  <file datatype="xml" source-language="en" target-language="ru-RU" original="WINNUT-CLIENT/FORMS/UPDATEAVAILABLEFORM.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="1.0.0.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="WINNUT-CLIENT/FORMS/UPDATEAVAILABLEFORM.RESX" datatype="resx">
+        <trans-unit id="Title.Font" translate="yes" extype="System.Drawing.Font, System.Drawing" xml:space="preserve">
+          <source>Microsoft Sans Serif, 12pt, style=Bold</source>
+          <target state="needs-review-translation">Microsoft Sans Serif, 12pt, style=Bold</target>
+        </trans-unit>
+        <trans-unit id="Title.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>6, 16</source>
+          <target state="needs-review-translation">6, 16</target>
+        </trans-unit>
+        <trans-unit id="Title.MaximumSize" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>500, 20</source>
+          <target state="needs-review-translation">500, 20</target>
+        </trans-unit>
+        <trans-unit id="Title.MinimumSize" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>500, 20</source>
+          <target state="needs-review-translation">500, 20</target>
+        </trans-unit>
+        <trans-unit id="Title.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>500, 20</source>
+          <target state="needs-review-translation">500, 20</target>
+        </trans-unit>
+        <trans-unit id="Title.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>0</source>
+          <target state="needs-review-translation">0</target>
+        </trans-unit>
+        <trans-unit id="Title.TextAlign" translate="yes" extype="System.Drawing.ContentAlignment, System.Drawing" xml:space="preserve">
+          <source>MiddleCenter</source>
+          <target state="needs-review-translation">MiddleCenter</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>6, 42</source>
+          <target state="needs-review-translation">6, 42</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.Multiline" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
+          <source>True</source>
+          <target state="needs-review-translation">True</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.ScrollBars" translate="yes" extype="System.Windows.Forms.ScrollBars, System.Windows.Forms" xml:space="preserve">
+          <source>Vertical</source>
+          <target state="needs-review-translation">Vertical</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.Size" translate="no" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>572, 300</source>
+          <target state="final">572, 300</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>1</source>
+          <target state="needs-review-translation">1</target>
+        </trans-unit>
+        <trans-unit id="GB1.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>12, 12</source>
+          <target state="needs-review-translation">12, 12</target>
+        </trans-unit>
+        <trans-unit id="GB1.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>584, 348</source>
+          <target state="new">584, 348</target>
+        </trans-unit>
+        <trans-unit id="GB1.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>0</source>
+          <target state="needs-review-translation">0</target>
+        </trans-unit>
+        <trans-unit id="Update_Btn.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>84, 3</source>
+          <target state="new">84, 3</target>
+        </trans-unit>
+        <trans-unit id="Update_Btn.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>75, 23</source>
+          <target state="new">75, 23</target>
+        </trans-unit>
+        <trans-unit id="Update_Btn.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>2</source>
+          <target state="needs-review-translation">2</target>
+        </trans-unit>
+        <trans-unit id="Update_Btn.Text" translate="yes" xml:space="preserve">
+          <source>Update</source>
+          <target state="new">Update</target>
+        </trans-unit>
+        <trans-unit id="Close_Btn.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>165, 3</source>
+          <target state="new">165, 3</target>
+        </trans-unit>
+        <trans-unit id="Close_Btn.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>75, 23</source>
+          <target state="new">75, 23</target>
+        </trans-unit>
+        <trans-unit id="Close_Btn.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>4</source>
+          <target state="needs-review-translation">4</target>
+        </trans-unit>
+        <trans-unit id="Close_Btn.Text" translate="yes" xml:space="preserve">
+          <source>Close</source>
+          <target state="new">Close</target>
+        </trans-unit>
+        <trans-unit id="$this.AutoScaleDimensions" translate="yes" extype="System.Drawing.SizeF, System.Drawing" xml:space="preserve">
+          <source>6, 13</source>
+          <target state="needs-review-translation">6, 13</target>
+        </trans-unit>
+        <trans-unit id="$this.ClientSize" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>608, 464</source>
+          <target state="new">608, 464</target>
+        </trans-unit>
+        <trans-unit id="$this.StartPosition" translate="yes" extype="System.Windows.Forms.FormStartPosition, System.Windows.Forms" xml:space="preserve">
+          <source>CenterScreen</source>
+          <target state="needs-review-translation">CenterScreen</target>
+        </trans-unit>
+        <trans-unit id="$this.Text" translate="yes" xml:space="preserve">
+          <source>Update Available</source>
+          <target state="new">Update Available</target>
+        </trans-unit>
+        <trans-unit id="$this.Localizable" translate="yes" extype="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" extradata="metadata" xml:space="preserve">
+          <source>True</source>
+          <target state="needs-review-translation">True</target>
+        </trans-unit>
+        <trans-unit id="GB1.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
+          <source>Top, Bottom, Left, Right</source>
+          <target state="needs-review-translation">Top, Bottom, Left, Right</target>
+        </trans-unit>
+        <trans-unit id="TB_ChgLog.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
+          <source>Top, Bottom, Left, Right</source>
+          <target state="needs-review-translation">Top, Bottom, Left, Right</target>
+        </trans-unit>
+        <trans-unit id="ButtonsPanel.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
+          <source>Bottom, Right</source>
+          <target state="needs-review-translation">Bottom, Right</target>
+        </trans-unit>
+        <trans-unit id="VisitPageButton.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="VisitPageButton.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>3, 3</source>
+          <target state="needs-review-translation">3, 3</target>
+        </trans-unit>
+        <trans-unit id="VisitPageButton.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>75, 23</source>
+          <target state="needs-review-translation">75, 23</target>
+        </trans-unit>
+        <trans-unit id="VisitPageButton.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>5</source>
+          <target state="needs-review-translation">5</target>
+        </trans-unit>
+        <trans-unit id="VisitPageButton.Text" translate="yes" xml:space="preserve">
+          <source>Visit Page</source>
+          <target state="new">Visit Page</target>
+        </trans-unit>
+        <trans-unit id="ButtonsPanel.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>349, 423</source>
+          <target state="needs-review-translation">349, 423</target>
+        </trans-unit>
+        <trans-unit id="ButtonsPanel.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>244, 29</source>
+          <target state="needs-review-translation">244, 29</target>
+        </trans-unit>
+        <trans-unit id="ButtonsPanel.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>5</source>
+          <target state="needs-review-translation">5</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanel.Anchor" translate="yes" extype="System.Windows.Forms.AnchorStyles, System.Windows.Forms" xml:space="preserve">
+          <source>Bottom, Left, Right</source>
+          <target state="needs-review-translation">Bottom, Left, Right</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.AutoSize" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
+          <source>True</source>
+          <target state="needs-review-translation">True</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.Font" translate="yes" extype="System.Drawing.Font, System.Drawing" xml:space="preserve">
+          <source>Microsoft Sans Serif, 11.25pt</source>
+          <target state="needs-review-translation">Microsoft Sans Serif, 11.25pt</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>3, 0</source>
+          <target state="needs-review-translation">3, 0</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>154, 18</source>
+          <target state="needs-review-translation">154, 18</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>0</source>
+          <target state="needs-review-translation">0</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.Text" translate="yes" xml:space="preserve">
+          <source>Downloading update...</source>
+          <target state="new">Downloading update...</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanel.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>12, 366</source>
+          <target state="needs-review-translation">12, 366</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanel.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>584, 51</source>
+          <target state="needs-review-translation">584, 51</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanel.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>6</source>
+          <target state="needs-review-translation">6</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanel.Visible" translate="yes" extype="System.Boolean, mscorlib" xml:space="preserve">
+          <source>False</source>
+          <target state="needs-review-translation">False</target>
+        </trans-unit>
+        <trans-unit id="$this.MinimumSize" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>624, 503</source>
+          <target state="needs-review-translation">624, 503</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressBar.Location" translate="yes" extype="System.Drawing.Point, System.Drawing" xml:space="preserve">
+          <source>3, 25</source>
+          <target state="needs-review-translation">3, 25</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressBar.Size" translate="yes" extype="System.Drawing.Size, System.Drawing" xml:space="preserve">
+          <source>578, 23</source>
+          <target state="needs-review-translation">578, 23</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressBar.TabIndex" translate="yes" extype="System.Int32, mscorlib" xml:space="preserve">
+          <source>1</source>
+          <target state="needs-review-translation">1</target>
+        </trans-unit>
+        <trans-unit id="Title.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="Update_Btn.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="Close_Btn.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressPanelLabel.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="DownloadProgressBar.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
+        </trans-unit>
+        <trans-unit id="$this.ImeMode" translate="yes" extype="System.Windows.Forms.ImeMode, System.Windows.Forms" xml:space="preserve">
+          <source>NoControl</source>
+          <target state="needs-review-translation">NoControl</target>
         </trans-unit>
       </group>
     </body>

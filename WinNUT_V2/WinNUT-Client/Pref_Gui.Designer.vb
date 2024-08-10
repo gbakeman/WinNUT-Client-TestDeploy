@@ -90,7 +90,6 @@ Partial Class Pref_Gui
         Me.Lbl_Branch_Update = New System.Windows.Forms.Label()
         Me.Lbl_Delay_Verif = New System.Windows.Forms.Label()
         Me.Cb_Update_At_Start = New System.Windows.Forms.CheckBox()
-        Me.Cb_Verify_Update = New System.Windows.Forms.CheckBox()
         Me.Btn_Ok = New System.Windows.Forms.Button()
         Me.Btn_Apply = New System.Windows.Forms.Button()
         Me.Btn_Cancel = New System.Windows.Forms.Button()
@@ -534,7 +533,6 @@ Partial Class Pref_Gui
         Me.Tab_Update.Controls.Add(Me.Lbl_Branch_Update)
         Me.Tab_Update.Controls.Add(Me.Lbl_Delay_Verif)
         Me.Tab_Update.Controls.Add(Me.Cb_Update_At_Start)
-        Me.Tab_Update.Controls.Add(Me.Cb_Verify_Update)
         resources.ApplyResources(Me.Tab_Update, "Tab_Update")
         Me.Tab_Update.Name = "Tab_Update"
         Me.Tab_Update.UseVisualStyleBackColor = True
@@ -572,13 +570,6 @@ Partial Class Pref_Gui
         Me.Pref_TlTip.SetToolTip(Me.Cb_Update_At_Start, resources.GetString("Cb_Update_At_Start.ToolTip"))
         Me.Cb_Update_At_Start.UseVisualStyleBackColor = True
         '
-        'Cb_Verify_Update
-        '
-        resources.ApplyResources(Me.Cb_Verify_Update, "Cb_Verify_Update")
-        Me.Cb_Verify_Update.Name = "Cb_Verify_Update"
-        Me.Pref_TlTip.SetToolTip(Me.Cb_Verify_Update, resources.GetString("Cb_Verify_Update.ToolTip"))
-        Me.Cb_Verify_Update.UseVisualStyleBackColor = True
-        '
         'Btn_Ok
         '
         resources.ApplyResources(Me.Btn_Ok, "Btn_Ok")
@@ -593,11 +584,8 @@ Partial Class Pref_Gui
         '
         'Btn_Cancel
         '
-        Me.Btn_Cancel.CausesValidation = False
         resources.ApplyResources(Me.Btn_Cancel, "Btn_Cancel")
         Me.Btn_Cancel.Name = "Btn_Cancel"
-        Me.Btn_Cancel.UseVisualStyleBackColor = True
-        Me.Btn_Cancel.UseWaitCursor = True
         '
         'Pref_Gui
         '
@@ -640,7 +628,6 @@ Partial Class Pref_Gui
     Friend WithEvents Tab_Update As TabPage
     Friend WithEvents Btn_Ok As Button
     Friend WithEvents Btn_Apply As Button
-    Friend WithEvents Btn_Cancel As Button
     Friend WithEvents Tb_Server_IP As TextBox
     Friend WithEvents Tb_Port As TextBox
     Friend WithEvents Tb_UPS_Name As TextBox
@@ -689,7 +676,6 @@ Partial Class Pref_Gui
     Friend WithEvents Lbl_Branch_Update As Label
     Friend WithEvents Lbl_Delay_Verif As Label
     Friend WithEvents Cb_Update_At_Start As CheckBox
-    Friend WithEvents Cb_Verify_Update As CheckBox
     Friend WithEvents Tb_Pwd_Nut As TextBox
     Friend WithEvents Tb_Login_Nut As TextBox
     Friend WithEvents Label3 As Label
@@ -698,4 +684,5 @@ Partial Class Pref_Gui
     Friend WithEvents CB_Follow_FSD As CheckBox
     Friend WithEvents pollingIntervalUnitLabel As Label
     Private WithEvents pollingIntervalValue As NumericUpDown
+    Private WithEvents Btn_Cancel As Button
 End Class

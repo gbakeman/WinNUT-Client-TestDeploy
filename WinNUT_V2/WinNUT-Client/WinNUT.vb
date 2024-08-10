@@ -1,13 +1,4 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-Imports WinNUT_Client_Common
+﻿Imports WinNUT_Client_Common
 
 Public Class WinNUT
 #Region "Properties"
@@ -35,7 +26,6 @@ Public Class WinNUT
     Private UPS_MaxRetry As Integer = 30
 
     'Variable used with Toast Functionnality
-    Public WithEvents FrmBuild As Update_Gui
     Public ToastPopup As New ToastPopup
     Private WindowsVersion As Version = Version.Parse(My.Computer.Info.OSVersion)
     Private MinOsVersionToast As Version = Version.Parse("10.0.18362.0")
@@ -95,13 +85,6 @@ Public Class WinNUT
         StrLog.Insert(AppResxStr.STR_MAIN_INVALIDLOGIN, My.Resources.Frm_Main_Str_13)
         StrLog.Insert(AppResxStr.STR_MAIN_EXITSLEEP, My.Resources.Frm_Main_Str_14)
         StrLog.Insert(AppResxStr.STR_MAIN_GOTOSLEEP, My.Resources.Frm_Main_Str_15)
-
-        'Add Update Gui's Strings
-        StrLog.Insert(AppResxStr.STR_UP_AVAIL, My.Resources.Frm_Update_Str_01)
-        StrLog.Insert(AppResxStr.STR_UP_SHOW, My.Resources.Frm_Update_Str_02)
-        StrLog.Insert(AppResxStr.STR_UP_HIDE, My.Resources.Frm_Update_Str_03)
-        StrLog.Insert(AppResxStr.STR_UP_UPMSG, My.Resources.Frm_Update_Str_04)
-        StrLog.Insert(AppResxStr.STR_UP_DOWNFROM, My.Resources.Frm_Update_Str_05)
 
         'Add Shutdown Gui's Strings
         StrLog.Insert(AppResxStr.STR_SHUT_STAT, My.Resources.Frm_Shutdown_Str_01)
@@ -188,6 +171,7 @@ Public Class WinNUT
         LogFile.LogTracing("Update Icon at Startup", LogLvl.LOG_DEBUG, Me)
         ' Start_Tray_Icon = Nothing
 
+        ' TODO: Move below code to a dedicated onsettingsloaded method.
         ApplyApplicationPreferences()
 
         ' If this is the first time WinNUT has been launched with the Settings system, check if old preferences exist
@@ -199,13 +183,11 @@ Public Class WinNUT
             RunRegPrefsUpgrade()
         End If
 
+        AddHandler UpdateController.UpdateCheckCompleted, AddressOf OnCheckForUpdateCompleted
         'Run Update
-        If My.Settings.UP_AutoUpdate And My.Settings.UP_CheckAtStart Then
-            LogFile.LogTracing("Run Automatic Update", LogLvl.LOG_DEBUG, Me)
-            Dim Update_Frm = New Update_Gui()
-            Update_Frm.Activate()
-            Update_Frm.Visible = True
-            HasFocus = False
+        If My.Settings.UP_CheckAtStart AndAlso Updater.UpdateUtil.UpdateCheckDelayPassed(My.Settings.UP_AutoChkDelay, My.Settings.UP_LastCheck) Then
+            LogFile.LogTracing("Auto update delay passed, checking for updates...", LogLvl.LOG_DEBUG, Me)
+            StartUpdateCheck()
         End If
 
         AddHandler Microsoft.Win32.SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
@@ -327,6 +309,7 @@ Public Class WinNUT
     End Sub
 
 #End Region
+
     Private Sub SystemEvents_PowerModeChanged(sender As Object, e As Microsoft.Win32.PowerModeChangedEventArgs)
         LogFile.LogTracing("PowerModeChangedEvent: " & [Enum].GetName(GetType(Microsoft.Win32.PowerModes), e.Mode), LogLvl.LOG_NOTICE, Me)
         Select Case e.Mode
@@ -1033,19 +1016,52 @@ Public Class WinNUT
 #End If
     End Sub
 
-    Private Sub Menu_Update_Click(sender As Object, e As EventArgs) Handles Menu_Update.Click
-        'Dim th As System.Threading.Thread = New Threading.Thread(New System.Threading.ParameterizedThreadStart(AddressOf Run_Update))
-        'th.SetApartmentState(System.Threading.ApartmentState.STA)
-        'th.Start(Me.UpdateMethod)
-        LogFile.LogTracing("Open About Gui From Menu", LogLvl.LOG_DEBUG, Me)
-        Dim Update_Frm = New Update_Gui(True)
-        Update_Frm.Activate()
-        Update_Frm.Visible = True
-        HasFocus = False
-    End Sub
-
     Private Sub ManageOldPrefsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOldPrefsToolStripMenuItem.Click
         RunRegPrefsUpgrade()
+    End Sub
+
+    Private Sub Menu_Update_Click(sender As Object, e As EventArgs) Handles Menu_Update.Click
+        LogFile.LogTracing("Check for update menu item clicked.", LogLvl.LOG_DEBUG, Me)
+        StartUpdateCheck()
+    End Sub
+
+    Private Sub StartUpdateCheck()
+        LogFile.LogTracing("Beginning update check in background...", LogLvl.LOG_NOTICE, Me, My.Resources.LogCheckingForUpdate)
+        UpdateController.BeginUpdateCheck(My.Settings.UP_Branch = 1)
+    End Sub
+
+    Private Sub OnCheckForUpdateCompleted(sender As Updater.UpdateUtil, eventArgs As Updater.UpdateCheckCompletedEventArgs)
+        LogFile.LogTracing("UpdateCheckCompleted event firing.", LogLvl.LOG_DEBUG, Me)
+        My.Settings.UP_LastCheck = Date.Now
+        My.Settings.Save()
+
+        If eventArgs.LatestRelease Is Nothing Then
+            LogFile.LogTracing($"No updates matching the parameter (acceptPreRelease = {My.Settings.UP_Branch = 1}) were found.",
+                               LogLvl.LOG_NOTICE, Me, StrLog.Item(AppResxStr.STR_LOG_NO_UPDATE))
+            If eventArgs.Error IsNot Nothing Then
+                LogFile.LogTracing("CheckForUpdate reported an error:", LogLvl.LOG_ERROR, Me)
+                LogFile.LogException(eventArgs.Error, Me)
+            End If
+
+            Return
+        Else
+            If New Version(eventArgs.LatestRelease.TagName.Substring(1)) <= New Version(ProgramVersion) Then
+                LogFile.LogTracing("No newer version available.", LogLvl.LOG_NOTICE, Me,
+                                   StrLog(AppResxStr.STR_LOG_NO_UPDATE))
+                Return
+            ElseIf UpdateController.LatestReleaseAsset Is Nothing Then
+                LogFile.LogTracing("New update was found on GitHub, but no valid Release Asset was attached.",
+                                   LogLvl.LOG_ERROR, Me, StrLog.Item(AppResxStr.STR_LOG_NO_UPDATE))
+                Return
+            End If
+        End If
+
+        LogFile.LogTracing($"New update found: { eventArgs.LatestRelease.Name }", LogLvl.LOG_NOTICE, Me,
+                           String.Format(StrLog(AppResxStr.STR_LOG_UPDATE), eventArgs.LatestRelease.Name))
+
+        Dim Update_Frm = New Forms.UpdateAvailableForm()
+        Update_Frm.Show()
+        HasFocus = False
     End Sub
 End Class
 

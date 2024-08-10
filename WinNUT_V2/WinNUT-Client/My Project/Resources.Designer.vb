@@ -525,53 +525,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Update Available : Version {0}.
-        '''</summary>
-        Public ReadOnly Property Frm_Update_Str_01() As String
-            Get
-                Return ResourceManager.GetString("Frm_Update_Str_01", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Show ChangeLog.
-        '''</summary>
-        Public ReadOnly Property Frm_Update_Str_02() As String
-            Get
-                Return ResourceManager.GetString("Frm_Update_Str_02", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Hide ChangeLog.
-        '''</summary>
-        Public ReadOnly Property Frm_Update_Str_03() As String
-            Get
-                Return ResourceManager.GetString("Frm_Update_Str_03", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Update WinNUT-Client Now?
-        '''Ok to Close WinNut and Install New Version
-        '''Cancel to Save Msi and Install Later.
-        '''</summary>
-        Public ReadOnly Property Frm_Update_Str_04() As String
-            Get
-                Return ResourceManager.GetString("Frm_Update_Str_04", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to Download New Version from :.
-        '''</summary>
-        Public ReadOnly Property Frm_Update_Str_05() As String
-            Get
-                Return ResourceManager.GetString("Frm_Update_Str_05", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to https://github.com/nutdotnet/WinNUT-Client.
         '''</summary>
         Public ReadOnly Property GitHub_URL() As String
@@ -685,6 +638,15 @@ Namespace My.Resources
         Public ReadOnly Property Log_Str_12() As String
             Get
                 Return ResourceManager.GetString("Log_Str_12", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Checking for update....
+        '''</summary>
+        Public ReadOnly Property LogCheckingForUpdate() As String
+            Get
+                Return ResourceManager.GetString("LogCheckingForUpdate", resourceCulture)
             End Get
         End Property
         

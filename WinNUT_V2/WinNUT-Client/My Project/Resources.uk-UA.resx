@@ -64,23 +64,6 @@
     <value>Заряд : {0}
 Залишилось часу : {1}</value>
   </data>
-  <data name="Frm_Update_Str_01" xml:space="preserve">
-    <value>Доступно оновлення: Версія {0}</value>
-  </data>
-  <data name="Frm_Update_Str_02" xml:space="preserve">
-    <value>Показати список змін</value>
-  </data>
-  <data name="Frm_Update_Str_03" xml:space="preserve">
-    <value>Приховати список змін</value>
-  </data>
-  <data name="Frm_Update_Str_04" xml:space="preserve">
-    <value>Оновити WinNUT зараз?
-"ОК" - закрити WinNUT та встановити нову версію.
-"Скасувати" - зберегти MSI та встановити пізніше.</value>
-  </data>
-  <data name="Frm_Update_Str_05" xml:space="preserve">
-    <value>Скачати нову версію с:</value>
-  </data>
   <data name="Log_Str_01" xml:space="preserve">
     <value>Налаштування WinNUT змінено</value>
   </data>

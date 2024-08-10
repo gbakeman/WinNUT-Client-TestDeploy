@@ -147,9 +147,6 @@
   <data name="Cb_Update_At_Start.Text" xml:space="preserve">
     <value>Beim Start auf Updates prüfen</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>Auf Update prüfen</value>
-  </data>
   <data name="Tab_Update.Text" xml:space="preserve">
     <value>Aktualisieren</value>
   </data>
@@ -257,9 +254,6 @@
   </data>
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>Sucht beim Start nach Updates.</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>Auf Updates prüfen.</value>
   </data>
   <data name="Tb_Pwd_Nut.ToolTip" xml:space="preserve">
     <value>Anmeldekennwort des NUT-Servers</value>

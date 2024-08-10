@@ -1,4 +1,4 @@
-Imports WinNUT_Client_Common
+﻿Imports WinNUT_Client_Common
 
 Public Class WinNUT
 #Region "Properties"
@@ -189,12 +189,11 @@ Public Class WinNUT
             StartUpdateCheck()
         End If
 
-        AddHandler SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
+        AddHandler Microsoft.Win32.SystemEvents.PowerModeChanged, AddressOf SystemEvents_PowerModeChanged
         AddHandler RequestConnect, AddressOf UPS_Connect
         AddHandler My.Settings.PropertyChanged, AddressOf SettingsPropertyChanged
 
-        LogFile.LogTracing(String.Format("WinNUT Form completed Load.", My.Application.Info.ProductName, My.Application.Info.Version),
-                           LogLvl.LOG_NOTICE, Me)
+        LogFile.LogTracing("WinNUT Form completed Load.", LogLvl.LOG_NOTICE, Me)
     End Sub
 
     ''' <summary>
@@ -310,7 +309,7 @@ Public Class WinNUT
 
 #End Region
 
-    Private Sub SettingsPropertyChanged(sender As Object, e As PropertyChangedEventArgs)
+    Private Sub SettingsPropertyChanged(sender As Object, e As System.ComponentModel.PropertyChangedEventArgs)
         LogFile.LogTracing("SettingsPropertyChanged: " & e.PropertyName, LogLvl.LOG_DEBUG, Me)
 
         UpdateMainMenuState()

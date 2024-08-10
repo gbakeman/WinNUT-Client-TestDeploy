@@ -18,21 +18,6 @@
   <data name="Frm_Shutdown_Str_01" xml:space="preserve">
     <value>Akkuladung: {0} Verbleibende Zeit: {1}</value>
   </data>
-  <data name="Frm_Update_Str_01" xml:space="preserve">
-    <value>Update verfügbar : Version {0}</value>
-  </data>
-  <data name="Frm_Update_Str_02" xml:space="preserve">
-    <value>Change-Log anzeigen</value>
-  </data>
-  <data name="Frm_Update_Str_03" xml:space="preserve">
-    <value>Change-Log ausblenden</value>
-  </data>
-  <data name="Frm_Update_Str_04" xml:space="preserve">
-    <value>WinNUT-Client jetzt aktualisieren? OK um WinNUT zu schließen und neue Version zu installieren Abbrechen um MSI-Datei zu speichern und später zu installieren</value>
-  </data>
-  <data name="Frm_Update_Str_05" xml:space="preserve">
-    <value>Neue Version herunterladen von :</value>
-  </data>
   <data name="Frm_Main_Str_01" xml:space="preserve">
     <value>Alte ups.ini importiert INI-Datei nach {0}.old verschoben</value>
   </data>

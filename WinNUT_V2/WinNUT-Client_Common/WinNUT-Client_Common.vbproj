@@ -66,6 +66,7 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -107,6 +108,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Nut_Socket.vb" />
+    <Compile Include="Updater\UpdateDownloadCompletedEventArgs.vb" />
+    <Compile Include="Updater\UpdateCheckCompletedEventArgs.vb" />
+    <Compile Include="Updater\UpdateDownloadProgressChangedEventArgs.vb" />
+    <Compile Include="Updater\UpdateUtil.vb" />
     <Compile Include="UPS_Device.vb" />
     <Compile Include="WinNUT_Globals.vb" />
   </ItemGroup>
@@ -123,6 +128,11 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Octokit">
+      <Version>13.0.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

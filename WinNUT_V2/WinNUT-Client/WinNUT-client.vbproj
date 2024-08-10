@@ -14,7 +14,6 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -166,10 +165,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ToastPopup.vb" />
-    <Compile Include="Update_Gui.Designer.vb">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <Compile Include="Forms\UpdateAvailableForm.Designer.vb">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Update_Gui.vb">
+    <Compile Include="Forms\UpdateAvailableForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Shutdown_Gui.Designer.vb">
@@ -307,26 +306,26 @@
     <EmbeddedResource Include="Shutdown_Gui.zh-TW.resx">
       <DependentUpon>Shutdown_Gui.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.de-DE.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.de-DE.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.fr-FR.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.fr-FR.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.ru-RU.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.ru-RU.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.uk-UA.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.uk-UA.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.zh-CN.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.zh-CN.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Update_Gui.zh-TW.resx">
-      <DependentUpon>Update_Gui.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\UpdateAvailableForm.zh-TW.resx">
+      <DependentUpon>UpdateAvailableForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpgradePrefsDialog.de-DE.resx">
       <DependentUpon>UpgradePrefsDialog.vb</DependentUpon>
@@ -465,6 +464,9 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Octokit">
+      <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

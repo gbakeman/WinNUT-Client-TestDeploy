@@ -30,9 +30,6 @@
   <data name="Cbx_Delay_Verif.Items" xml:space="preserve">
     <value>每天</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>檢查更新</value>
-  </data>
   <data name="Cbx_Delay_Verif.Items1" xml:space="preserve">
     <value>每週</value>
   </data>
@@ -254,9 +251,6 @@
   </data>
   <data name="Btn_Apply.Text" xml:space="preserve">
     <value>套用</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>檢查應用程式更新。</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>選項</value>

@@ -57,12 +57,6 @@
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>Проверяет обновления при запуске.</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>Проверять обновления</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>Проверка обновлений.</value>
-  </data>
   <data name="Tab_Update.Text" xml:space="preserve">
     <value>Обновить</value>
   </data>

@@ -153,9 +153,6 @@ inférieur à</value>
   <data name="Cb_Update_At_Start.Text" xml:space="preserve">
     <value>Vérifier la mise à jour au Démarrage</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>Vérifier la mise à jour</value>
-  </data>
   <data name="Tab_Update.Text" xml:space="preserve">
     <value>Mise à jour</value>
   </data>
@@ -277,9 +274,6 @@ Valeur acceptée: valeur numérique de 0 à 100.</value>
   </data>
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>Vérifie les mises à jour au démarrage.</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>Vérifiez les mises à jour.</value>
   </data>
   <data name="Tb_Pwd_Nut.ToolTip" xml:space="preserve">
     <value>Mot de Passe de connexion au serveur NUT</value>

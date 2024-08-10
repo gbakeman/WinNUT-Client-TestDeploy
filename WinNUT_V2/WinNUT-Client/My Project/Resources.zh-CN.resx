@@ -56,23 +56,6 @@ Ini 文件重命名为 {0}.old</value>
     <value>电池电量 : {0}
 剩余时间 : {1}</value>
   </data>
-  <data name="Frm_Update_Str_01" xml:space="preserve">
-    <value>可用的新版本：{0}</value>
-  </data>
-  <data name="Frm_Update_Str_02" xml:space="preserve">
-    <value>显示更新日志</value>
-  </data>
-  <data name="Frm_Update_Str_03" xml:space="preserve">
-    <value>隐藏更新日志</value>
-  </data>
-  <data name="Frm_Update_Str_04" xml:space="preserve">
-    <value>立即更新WinNUT-Client吗？
-单击确定以关闭WinNut并安装新版本 
-取消以保存 Msi 并于稍后安装</value>
-  </data>
-  <data name="Frm_Update_Str_05" xml:space="preserve">
-    <value>下载了新版本于：</value>
-  </data>
   <data name="Log_Str_01" xml:space="preserve">
     <value>WinNut 设置已修改</value>
   </data>

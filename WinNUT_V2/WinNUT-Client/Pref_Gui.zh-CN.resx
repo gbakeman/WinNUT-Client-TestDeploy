@@ -280,12 +280,6 @@
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>在启动时检查更新。</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>验证更新</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>检查应用更新。</value>
-  </data>
   <data name="Btn_Ok.Text" xml:space="preserve">
     <value>确认</value>
   </data>

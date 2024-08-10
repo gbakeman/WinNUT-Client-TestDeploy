@@ -18,9 +18,9 @@ Public Class Logger
     Private Const LOG_FILE_CREATION_SCHEDULE = LogFileCreationScheduleOption.Daily
 
     ' Set TEST_RELEASE_DIRS in the custom compiler constants dialog for file storage to behave like release.
-#If DEBUG And Not TEST_RELEASE_DIRS Then
+#If DEBUG AndAlso Not TEST_RELEASE_DIRS Then
     Private Shared ReadOnly DEFAULT_DATETIMEFORMAT = DateTimeFormatInfo.InvariantInfo
-    Private Shared ReadOnly DEFAULT_LOCATION = LogFileLocation.ExecutableDirectory
+    Private Shared ReadOnly DEFAULT_LOCATION = Application.StartupPath
 #Else
     Private Shared ReadOnly DEFAULT_DATETIMEFORMAT = DateTimeFormatInfo.CurrentInfo
     Private Shared ReadOnly DEFAULT_LOCATION = Application.LocalUserAppDataPath

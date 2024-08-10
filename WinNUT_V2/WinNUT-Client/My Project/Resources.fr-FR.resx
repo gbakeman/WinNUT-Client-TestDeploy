@@ -19,23 +19,6 @@
     <value>Charge Batterie : {0}
 Temps restant : {1}</value>
   </data>
-  <data name="Frm_Update_Str_01" xml:space="preserve">
-    <value>Mise à jour disponible : version {0}</value>
-  </data>
-  <data name="Frm_Update_Str_02" xml:space="preserve">
-    <value>Afficher ChangeLog</value>
-  </data>
-  <data name="Frm_Update_Str_03" xml:space="preserve">
-    <value>Cacher ChangeLog</value>
-  </data>
-  <data name="Frm_Update_Str_04" xml:space="preserve">
-    <value>Mettre à jour WinNUT-Client maintenant?
-Ok pour fermer WinNut et installer une nouvelle version
-Annuler pour enregistrer Msi et installer plus tard</value>
-  </data>
-  <data name="Frm_Update_Str_05" xml:space="preserve">
-    <value>Téléchargez la nouvelle version depuis :</value>
-  </data>
   <data name="Frm_Main_Str_01" xml:space="preserve">
     <value>Ancien Fichier "ups.ini" importé
 Fichier Ini déplacé vers {0}.old</value>

@@ -7,8 +7,13 @@
 '
 ' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
 
+Imports System.Configuration
+Imports System.Deployment.Application
+Imports System.Globalization
 Imports System.IO
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Newtonsoft.Json
 Imports WinNUT_Client_Common
 
 Namespace My
@@ -19,23 +24,53 @@ Namespace My
     ' StartupNextInstance : Déclenché lors du lancement d'une application à instance unique et si cette application est déjà active. 
     ' NetworkAvailabilityChanged : Déclenché quand la connexion réseau est connectée ou déconnectée.
     Partial Friend Class MyApplication
+        ' Default culture for output so logs can be shared with the project.
+        Private Shared ReadOnly DEF_CULTURE_INFO As CultureInfo = CultureInfo.InvariantCulture
+        Private Shared ReadOnly CRASHBUG_OUTPUT_PATH = System.Windows.Forms.Application.LocalUserAppDataPath
+
         Private CrashBug_Form As New Form
         Private BtnClose As New Button
         Private BtnGenerate As New Button
         Private Msg_Crash As New Label
         Private Msg_Error As New TextBox
 
+        Private SensitiveProperties As List(Of String) = New List(Of String)({"NUT_ServerAddress", "NUT_ServerPort", "NUT_UPSName",
+                                                           "NUT_Username", "NUT_Password"})
+        Private crashReportData As String
+
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-            'Init WinNUT Variables
+            ' Uncomment below and comment out Handles line for _UnhandledException sub when debugging unhandled exceptions.
+            ' AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf AppDomainUnhandledException
+
             Init_Globals()
-            LogFile.LogTracing("Init Globals Variables Complete", LogLvl.LOG_DEBUG, Me)
+            LogFile.LogTracing(String.Format("{0} v{1} starting up.", My.Application.Info.ProductName, My.Application.Info.Version),
+                           LogLvl.LOG_NOTICE, Me)
+            ' LogFile.LogTracing($"DataDirectory: { ApplicationDeployment.CurrentDeployment.DataDirectory }", LogLvl.LOG_NOTICE, Me)
+
+            ' If first run indicated by Settings, attempt upgrade in case older version is present.
+            ' Only necessary when deploying MSI. Remove once using pure ClickOnce.
+            If Settings.IsFirstRun Then
+                Try
+                    Settings.Upgrade()
+                    LogFile.LogTracing("Settings upgrade completed without exception.", LogLvl.LOG_NOTICE, Me)
+                Catch ex As ConfigurationErrorsException
+                    LogFile.LogTracing("Error encountered while trying to upgrade Settings:", LogLvl.LOG_ERROR, Me)
+                    LogFile.LogException(ex, Me)
+                End Try
+
+                Settings.IsFirstRun = False
+                Settings.Save()
+            End If
+
+            LogFile.LogTracing("MyApplication_Startup complete.", LogLvl.LOG_DEBUG, Me)
         End Sub
 
-        Private Sub MyApplication_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
-            e.ExitApplication = False
+        Private Sub AppDomainUnhandledException(sender As Object, e As System.UnhandledExceptionEventArgs)
+            MyApplication_UnhandledException(sender, New UnhandledExceptionEventArgs(False, e.ExceptionObject))
+        End Sub
 
-            Dim Frms As New FormCollection
-            Frms = Application.OpenForms()
+        Private Sub MyApplication_UnhandledException(sender As Object, e As UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            e.ExitApplication = False
 
             With Msg_Crash
                 .Location = New Point(6, 6)
@@ -49,19 +84,12 @@ Namespace My
                 .Size = New Point(470, 100)
             End With
 
-            Dim Exception_data = BuildExceptionString(e.Exception)
-
-            If e.Exception.InnerException IsNot Nothing Then
-                Exception_data &= vbNewLine & "InnerException present:" & vbNewLine
-                Exception_data &= BuildExceptionString(e.Exception.InnerException)
-            End If
-
             With Msg_Error
                 .Location = New Point(6, 110)
                 .Multiline = True
                 .ScrollBars = ScrollBars.Vertical
                 .ReadOnly = True
-                .Text = Exception_data.ToString()
+                .Text = e.Exception.ToString()
                 .Size = New Point(470, 300)
             End With
 
@@ -93,99 +121,80 @@ Namespace My
                 .Controls.Add(BtnGenerate)
             End With
 
+            crashReportData = GenerateCrashReport(e.Exception)
+
             AddHandler BtnClose.Click, AddressOf Application.Close_Button_Click
             AddHandler BtnGenerate.Click, AddressOf Application.Generate_Button_Click
-            AddHandler CrashBug_Form.FormClosing, AddressOf Application.CrashBug_FormClosing
 
             CrashBug_Form.Show()
             CrashBug_Form.BringToFront()
             WinNUT.HasCrashed = True
         End Sub
 
-        ''' <summary>
-        ''' Generate a friendly message describing an exception.
-        ''' </summary>
-        ''' <param name="ex">The exception that will be read for the message.</param>
-        ''' <returns>The final string representation of the exception.</returns>
-        Private Function BuildExceptionString(ex As Exception) As String
-            Dim retStr = String.Empty
+        Private Function GenerateCrashReport(ex As Exception) As String
+            Dim jsonSerializerSettings As New JsonSerializerSettings()
+            jsonSerializerSettings.Culture = DEF_CULTURE_INFO
+            jsonSerializerSettings.Formatting = Formatting.Indented
 
-            retStr &= String.Format("Exception type: {0}" & vbNewLine, ex.GetType.ToString)
-            retStr &= String.Format("Exception message: {0}" & vbNewLine, ex.Message)
-            retStr &= "Exception stack trace:" & vbNewLine
-            retStr &= ex.StackTrace & vbNewLine
+            Dim reportStream As New StringWriter(DEF_CULTURE_INFO)
+            reportStream.WriteLine("WinNUT Bug Report")
+            reportStream.WriteLine("Generated at " + Date.UtcNow.ToString("F", DEF_CULTURE_INFO))
+            reportStream.WriteLine()
+            reportStream.WriteLine("OS Version: " & Computer.Info.OSVersion)
+            reportStream.WriteLine("WinNUT Version: " & ProgramVersion)
 
-            Return retStr
+#Region "Config output"
+            reportStream.WriteLine()
+            reportStream.WriteLine("==== Settings ====")
+            reportStream.WriteLine()
+
+            For Each setProp As SettingsProperty In Settings.Properties
+                Dim setVal As String
+
+                If SensitiveProperties.Contains(setProp.Name) Then
+                    setVal = "{Removed}"
+                    SensitiveProperties.Remove(setProp.Name)
+                Else
+                    setVal = Settings.Item(setProp.Name)
+                End If
+
+                reportStream.WriteLine(setProp.Name & ": " & setVal & " (" & setProp.DefaultValue & ")")
+            Next
+#End Region
+
+#Region "Exceptions"
+            reportStream.WriteLine("==== Exception ====")
+            reportStream.WriteLine()
+            reportStream.WriteLine(Regex.Unescape(JsonConvert.SerializeObject(ex, jsonSerializerSettings)))
+            reportStream.WriteLine()
+#End Region
+
+            reportStream.WriteLine("==== Last Events ====")
+
+            LogFile.LastEvents.Reverse()
+            reportStream.WriteLine()
+            reportStream.WriteLine(Regex.Unescape(JsonConvert.SerializeObject(LogFile.LastEvents, jsonSerializerSettings)))
+
+            Return reportStream.ToString()
         End Function
 
-        Private Sub CrashBug_FormClosing(sender As Object, e As FormClosingEventArgs)
-            End
-        End Sub
-        Private Sub Close_Button_Click(sender As Object, e As EventArgs)
-            End
-        End Sub
-
         Private Sub Generate_Button_Click(sender As Object, e As EventArgs)
-            'Generate a bug report with all essential datas 
-            Dim Crash_Report As String = "WinNUT Bug Report" & vbNewLine
-            Dim WinNUT_Config As New Dictionary(Of String, Object)
-            Try
-                WinNUT_Config = Arr_Reg_Key
-            Catch ex As Exception
-                Crash_Report &= "ALERT: Encountered exception while trying to access Arr_Reg_Key:" & vbNewLine
-                Crash_Report &= BuildExceptionString(ex)
-            End Try
+            Dim logFileName = "CrashReport_" + Date.Now.ToString("s").Replace(":", ".") + ".txt"
 
-            ' Initialize directory for data
-            Dim CrashLog_Dir = ApplicationData & "\CrashLog"
-            If Not Computer.FileSystem.DirectoryExists(CrashLog_Dir) Then
-                Computer.FileSystem.CreateDirectory(CrashLog_Dir)
-            End If
+            Computer.Clipboard.SetText(crashReportData)
 
-            Dim CrashLog_Filename As String = "Crash_Report_" & Format(Now, "dd-MM-yyyy") & "_" &
-                String.Format("{0}-{1}-{2}.txt", Now.Hour.ToString("00"), Now.Minute.ToString("00"), Now.Second.ToString("00"))
-
-
-
-            Crash_Report &= "Os Version : " & Computer.Info.OSVersion & vbNewLine
-            Crash_Report &= "WinNUT Version : " & Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString & vbNewLine
-
-            Crash_Report &= vbNewLine & "WinNUT Parameters : " & vbNewLine
-            If WinNUT_Config.Count > 0 Then
-                ' Prepare config values by removing sensitive information.
-                For Each kvp As KeyValuePair(Of String, Object) In Arr_Reg_Key
-                    Select Case kvp.Key
-                        Case "ServerAddress", "Port", "UPSName", "NutLogin", "NutPassword"
-                            WinNUT_Config.Remove(kvp.Key)
-                    End Select
-                Next
-                Crash_Report &= Newtonsoft.Json.JsonConvert.SerializeObject(WinNUT_Config, Newtonsoft.Json.Formatting.Indented) & vbNewLine
-
-            Else
-                Crash_Report &= "[EMPTY]" & vbNewLine
-            End If
-
-            Crash_Report &= vbNewLine & "Error Message : " & vbNewLine
-            Crash_Report &= Msg_Error.Text & vbNewLine & vbNewLine
-            Crash_Report &= "Last Events :" & vbNewLine
-
-            For Each WinNUT_Event In LogFile.LastEvents
-                Crash_Report &= WinNUT_Event & vbNewLine
-            Next
-
-            Computer.Clipboard.SetText(Crash_Report)
-
-            Dim CrashLog_Report As StreamWriter
-            CrashLog_Report = Computer.FileSystem.OpenTextFileWriter(CrashLog_Dir & "\" & CrashLog_Filename, True)
-            CrashLog_Report.WriteLine(Crash_Report)
+            Directory.CreateDirectory(CRASHBUG_OUTPUT_PATH)
+            Dim CrashLog_Report = New StreamWriter(Path.Combine(CRASHBUG_OUTPUT_PATH, logFileName))
+            CrashLog_Report.WriteLine(crashReportData)
             CrashLog_Report.Close()
 
             ' Open an Explorer window to the crash log.
-            ' Dim fullFilepath As String = CrashLog_Dir & "\" & CrashLog_Filename
-            ' If WinNUT IsNot Nothing Then
-            Process.Start(CrashLog_Dir)
-            ' End If
+            Process.Start(CRASHBUG_OUTPUT_PATH)
             End
+        End Sub
+
+        Private Sub Close_Button_Click(sender As Object, e As EventArgs)
+            CrashBug_Form.Close()
         End Sub
     End Class
 End Namespace

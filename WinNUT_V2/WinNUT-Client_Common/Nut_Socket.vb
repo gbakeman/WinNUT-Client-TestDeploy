@@ -1,60 +1,31 @@
-﻿' WinNUT-Client is a NUT windows client for monitoring your ups hooked up to your favorite linux server.
-' Copyright (C) 2019-2021 Gawindx (Decaux Nicolas)
-'
-' This program is free software: you can redistribute it and/or modify it under the terms of the
-' GNU General Public License as published by the Free Software Foundation, either version 3 of the
-' License, or any later version.
-'
-' This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY
-
-
-
-' Class dealing only with the management of the communication socket with the Nut server
+﻿Imports System.IO
 Imports System.Net.Sockets
-Imports System.IO
 
 Public Class Nut_Socket
 
 #Region "Properties"
-
     Public ReadOnly Property ConnectionStatus As Boolean
         Get
-            If NutSocket IsNot Nothing Then
-                Return NutSocket.Connected
-            Else
-                Return False
-            End If
+            Return If(client IsNot Nothing, client.Connected, False)
         End Get
     End Property
 
-    Public ReadOnly Property IsConnected() As Boolean
+    Private _isLoggedIn As Boolean = False
+    Public ReadOnly Property IsLoggedIn() As Boolean
         Get
-            Return ConnectionStatus
+            Return _isLoggedIn
         End Get
     End Property
 
-    Private Nut_Ver As String
-    Public ReadOnly Property Nut_Version() As String
-        Get
-            Return Nut_Ver
-        End Get
-    End Property
-
-    Private Net_Ver As String
-    Public ReadOnly Property Net_Version() As String
-        Get
-            Return Net_Ver
-        End Get
-    End Property
-
+    Public ReadOnly Property NUTVersion As String
+    Public ReadOnly Property NetVersion As String
 #End Region
 
     Private LogFile As Logger
     Private NutConfig As Nut_Parameter
 
     'Socket Variables
-    Private NutSocket As Socket
-    Private NutTCP As TcpClient
+    Private client As TcpClient
     Private NutStream As NetworkStream
     Private ReaderStream As StreamReader
     Private WriterStream As StreamWriter
@@ -64,26 +35,11 @@ Public Class Nut_Socket
     ''' </summary>
     Private streamInUse As Boolean
 
-
-    Public Auth_Success As Boolean = False
-    ' Private ReadOnly WatchDog As New Timer
-
     Public Event Socket_Broken(ex As NutException)
-
-    ''' <summary>
-    ''' Socket was disconnected as a part of normal operations.
-    ''' </summary>
-    Public Event SocketDisconnected()
 
     Public Sub New(Nut_Config As Nut_Parameter, ByRef logger As Logger)
         LogFile = logger
         NutConfig = Nut_Config
-
-        'With Me.WatchDog
-        '    .Interval = 1000
-        '    .Enabled = False
-        '    AddHandler .Tick, AddressOf Event_WatchDog
-        'End With
     End Sub
 
     Public Sub Connect()
@@ -98,56 +54,94 @@ Public Class Nut_Socket
         End If
 
         Try
-            ' NutSocket = New Socket(AddressFamily.InterNetwork, ProtocolType.IP)
-            NutSocket = New Socket(SocketType.Stream, ProtocolType.IP)
             LogFile.LogTracing(String.Format("Attempting TCP socket connection to {0}:{1}...", Host, Port), LogLvl.LOG_NOTICE, Me)
-            NutSocket.Connect(Host, Port)
-            NutTCP = New TcpClient(Host, Port)
-            NutStream = NutTCP.GetStream
+
+            client = New TcpClient(Host, Port)
+            NutStream = client.GetStream()
             ReaderStream = New StreamReader(NutStream)
             WriterStream = New StreamWriter(NutStream)
-            LogFile.LogTracing(String.Format("Connection established and streams ready for {0}:{1}", Host, Port), LogLvl.LOG_NOTICE, Me)
 
-            ' Something went wrong - cleanup and pass along error.
+            LogFile.LogTracing("Connection established and streams ready.", LogLvl.LOG_NOTICE, Me)
+
+            LogFile.LogTracing("Gathering basic info about the NUT server...", LogLvl.LOG_DEBUG, Me)
+
+            Try
+                Dim Nut_Query = Query_Data("VER")
+
+                If Nut_Query.ResponseType = NUTResponse.OK Then
+                    _NUTVersion = (Nut_Query.RawResponse.Split(" "c))(4)
+                    LogFile.LogTracing("Server version: " & NUTVersion, LogLvl.LOG_NOTICE, Me)
+                End If
+            Catch nutEx As NutException
+                LogFile.LogTracing("Error retrieving server version.", LogLvl.LOG_WARNING, Me)
+                LogFile.LogException(nutEx, Me)
+            End Try
+
+            Try
+                Dim Nut_Query = Query_Data("NETVER")
+
+                If Nut_Query.ResponseType = NUTResponse.OK Then
+                    _NetVersion = Nut_Query.RawResponse
+                    LogFile.LogTracing("Protocol version: " & NetVersion, LogLvl.LOG_NOTICE, Me)
+                End If
+            Catch nutEx As NutException
+                LogFile.LogTracing("Error retrieving protocol version.", LogLvl.LOG_WARNING, Me)
+                LogFile.LogException(nutEx, Me)
+            End Try
+
+            LogFile.LogTracing("Completed gathering basic info about NUT server.", LogLvl.LOG_DEBUG, Me)
         Catch Excep As Exception
-            Disconnect(True, True)
+            Disconnect(True)
             Throw ' Pass exception on up to UPS
         End Try
+    End Sub
 
-        If ConnectionStatus Then
-            AuthLogin(Login, Password)
-
-            Dim Nut_Query = Query_Data("VER")
-
-            If Nut_Query.ResponseType = NUTResponse.OK Then
-                Nut_Ver = (Nut_Query.RawResponse.Split(" "c))(4)
-            End If
-            Nut_Query = Query_Data("NETVER")
-
-            If Nut_Query.ResponseType = NUTResponse.OK Then
-                Net_Ver = Nut_Query.RawResponse
-            End If
-
-            LogFile.LogTracing(String.Format("NUT server reports VER: {0} NETVER: {1}", Nut_Ver, Net_Ver), LogLvl.LOG_NOTICE, Me)
+    Public Sub Login()
+        If _isLoggedIn Then
+            Throw New InvalidOperationException("Attempted to login when already logged in.")
         End If
+
+        LogFile.LogTracing(String.Format("Logging in to UPS [{0}] as user [{1}] ({2})...",
+                            NutConfig.UPSName, NutConfig.Login,
+                            If(String.IsNullOrEmpty(NutConfig.Password),
+                                "NO Password", "Password provided")), LogLvl.LOG_NOTICE, Me)
+
+        If Not String.IsNullOrEmpty(NutConfig.Login) Then
+            Query_Data("USERNAME " & NutConfig.Login)
+
+            If Not String.IsNullOrEmpty(NutConfig.Password) Then
+                Query_Data("PASSWORD " & NutConfig.Password)
+            End If
+        End If
+
+        Query_Data("LOGIN " & NutConfig.UPSName)
+        _isLoggedIn = True
+        LogFile.LogTracing("Authenticated successfully.", LogLvl.LOG_NOTICE, Me)
     End Sub
 
     ''' <summary>
     ''' Perform various functions necessary to disconnect the socket from the NUT server.
     ''' </summary>
-    ''' <param name="Silent">Skip raising the <see cref="SocketDisconnected"/> event if true.</param>
-    ''' <param name="Forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
-    Public Sub Disconnect(Optional silent = False, Optional forceful = False)
-        ' WatchDog.Stop()
-
-        If IsConnected AndAlso Not forceful Then
+    ''' <param name="forceful">Skip sending the LOGOUT command to the NUT server. Unknown effects.</param>
+    Public Sub Disconnect(Optional forceful = False)
+        If IsLoggedIn AndAlso Not forceful Then
             Query_Data("LOGOUT")
         End If
 
-        Close_Socket()
+        If WriterStream IsNot Nothing Then
+            WriterStream.Dispose()
+        End If
 
-        If Not silent Then
-            RaiseEvent SocketDisconnected()
+        If ReaderStream IsNot Nothing Then
+            ReaderStream.Dispose()
+        End If
+
+        If NutStream IsNot Nothing Then
+            NutStream.Dispose()
+        End If
+
+        If client IsNot Nothing Then
+            client.Close()
         End If
     End Sub
 
@@ -172,7 +166,7 @@ Public Class Nut_Socket
                 Response = NUTResponse.ENDLIST
             Case "ERR"
                 Response = DirectCast([Enum].Parse(GetType(NUTResponse), SplitString(1)), NUTResponse)
-            Case "NETWORK", "1.0", "1.1", "1.2"
+            Case "NETWORK", "1.0", "1.1", "1.2", "1.3"
                 'In case of "VER" or "NETVER" Query
                 Response = NUTResponse.OK
             Case Else
@@ -356,59 +350,11 @@ Public Class Nut_Socket
         End If
     End Function
 
-    Private Sub AuthLogin(Login As String, Password As String)
-        LogFile.LogTracing("Attempting authentication...", LogLvl.LOG_NOTICE, Me)
-        Auth_Success = False
-        If Not String.IsNullOrEmpty(Login) AndAlso String.IsNullOrEmpty(Password) Then
-            Dim Nut_Query = Query_Data("USERNAME " & Login)
-
-            If Nut_Query.ResponseType <> NUTResponse.OK Then
-                Throw New NutException(Nut_Query)
-            End If
-
-            Nut_Query = Query_Data("PASSWORD " & Password)
-
-            If Nut_Query.ResponseType <> NUTResponse.OK Then
-                Throw New NutException(Nut_Query)
-            End If
-        End If
-
-        LogFile.LogTracing("Authenticated successfully.", LogLvl.LOG_NOTICE, Me)
-        Auth_Success = True
-    End Sub
-
     Private Sub Event_WatchDog(sender As Object, e As EventArgs)
         Dim Nut_Query = Query_Data("")
         If Nut_Query.ResponseType = NUTResponse.NORESPONSE Then
-            Disconnect(True, True)
+            Disconnect(True)
             RaiseEvent Socket_Broken(New NutException(Nut_Query))
         End If
-    End Sub
-
-    Private Sub Close_Socket()
-        Try
-            If WriterStream IsNot Nothing Then
-                WriterStream.Close()
-            End If
-
-            If ReaderStream IsNot Nothing Then
-                ReaderStream.Close()
-            End If
-
-            If NutStream IsNot Nothing Then
-                NutStream.Close()
-            End If
-
-            If NutTCP IsNot Nothing Then
-                NutTCP.Close()
-            End If
-
-            If NutSocket IsNot Nothing Then
-                NutSocket.Close()
-            End If
-        Catch Excep As Exception
-            LogFile.LogTracing("Error encountered while shutting down socket: " & vbNewLine & Excep.ToString(),
-                               LogLvl.LOG_ERROR, Me)
-        End Try
     End Sub
 End Class

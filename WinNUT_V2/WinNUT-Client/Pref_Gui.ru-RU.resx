@@ -57,12 +57,6 @@
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>Проверяет обновления при запуске.</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>Проверять обновления</value>
-  </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>Проверка обновлений.</value>
-  </data>
   <data name="Tab_Update.Text" xml:space="preserve">
     <value>Обновить</value>
   </data>
@@ -80,10 +74,6 @@
   </data>
   <data name="Lbl_Login_Nut.Text" xml:space="preserve">
     <value>Логин</value>
-  </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>Время между обновлениями данных ИБП (по умолчанию = 5).
-Число от 1 до 60 секунд.</value>
   </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>Имя ИБП для мониторинга.
@@ -122,10 +112,6 @@ IPV4 / IPV6 / доменное имя.</value>
     <value>Максимальное напряжение батареи.
 Число от 0 до 100.</value>
   </data>
-  <data name="Tb_Load_Max.ToolTip" xml:space="preserve">
-    <value>Максимальная нагрузка на ИБП.
-Число от 0 до 100.</value>
-  </data>
   <data name="Tb_OutV_Max.ToolTip" xml:space="preserve">
     <value>Максимальное напряжение на выходе.
 Число от 0 до 100.</value>
@@ -136,10 +122,6 @@ IPV4 / IPV6 / доменное имя.</value>
   </data>
   <data name="Tb_BattV_Min.ToolTip" xml:space="preserve">
     <value>Минимальное напряжение батареи.
-Число от 0 до 100.</value>
-  </data>
-  <data name="Tb_Load_Min.ToolTip" xml:space="preserve">
-    <value>Минимальная нагрузка на ИБП.
 Число от 0 до 100.</value>
   </data>
   <data name="Tb_OutV_Min.ToolTip" xml:space="preserve">
@@ -211,9 +193,6 @@ IPV4 / IPV6 / доменное имя.</value>
   </data>
   <data name="CB_Use_Logfile.Text" xml:space="preserve">
     <value>Создать файл лога</value>
-  </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>Создать файл лога (файл WinNUT-client.log в папке установки WinNUT).</value>
   </data>
   <data name="CB_Start_W_Win.Text" xml:space="preserve">
     <value>Запускать с Windows</value>
@@ -313,5 +292,47 @@ IPV4 / IPV6 / доменное имя.</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Опции</value>
+  </data>
+  <data name="Cbx_Freq_Input.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_BattV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_OutV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_InF_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Anchor" xml:space="preserve" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.AutoSize" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>251, 102</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="pollingIntervalValue.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>154, 100</value>
+  </data>
+  <data name="pollingIntervalValue.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>91, 20</value>
+  </data>
+  <data name="pollingIntervalValue.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="Btn_Apply.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
 </root>

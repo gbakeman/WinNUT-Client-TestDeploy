@@ -34,7 +34,6 @@ Public Enum AppResxStr
     STR_MAIN_OLDINI_RENAMED
     STR_MAIN_OLDINI
     STR_MAIN_RECONNECT
-    STR_MAIN_RETRY
     STR_MAIN_NOTCONN
     STR_MAIN_CONN
     STR_MAIN_OL
@@ -46,11 +45,6 @@ Public Enum AppResxStr
     STR_MAIN_INVALIDLOGIN
     STR_MAIN_EXITSLEEP
     STR_MAIN_GOTOSLEEP
-    STR_UP_AVAIL
-    STR_UP_SHOW
-    STR_UP_HIDE
-    STR_UP_UPMSG
-    STR_UP_DOWNFROM
     STR_SHUT_STAT
     STR_APP_SHUT
     STR_LOG_PREFS
@@ -58,8 +52,6 @@ Public Enum AppResxStr
     STR_LOG_CON_FAILED
     STR_LOG_CON_RETRY
     STR_LOG_LOGOFF
-    STR_LOG_NEW_RETRY
-    STR_LOG_STOP_RETRY
     STR_LOG_SHUT_START
     STR_LOG_SHUT_STOP
     STR_LOG_NO_UPDATE
@@ -115,4 +107,19 @@ Public Enum UPS_States
     OVER = 1 << 10
     TRIM = 1 << 11
     BOOST = 1 << 12
+    ALARM = 1 << 13
+    ECO = 1 << 14 ' eConversion mode
+    RB = 1 << 15 ' Batteries need to be replaced 
+End Enum
+
+''' <summary>
+''' Ref. https://github.com/nutdotnet/WinNUT-Client/pull/112
+''' </summary>
+Public Enum PowerMethod
+    Unavailable ' No methods are available to calculate power.
+    RealPower ' The ups.realpower variable is available for direct reading.
+    RealOutputPower ' output.realpower is available for direct reading.
+    RPNomLoadPct ' Power is calcualted as the load percentage of nominal realpower.
+    InputNomVALoadPct ' Power is given as the nominal power calculated from nominal input volts/amps (and PF), multiplied by the percent load.
+    OutputVACalc ' Power is calculated with output voltage and current (seen on Huawei, issue #150)
 End Enum

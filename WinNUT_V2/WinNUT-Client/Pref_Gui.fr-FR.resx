@@ -153,9 +153,6 @@ inférieur à</value>
   <data name="Cb_Update_At_Start.Text" xml:space="preserve">
     <value>Vérifier la mise à jour au Démarrage</value>
   </data>
-  <data name="Cb_Verify_Update.Text" xml:space="preserve">
-    <value>Vérifier la mise à jour</value>
-  </data>
   <data name="Tab_Update.Text" xml:space="preserve">
     <value>Mise à jour</value>
   </data>
@@ -167,10 +164,6 @@ inférieur à</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Préférences</value>
-  </data>
-  <data name="Tb_Delay_Com.ToolTip" xml:space="preserve">
-    <value>Temps entre chaque mise à jour des données UPS (par défaut = 5).
-Valeur acceptée: valeur numérique de 1 à 60 secondes.</value>
   </data>
   <data name="Tb_UPS_Name.ToolTip" xml:space="preserve">
     <value>Nom de l'onduleur à surveiller.
@@ -194,10 +187,6 @@ Valeur acceptée: adresse IPV4 / IPV6 / FQDN.</value>
     <value>Tension maximale de la batterie.
 Valeur acceptée: valeur numérique de 0 à 100.</value>
   </data>
-  <data name="Tb_Load_Max.ToolTip" xml:space="preserve">
-    <value>Niveau de charge maximum de l'onduleur.
-Valeur acceptée: valeur numérique de 0 à 100.</value>
-  </data>
   <data name="Tb_OutV_Max.ToolTip" xml:space="preserve">
     <value>Tension de sortie maximale.
 Valeur acceptée: valeur numérique de 0 à 999.</value>
@@ -208,10 +197,6 @@ Valeur acceptée: valeur numérique de 0 à 100.</value>
   </data>
   <data name="Tb_BattV_Min.ToolTip" xml:space="preserve">
     <value>Tension minimale de la batterie.
-Valeur acceptée: valeur numérique de 0 à 100.</value>
-  </data>
-  <data name="Tb_Load_Min.ToolTip" xml:space="preserve">
-    <value>Niveau de charge minimum de l'onduleur.
 Valeur acceptée: valeur numérique de 0 à 100.</value>
   </data>
   <data name="Tb_OutV_Min.ToolTip" xml:space="preserve">
@@ -241,9 +226,6 @@ Valeur acceptée: valeur numérique de 0 à 999.</value>
   </data>
   <data name="Lbl_LevelLog.ToolTip" xml:space="preserve">
     <value>Niveau de journalisation du fichier journal</value>
-  </data>
-  <data name="CB_Use_Logfile.ToolTip" xml:space="preserve">
-    <value>Créez un fichier journal (fichier "WinNUT-client.log" dans le répertoire d'installation de WinNUT).</value>
   </data>
   <data name="CB_Start_W_Win.ToolTip" xml:space="preserve">
     <value>Démarre WinNUT au démarrage de Windows.</value>
@@ -293,9 +275,6 @@ Valeur acceptée: valeur numérique de 0 à 100.</value>
   <data name="Cb_Update_At_Start.ToolTip" xml:space="preserve">
     <value>Vérifie les mises à jour au démarrage.</value>
   </data>
-  <data name="Cb_Verify_Update.ToolTip" xml:space="preserve">
-    <value>Vérifiez les mises à jour.</value>
-  </data>
   <data name="Tb_Pwd_Nut.ToolTip" xml:space="preserve">
     <value>Mot de Passe de connexion au serveur NUT</value>
   </data>
@@ -316,5 +295,47 @@ Valeur acceptée: valeur numérique de 0 à 100.</value>
   </data>
   <data name="CB_Follow_FSD.ToolTip" xml:space="preserve">
     <value>Indique si une extinction doit être executé lorsque le serveur NUT signal une extinction forcée (FSD=Force ShutDown)</value>
+  </data>
+  <data name="Cbx_Freq_Input.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_BattV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_OutV_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Tb_InF_Max.Margin" xml:space="preserve" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 6, 3, 3</value>
+  </data>
+  <data name="Lbl_LoadUPS.Font" xml:space="preserve" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Italic</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Anchor" xml:space="preserve" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.AutoSize" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>251, 102</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
+  </data>
+  <data name="pollingIntervalUnitLabel.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="pollingIntervalValue.Location" xml:space="preserve" type="System.Drawing.Point, System.Drawing">
+    <value>154, 100</value>
+  </data>
+  <data name="pollingIntervalValue.Size" xml:space="preserve" type="System.Drawing.Size, System.Drawing">
+    <value>91, 20</value>
+  </data>
+  <data name="pollingIntervalValue.TabIndex" xml:space="preserve" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="Btn_Apply.Enabled" xml:space="preserve" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
 </root>

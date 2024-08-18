@@ -24,8 +24,8 @@
     <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://nutdotnet.github.io/WinNUT-Client/</InstallUrl>
-    <SupportUrl>https://github.com/nutdotnet/WinNUT-Client/issues</SupportUrl>
+    <InstallUrl>https://gbakeman.github.io/WinNUT-Client-TestDeploy/</InstallUrl>
+    <SupportUrl>https://github.com/gbakeman/WinNUT-Client-TestDeploy/discussions</SupportUrl>
     <ProductName>WinNUT</ProductName>
     <PublisherName>NUTDotNet</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>

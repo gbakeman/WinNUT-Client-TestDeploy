@@ -4,8 +4,8 @@ Imports Octokit
 
 Namespace Updater
     Public Class UpdateUtil
-        Private Const REPOSITORY_OWNER = "nutdotnet"
-        Private Const REPOSITORY_NAME = "WinNUT-Client"
+        Private Const REPOSITORY_OWNER = "gbakeman"
+        Private Const REPOSITORY_NAME = "WinNUT-Client-TestDeploy"
         Private Shared ReadOnly USER_AGENT_HEADER As String = $"{REPOSITORY_OWNER}"
         Private Shared ReadOnly PROGRESS_CHANGED_DELAY = 500 ' Milliseconds to delay between raising progress update events.
 

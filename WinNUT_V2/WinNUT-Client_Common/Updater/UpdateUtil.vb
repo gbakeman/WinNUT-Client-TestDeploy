@@ -4,6 +4,7 @@ Imports Octokit
 
 Namespace Updater
     Public Class UpdateUtil
+        'blah
         Private Const REPOSITORY_OWNER = "gbakeman"
         Private Const REPOSITORY_NAME = "WinNUT-Client-TestDeploy"
         Private Shared ReadOnly USER_AGENT_HEADER As String = $"{REPOSITORY_OWNER}"
